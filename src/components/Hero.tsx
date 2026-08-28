@@ -103,7 +103,7 @@ const Hero = () => {
           {/* Image panel */}
           <div className="relative order-1 min-h-[280px] overflow-hidden md:order-2 md:min-h-0 bg-[#161c36]">
             <Image
-              src="/coffee-hero.svg"
+              src="/espersso1.jpg"
               alt="Takimia Commercial Espresso Machine"
               fill
               priority
