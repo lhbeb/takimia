@@ -140,8 +140,8 @@ const Header = () => {
 
   return (
     <>
-      {/* Announcement bar - Deep Blue background with white text */}
-      <div suppressHydrationWarning={true} className="bg-[#003099] text-[#ffffff] py-2 relative overflow-hidden h-[40px] flex items-center">
+      {/* Announcement bar - Takimia Blue background with white text */}
+      <div suppressHydrationWarning={true} className="bg-[#2e3868] text-[#ffffff] py-2 relative overflow-hidden h-[40px] flex items-center">
         <div suppressHydrationWarning={true} className="container mx-auto px-4 flex items-center justify-center relative w-full h-full">
           {/* Announcement Text - PRESERVED */}
           <div suppressHydrationWarning={true} className="text-center font-medium px-4 sm:px-16 transition-all duration-500 ease-in-out h-full flex items-center justify-center min-h-[24px]">
