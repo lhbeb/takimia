@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e3868" />
+      <stop offset="50%" stop-color="#212a52" />
+      <stop offset="100%" stop-color="#151b38" />
+    </linearGradient>
+    <linearGradient id="metalBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d4dce8" />
+      <stop offset="25%" stop-color="#f8fafc" />
+      <stop offset="50%" stop-color="#cbd5e1" />
+      <stop offset="85%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+    <linearGradient id="darkMetal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="50%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="brassGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#92400e" />
+    </linearGradient>
+    <linearGradient id="cremaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="40%" stop-color="#b45309" />
+      <stop offset="100%" stop-color="#451a03" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <radialGradient id="counterGlow" cx="50%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#0a1d3d" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bgGrad)" />
+  <rect width="800" height="600" fill="url(#counterGlow)" />
+
+  <!-- Ambient Glow -->
+  <circle cx="400" cy="300" r="220" fill="#f59e0b" opacity="0.08" filter="url(#glow)" />
+
+  <!-- Countertop -->
+  <path d="M 0 510 L 800 510 L 800 600 L 0 600 Z" fill="#0b1120" />
+  <line x1="0" y1="510" x2="800" y2="510" stroke="#334155" stroke-width="2" />
+  <rect x="0" y="512" width="800" height="8" fill="#1e293b" opacity="0.4" />
+
+  <!-- Coffee Machine Body -->
+  <!-- Top Cup Warmer Rail -->
+  <rect x="230" y="110" width="340" height="12" rx="4" fill="url(#metalBody)" />
+  <line x1="240" y1="110" x2="240" y2="95" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
+  <line x1="320" y1="110" x2="320" y2="95" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
+  <line x1="480" y1="110" x2="480" y2="95" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
+  <line x1="560" y1="110" x2="560" y2="95" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
+  <line x1="235" y1="95" x2="565" y2="95" stroke="url(#metalBody)" stroke-width="4" stroke-linecap="round" />
+
+  <!-- Cups on top -->
+  <ellipse cx="280" cy="98" rx="20" ry="6" fill="#f8fafc" opacity="0.8" />
+  <path d="M 262 98 C 264 110 296 110 298 98 Z" fill="#f1f5f9" opacity="0.8" />
+  <ellipse cx="520" cy="98" rx="20" ry="6" fill="#f8fafc" opacity="0.8" />
+  <path d="M 502 98 C 504 110 536 110 538 98 Z" fill="#f1f5f9" opacity="0.8" />
+
+  <!-- Main Machine Housing -->
+  <rect x="220" y="122" width="360" height="340" rx="16" fill="url(#metalBody)" />
+  <rect x="230" y="132" width="340" height="320" rx="10" fill="url(#darkMetal)" />
+
+  <!-- Display / Top Dashboard -->
+  <rect x="250" y="150" width="300" height="60" rx="8" fill="#030712" stroke="#334155" stroke-width="1.5" />
+  
+  <!-- Digital Pressure Gauge -->
+  <circle cx="310" cy="180" r="22" fill="#0f172a" stroke="url(#brassGold)" stroke-width="2.5" />
+  <circle cx="310" cy="180" r="17" fill="#020617" />
+  <path d="M 310 180 L 322 172" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" />
+  <circle cx="310" cy="180" r="3" fill="#fbbf24" />
+  <text x="310" y="193" font-family="monospace" font-size="6" fill="#94a3b8" text-anchor="middle">9.2 BAR</text>
+
+  <!-- PID Temp Screen -->
+  <rect x="360" y="165" width="80" height="30" rx="4" fill="#020617" stroke="#1e293b" />
+  <text x="400" y="184" font-family="monospace" font-size="14" font-weight="bold" fill="#38bdf8" text-anchor="middle" filter="url(#glow)">93.5°C</text>
+
+  <!-- Control Buttons -->
+  <circle cx="475" cy="180" r="10" fill="url(#metalBody)" stroke="#64748b" stroke-width="1" />
+  <circle cx="475" cy="180" r="7" fill="#0f172a" />
+  <circle cx="515" cy="180" r="10" fill="url(#metalBody)" stroke="#64748b" stroke-width="1" />
+  <circle cx="515" cy="180" r="7" fill="#0f172a" />
+
+  <!-- Takimia Logo on Machine -->
+  <text x="400" y="235" font-family="'Helvetica Neue', sans-serif" font-size="15" font-weight="900" letter-spacing="4" fill="#f8fafc" text-anchor="middle">TAKIMIA</text>
+  <text x="400" y="247" font-family="'Helvetica Neue', sans-serif" font-size="7" font-weight="600" letter-spacing="2" fill="#94a3b8" text-anchor="middle">PRO ESPRESSO SYSTEM</text>
+
+  <!-- Group Head Collar -->
+  <rect x="340" y="265" width="120" height="18" rx="4" fill="url(#metalBody)" />
+  <rect x="360" y="283" width="80" height="15" fill="url(#darkMetal)" />
+
+  <!-- Portafilter -->
+  <path d="M 370 298 L 430 298 L 424 330 L 376 330 Z" fill="url(#metalBody)" />
+  <!-- Spouts -->
+  <path d="M 388 330 L 388 346 L 392 346 L 392 330 Z" fill="url(#metalBody)" />
+  <path d="M 408 330 L 408 346 L 412 346 L 412 330 Z" fill="url(#metalBody)" />
+  <!-- Handle -->
+  <path d="M 430 306 L 560 326 L 558 340 L 428 320 Z" fill="url(#darkMetal)" stroke="url(#brassGold)" stroke-width="1" />
+
+  <!-- Steam Wand -->
+  <path d="M 265 270 Q 250 340 275 390" stroke="url(#metalBody)" stroke-width="8" stroke-linecap="round" fill="none" />
+  <circle cx="275" cy="390" r="5" fill="url(#metalBody)" />
+
+  <!-- Hot Water Spout -->
+  <path d="M 535 270 Q 550 320 535 360" stroke="url(#metalBody)" stroke-width="6" stroke-linecap="round" fill="none" />
+
+  <!-- Espresso Stream & Crema -->
+  <line x1="390" y1="346" x2="390" y2="415" stroke="url(#cremaGrad)" stroke-width="2.5" opacity="0.9" />
+  <line x1="410" y1="346" x2="410" y2="415" stroke="url(#cremaGrad)" stroke-width="2.5" opacity="0.9" />
+
+  <!-- Glass Espresso Cup -->
+  <!-- Saucer -->
+  <ellipse cx="400" cy="460" rx="42" ry="7" fill="#334155" opacity="0.7" />
+  <ellipse cx="400" cy="458" rx="36" ry="5" fill="#f8fafc" opacity="0.9" />
+  
+  <!-- Cup Body (Glass/Ceramic) -->
+  <path d="M 374 410 L 426 410 L 418 454 L 382 454 Z" fill="rgba(255,255,255,0.15)" stroke="#e2e8f0" stroke-width="1.5" />
+  <!-- Liquid / Crema Layer -->
+  <path d="M 377 418 L 423 418 L 418 452 L 382 452 Z" fill="url(#cremaGrad)" />
+  <ellipse cx="400" cy="418" rx="23" ry="4" fill="#d97706" />
+
+  <!-- Steam rising -->
+  <path d="M 390 400 Q 380 375 395 350 T 385 310" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.25" filter="url(#glow)" />
+  <path d="M 410 400 Q 420 375 405 350 T 415 310" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.25" filter="url(#glow)" />
+
+  <!-- Drip Tray & Grate -->
+  <rect x="210" y="462" width="380" height="48" rx="8" fill="url(#metalBody)" />
+  <!-- Grille Slots -->
+  <line x1="240" y1="472" x2="560" y2="472" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+  <line x1="240" y1="480" x2="560" y2="480" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+  <line x1="240" y1="488" x2="560" y2="488" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+  <line x1="240" y1="496" x2="560" y2="496" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Bottom Legs -->
+  <rect x="235" y="510" width="30" height="10" rx="3" fill="url(#darkMetal)" />
+  <rect x="535" y="510" width="30" height="10" rx="3" fill="url(#darkMetal)" />
+</svg>
