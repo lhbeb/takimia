@@ -131,14 +131,15 @@ export default function RootLayout({
                 "description": "Takimia - Premium Coffee Machines & Espresso Makers. Discover precision-engineered espresso machines, grinders, and brewing accessories.",
                 "sameAs": [
                   "https://www.instagram.com/takimia.house",
-                  "https://www.pinterest.com/takimia_officiel"
+                  "https://www.pinterest.com/takimia_officiel",
+                  "https://www.tiktok.com/@takimia.llc"
                 ],
                 "contactPoint": {
                   "@type": "ContactPoint",
                   "contactType": "customer service",
                   "email": "contact@takimia.com",
                   "telephone": "+17863025205",
-                  "areaServed": ["GB", "US"]
+                  "areaServed": ["US"]
                 },
                 "address": {
                   "@type": "PostalAddress",
