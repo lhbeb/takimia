@@ -129,11 +129,6 @@ export default function RootLayout({
                 "url": "https://takimia.com",
                 "logo": "https://takimia.com/logosvg.svg",
                 "description": "Takimia - Premium Coffee Machines & Espresso Makers. Discover precision-engineered espresso machines, grinders, and brewing accessories.",
-                "sameAs": [
-                  "https://www.tiktok.com/@takimia_officiel",
-                  "https://www.instagram.com/takimia_officiel/",
-                  "https://www.pinterest.com/takimia_officiel/"
-                ],
                 "contactPoint": {
                   "@type": "ContactPoint",
                   "contactType": "customer service",
