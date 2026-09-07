@@ -644,9 +644,50 @@ html.modal-open {
 @media (max-width: 1024px) {
   #lc-container,
   #lc-button,
+  #lc-btn,
   #tidio-chat-iframe,
   #tidio-chat,
   [id^="tidio-chat"] iframe {
     bottom: 88px !important;
+  }
+}
+
+/* ── Takimia Brand Custom Live Chat Widget Styling ── */
+#lc-btn {
+  background: linear-gradient(135deg, #2e3868 0%, #1f274a 100%) !important;
+  box-shadow: 0 8px 24px -4px rgba(46, 56, 104, 0.45), 0 0 0 2px rgba(245, 151, 12, 0.3) !important;
+  animation: lc-takimia-pulse 2.5s ease-in-out infinite !important;
+}
+
+#lc-btn:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 12px 28px -2px rgba(46, 56, 104, 0.6), 0 0 0 3px rgba(245, 151, 12, 0.5) !important;
+}
+
+#lc-tooltip {
+  background: #2e3868 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(245, 151, 12, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(46, 56, 104, 0.35) !important;
+  font-family: var(--font-dm-sans), system-ui, sans-serif !important;
+}
+
+#lc-tooltip .lc-dot {
+  background: #22c55e !important;
+  box-shadow: 0 0 6px #22c55e !important;
+}
+
+#lc-iframe-wrap {
+  border: 1px solid rgba(46, 56, 104, 0.2) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 20px 48px -10px rgba(46, 56, 104, 0.3) !important;
+}
+
+@keyframes lc-takimia-pulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px -4px rgba(46, 56, 104, 0.45), 0 0 0 0 rgba(245, 151, 12, 0.4);
+  }
+  50% {
+    box-shadow: 0 12px 28px -2px rgba(46, 56, 104, 0.6), 0 0 0 6px rgba(245, 151, 12, 0);
   }
 }
