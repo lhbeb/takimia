@@ -38,7 +38,7 @@ export default function AboutPage() {
         'url': 'https://takimia.com/about',
         'name': 'About Takimia',
         'description':
-          'Takimia is an ecommerce retailer serving customers in the United Kingdom and United States with premium coffee machines and barista essentials.',
+          'Takimia is an ecommerce retailer serving customers across the United States with premium coffee machines and barista essentials.',
         'mainEntity': {
           '@id': 'https://takimia.com/#organization',
         },
@@ -49,7 +49,7 @@ export default function AboutPage() {
         'name': 'Takimia',
         'url': 'https://takimia.com',
         'description':
-          'Ecommerce store serving the United Kingdom and United States with premium coffee machines, espresso makers, precision grinders, and barista essentials.',
+          'Ecommerce store serving the United States with premium coffee machines, espresso makers, precision grinders, and barista essentials.',
         'email': 'contact@takimia.com',
         'telephone': ['+17863025205'],
         'address': {
@@ -104,10 +104,10 @@ export default function AboutPage() {
             </div>
             <div className="space-y-4 text-base leading-7 text-gray-700">
               <p>
-                Takimia operates out of Delaware, Ohio, serving coffee enthusiasts and businesses across the United States. Our central warehouse and fulfillment operations are designed to get your coffee equipment to you safely and fast.
+                Takimia operates out of Gilbert, Arizona, serving coffee enthusiasts and businesses across the United States. Our central warehouse and fulfillment operations are designed to get your coffee equipment to you safely and fast.
               </p>
               <p>
-                Eligible products can be collected locally from our Delaware location. Our team confirms the available pickup address and collection time for each order before you travel.
+                Eligible products can be collected locally from our Gilbert, Arizona location. Our team confirms the available pickup address and collection time for each order before you travel.
               </p>
               <Link href="/local-pickup" className="inline-flex font-semibold text-[#2e3868] hover:text-[#1f274a] hover:underline">
                 View the local pickup guide
@@ -305,7 +305,7 @@ export default function AboutPage() {
                 <Headphones className="h-6 w-6 text-[#2e3868]" />
                 <h3 className="text-xl font-bold text-[#262626]">Customer Focus</h3>
               </div>
-              <p className="text-gray-700">We offer fast and free shipping within the United States and United Kingdom, a 30 day return policy, and reliable human support.</p>
+              <p className="text-gray-700">We offer fast and free shipping within the United States, a 30 day return policy, and reliable human support.</p>
             </div>
 
             <div className="bg-[#F0F6FF] rounded-xl p-6 border border-[#2e3868]/10 md:col-span-2">

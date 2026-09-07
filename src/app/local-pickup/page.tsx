@@ -32,7 +32,7 @@ export default function LocalPickupPage() {
               Pick up your Takimia order with confidence
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-7 text-[#D9E6FF] sm:text-base">
-              Eligible coffee machines, espresso makers, and barista accessories can be collected from our location in Delaware, Ohio. This page covers what to expect, what to bring, and how collection works once your order is ready.
+              Eligible coffee machines, espresso makers, and barista accessories can be collected from our location in Gilbert, Arizona. This page covers what to expect, what to bring, and how collection works once your order is ready.
             </p>
           </section>
 
