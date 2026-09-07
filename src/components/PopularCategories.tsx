@@ -1,7 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/types/product';
-import { filterProductsByCategory, POPULAR_CATEGORY_NAMES, CATALOG_NAVIGATION } from '@/config/categories';
+import {
+  filterProductsByCategory,
+  POPULAR_CATEGORY_NAMES,
+  POPULAR_CATEGORY_IMAGES,
+  CATALOG_NAVIGATION,
+} from '@/config/categories';
 
 interface PopularCategoriesProps {
   products: Product[];
@@ -13,11 +18,15 @@ export default function PopularCategories({ products }: PopularCategoriesProps) 
     const navItem = CATALOG_NAVIGATION.find(item => item.label.toLowerCase() === name.toLowerCase());
     const href = navItem?.href || `/search?category=${encodeURIComponent(name)}`;
 
+    const image =
+      POPULAR_CATEGORY_IMAGES[name] ||
+      categoryProducts.find((product) => product.images?.[0])?.images[0];
+
     return {
       name,
       href,
       count: categoryProducts.length,
-      image: categoryProducts.find((product) => product.images?.[0])?.images[0],
+      image,
     };
   }).filter((category) => category.count > 0 && category.image);
 

@@ -54,6 +54,14 @@ export const POPULAR_CATEGORY_NAMES = [
   'Barista Accessories',
 ] as const;
 
+export const POPULAR_CATEGORY_IMAGES: Record<string, string> = {
+  'Espresso Machines': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-oracle-jet/img1.png',
+  'Coffee Makers': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-luxe-brewer-thermal/img1.png',
+  'Precision Grinders': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-dynamic-duo/img3.png',
+  'Bean-to-Cup': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-grind-control/img1.png',
+  'Barista Accessories': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-milk-cafe/img1.png',
+};
+
 /**
  * Filter coffee products by category, collection, or search term.
  * Ensures that every valid store category in the navbar returns matching, relevant products.
@@ -111,7 +119,14 @@ export function filterProductsByCategory(products: Product[], categoryOrQuery: s
         desc.includes('grinder')
       );
     });
-    if (matched.length > 0) return matched;
+    if (matched.length > 0) {
+      // Prioritize dedicated grinders (Dynamic Duo / Smart Grinder Pro & Grind Control)
+      return matched.sort((a, b) => {
+        const aScore = a.slug.includes('dynamic-duo') ? 3 : a.slug.includes('grind') ? 2 : 1;
+        const bScore = b.slug.includes('dynamic-duo') ? 3 : b.slug.includes('grind') ? 2 : 1;
+        return bScore - aScore;
+      });
+    }
   }
 
   // 3. Bean-to-Cup / All-in-one automated machines
@@ -123,13 +138,20 @@ export function filterProductsByCategory(products: Product[], categoryOrQuery: s
     const matched = coffeeProducts.filter((p) => {
       const slug = String(p.slug || '').toLowerCase();
       return (
-        slug.includes('oracle') ||
+        slug.includes('grind-control') ||
         slug.includes('barista-touch') ||
-        slug.includes('barista-pro') ||
-        slug.includes('grind-control')
+        slug.includes('oracle') ||
+        slug.includes('barista-pro')
       );
     });
-    if (matched.length > 0) return matched;
+    if (matched.length > 0) {
+      // Prioritize Grind Control (all-in-one bean-to-cup) then Barista Touch Impress
+      return matched.sort((a, b) => {
+        const aScore = a.slug.includes('grind-control') ? 3 : a.slug.includes('impress') ? 2 : 1;
+        const bScore = b.slug.includes('grind-control') ? 3 : b.slug.includes('impress') ? 2 : 1;
+        return bScore - aScore;
+      });
+    }
   }
 
   // 4. Barista Accessories & Frothers
