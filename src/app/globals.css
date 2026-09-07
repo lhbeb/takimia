@@ -640,8 +640,10 @@ html.modal-open {
   }
 }
 
-/* ── Tidio chat widget: lift above the sticky Add-to-Cart bar on mobile ── */
+/* ── Live chat widget: lift above the sticky Add-to-Cart bar on mobile ── */
 @media (max-width: 1024px) {
+  #lc-container,
+  #lc-button,
   #tidio-chat-iframe,
   #tidio-chat,
   [id^="tidio-chat"] iframe {

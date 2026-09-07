@@ -21,7 +21,7 @@ declare global {
     }
 }
 
-const CHAT_WIDGET_SRC = 'https://chatapppay.vercel.app/widget.js';
+const CHAT_WIDGET_SRC = 'https://chatapppay-rust.vercel.app/widget.js';
 const CHAT_WIDGET_SCRIPT_ID = 'hf-chat-widget-script';
 
 function clearChatTargets() {
@@ -191,7 +191,7 @@ export default function PaypalInvoiceConfirmation({
         lastTargetRef.current = targetId;
 
         window.HFChatConfig = {
-            chatUrl: 'https://chatapppay.vercel.app',
+            chatUrl: 'https://chatapppay-rust.vercel.app',
             target: targetId,
             customerName,
             customerEmail: shippingData.email,
