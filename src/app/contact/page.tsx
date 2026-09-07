@@ -2,7 +2,8 @@
 // Registered business office and GMC support details
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Building2 } from 'lucide-react';
+import Link from 'next/link';
+import { Mail, Phone, MapPin, Building2, MessageCircle } from 'lucide-react';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -229,6 +230,16 @@ export default function ContactPage() {
                       <div className="ml-4">
                         <h3 className="font-medium text-[#262626]">Email</h3>
                         <p className="text-gray-600 mt-1">contact@takimia.com</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <MessageCircle className="h-6 w-6 text-[#2e3868] mt-1 shrink-0" />
+                      <div className="ml-4">
+                        <h3 className="font-medium text-[#262626]">Live Chat</h3>
+                        <p className="text-gray-600 mt-1">Real-time support with our team.</p>
+                        <Link href="/livechat" className="inline-flex items-center text-sm font-bold text-[#2e3868] hover:underline mt-1">
+                          Start Live Chat &rarr;
+                        </Link>
                       </div>
                     </div>
                     <div className="border-t border-gray-200 pt-6">
