@@ -50,7 +50,7 @@ export default async function HomePage() {
         <Suspense fallback={null}>
           <ProductGrid
             products={espressoProducts}
-            sectionId="espresso-machines-collection"
+            sectionId="products"
             title=""
             editorialCard={{
               title: 'Masterful Extraction in Every Cup',

@@ -10,14 +10,9 @@ import type { Product } from '@/types/product';
 import ClientOnly from './ClientOnly';
 import SearchBar from './SearchBar';
 
-const catalogNavigation = [
-  { label: 'All', href: '/#products' },
-  { label: 'Espresso Machines', href: '/search?category=Espresso%20Machines' },
-  { label: 'Coffee Makers', href: '/search?category=Coffee%20Makers' },
-  { label: 'Precision Grinders', href: '/search?category=Precision%20Grinders' },
-  { label: 'Bean-to-Cup', href: '/search?category=Bean-to-Cup' },
-  { label: 'Barista Accessories', href: '/search?category=Barista%20Accessories' },
-] as const;
+import { CATALOG_NAVIGATION } from '@/config/categories';
+
+const catalogNavigation = CATALOG_NAVIGATION;
 
 const desktopNavLinkClass =
   'relative py-1 text-sm font-medium text-[#2e3868] transition-colors duration-200 hover:text-[#44518c] focus-visible:text-[#44518c] focus-visible:outline-none after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-[#2e3868] after:transition-transform after:duration-200 hover:after:scale-x-100 focus-visible:after:scale-x-100';

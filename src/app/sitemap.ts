@@ -17,12 +17,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes = [
     { path: '', changeFrequency: 'daily' as const, priority: 1 },
+    { path: '/products', changeFrequency: 'daily' as const, priority: 0.9 },
     { path: '/espresso-machines', changeFrequency: 'daily' as const, priority: 0.8 },
     { path: '/coffee-makers', changeFrequency: 'daily' as const, priority: 0.8 },
     { path: '/precision-grinders', changeFrequency: 'daily' as const, priority: 0.8 },
     { path: '/barista-accessories', changeFrequency: 'daily' as const, priority: 0.8 },
     { path: '/search', changeFrequency: 'weekly' as const, priority: 0.6 },
-    { path: '/sell', changeFrequency: 'monthly' as const, priority: 0.6 },
+    { path: '/livechat', changeFrequency: 'monthly' as const, priority: 0.6 },
     { path: '/about', changeFrequency: 'monthly' as const, priority: 0.5 },
     { path: '/contact', changeFrequency: 'monthly' as const, priority: 0.5 },
     { path: '/frequently-asked-questions', changeFrequency: 'monthly' as const, priority: 0.5 },

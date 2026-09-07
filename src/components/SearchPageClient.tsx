@@ -6,21 +6,14 @@ import ProductCard from "@/components/ProductCard";
 import type { Product } from "@/types/product";
 import { Loader2 } from "lucide-react";
 
+import { filterProductsByCategory, CATALOG_NAVIGATION } from "@/config/categories";
+
 interface SearchPageClientProps {
   initialQuery?: string;
   initialCategory?: string;
 }
 
-const CATALOG_CATEGORIES = [
-  "Espresso Machines",
-  "Coffee Makers",
-  "Precision Grinders",
-  "Bean-to-Cup",
-  "Barista Accessories",
-  "Pour Over & Drip",
-  "Milk Frothers",
-  "Coffee Scales & Tools",
-] as const;
+const CATALOG_CATEGORIES = CATALOG_NAVIGATION.map((item) => item.label);
 
 function getExactCatalogCategory(value: string): string {
   const normalizedValue = value.trim().toLowerCase();
@@ -97,14 +90,14 @@ function advancedSearch(products: Product[], query: string): Product[] {
 
     // Brand matches (very important for brand searches)
     if (brand.includes(normalizedQuery)) {
-      score += 500; // Increased from 300
+      score += 500;
     }
     if (brand === normalizedQuery) {
-      score += 300; // Bonus for exact brand match
+      score += 300;
     }
     queryWords.forEach((word) => {
       if (brand.includes(word)) {
-        score += 100; // Increased from 80
+        score += 100;
       }
     });
 
@@ -125,11 +118,9 @@ function advancedSearch(products: Product[], query: string): Product[] {
   return scoredProducts
     .filter((item) => item.score > 0)
     .sort((a, b) => {
-      // Sort by score first
       if (b.score !== a.score) {
         return b.score - a.score;
       }
-      // If scores are equal, prefer newer products
       return 0;
     })
     .map((item) => item.product);
@@ -139,8 +130,6 @@ export default function SearchPageClient({ initialQuery, initialCategory }: Sear
   const searchParams = useSearchParams();
   const queryParam = searchParams.get("query") || initialQuery || "";
   const categoryParam = searchParams.get("category") || initialCategory || "";
-  // Old and cached navbar links used `?query=Espresso Machines`. Treat known catalog
-  // names as exact categories so accessory copy cannot leak into the results.
   const exactCategory = categoryParam.trim() || getExactCatalogCategory(queryParam);
   const activeTerm = exactCategory || queryParam;
   const [products, setProducts] = useState<Product[]>([]);
@@ -160,12 +149,6 @@ export default function SearchPageClient({ initialQuery, initialCategory }: Sear
   // Fetch and search products
   useEffect(() => {
     const fetchAndSearch = async () => {
-      if (!activeTerm.trim()) {
-        setProducts([]);
-        setLoading(false);
-        return;
-      }
-
       setLoading(true);
       setError(null);
       setCurrentPage(1); // Reset page when new search starts
@@ -179,13 +162,19 @@ export default function SearchPageClient({ initialQuery, initialCategory }: Sear
 
         const allProducts: Product[] = await response.json();
 
-        const filteredProducts = exactCategory
-          ? allProducts.filter(
-              (product) =>
-                String(product.category || '').trim().toLowerCase() ===
-                exactCategory.toLowerCase(),
-            )
-          : advancedSearch(allProducts, queryParam);
+        let filteredProducts: Product[] = [];
+        if (exactCategory) {
+          filteredProducts = filterProductsByCategory(allProducts, exactCategory);
+        } else if (queryParam.trim()) {
+          filteredProducts = advancedSearch(allProducts, queryParam);
+          // If strict advanced search yields no results, fallback to flexible category/keyword
+          if (filteredProducts.length === 0) {
+            filteredProducts = filterProductsByCategory(allProducts, queryParam);
+          }
+        } else {
+          // If neither category nor query is provided, show all products
+          filteredProducts = filterProductsByCategory(allProducts, "all");
+        }
 
         setProducts(filteredProducts);
       } catch (err) {
@@ -212,7 +201,7 @@ export default function SearchPageClient({ initialQuery, initialCategory }: Sear
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 text-[#2e3868] animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 text-lg">Loading &quot;{activeTerm}&quot;...</p>
+          <p className="text-gray-600 text-lg">Loading products...</p>
           <p className="text-gray-500 text-sm mt-2">Finding products in our database</p>
         </div>
       </main>
@@ -225,16 +214,6 @@ export default function SearchPageClient({ initialQuery, initialCategory }: Sear
         <div className="text-center max-w-md mx-auto px-4">
           <p className="text-red-600 text-lg mb-2">Search Error</p>
           <p className="text-gray-600">{error}</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (!activeTerm.trim()) {
-    return (
-      <main className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-16 text-center">
-          <p className="text-gray-600 text-lg">Enter a search term to find products</p>
         </div>
       </main>
     );
@@ -255,7 +234,13 @@ export default function SearchPageClient({ initialQuery, initialCategory }: Sear
         <>
           <div className="container mx-auto px-4 py-8">
             <h1 className="text-2xl font-bold text-[#262626] mb-2">
-              {exactCategory ? exactCategory : <>Search Results for &quot;{queryParam}&quot;</>}
+              {exactCategory ? (
+                exactCategory
+              ) : queryParam ? (
+                <>Search Results for &quot;{queryParam}&quot;</>
+              ) : (
+                <>All Coffee Machines &amp; Equipment</>
+              )}
             </h1>
             <p className="text-gray-600">
               Found {products.length} {products.length === 1 ? "product" : "products"}

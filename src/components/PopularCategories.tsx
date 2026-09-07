@@ -1,14 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/types/product';
-
-const POPULAR_CATEGORY_NAMES = [
-  'Espresso Machines',
-  'Coffee Makers',
-  'Precision Grinders',
-  'Bean-to-Cup',
-  'Barista Accessories',
-] as const;
+import { filterProductsByCategory, POPULAR_CATEGORY_NAMES, CATALOG_NAVIGATION } from '@/config/categories';
 
 interface PopularCategoriesProps {
   products: Product[];
@@ -16,12 +9,13 @@ interface PopularCategoriesProps {
 
 export default function PopularCategories({ products }: PopularCategoriesProps) {
   const categories = POPULAR_CATEGORY_NAMES.map((name) => {
-    const categoryProducts = products.filter(
-      (product) => product.category?.trim().toLowerCase() === name.toLowerCase(),
-    );
+    const categoryProducts = filterProductsByCategory(products, name);
+    const navItem = CATALOG_NAVIGATION.find(item => item.label.toLowerCase() === name.toLowerCase());
+    const href = navItem?.href || `/search?category=${encodeURIComponent(name)}`;
 
     return {
       name,
+      href,
       count: categoryProducts.length,
       image: categoryProducts.find((product) => product.images?.[0])?.images[0],
     };
@@ -46,7 +40,7 @@ export default function PopularCategories({ products }: PopularCategoriesProps) 
             {categories.map((category) => (
               <Link
                 key={category.name}
-                href={`/search?category=${encodeURIComponent(category.name)}`}
+                href={category.href}
                 className="relative overflow-hidden rounded-2xl border border-[#2e3868]/10 bg-white shadow-[0_12px_30px_rgba(46,56,104,0.06)] transition-colors duration-200 hover:border-[#2e3868]/25"
                 aria-label={`Shop ${category.name}`}
               >

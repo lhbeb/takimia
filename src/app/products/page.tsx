@@ -6,15 +6,15 @@ import { filterProductsByCategory } from '@/config/categories';
 import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
-  title: 'Precision Coffee Grinders | Takimia',
+  title: 'All Coffee & Espresso Machines | Takimia',
   description:
-    'Shop Takimia conical and flat burr coffee grinders engineered for low retention and uniform particle size.',
+    'Browse our complete catalog of premium Breville espresso machines, precision drip coffee makers, grinders, and barista essentials.',
 };
 
-export default async function PrecisionGrindersPage() {
+export default async function ProductsPage() {
   try {
     const allProducts = await getAllProducts();
-    const products = filterProductsByCategory(allProducts, 'Precision Grinders');
+    const products = filterProductsByCategory(allProducts, 'all');
 
     return (
       <>
@@ -25,9 +25,9 @@ export default async function PrecisionGrindersPage() {
         <div className="min-h-screen bg-gray-50">
           <div className="bg-white border-b border-gray-200">
             <div className="container mx-auto px-4 py-8">
-              <h1 className="text-3xl md:text-4xl font-bold text-[#262626] mb-2">Precision Coffee Grinders</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-[#262626] mb-2">All Coffee Machines</h1>
               <p className="text-gray-600">
-                Unlock full coffee bean aroma and balanced extraction with our micro-stepped, zero-retention conical and flat burr grinders.
+                Explore our full range of manual and automatic espresso machines, precision drip brewers, and barista gear.
               </p>
             </div>
           </div>
@@ -41,7 +41,7 @@ export default async function PrecisionGrindersPage() {
       </>
     );
   } catch (error) {
-    console.error('Error loading grinders page:', error);
+    console.error('Error loading products page:', error);
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">

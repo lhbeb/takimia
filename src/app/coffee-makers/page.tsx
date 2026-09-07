@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import ProductGrid from '@/components/ProductGrid';
-import { getProductsByCollection, getProductsByCategory } from '@/lib/supabase/products';
+import { getAllProducts } from '@/lib/data';
+import { filterProductsByCategory } from '@/config/categories';
 import ScrollToTop from '@/components/ScrollToTop';
 
 export const metadata: Metadata = {
@@ -12,8 +13,8 @@ export const metadata: Metadata = {
 
 export default async function CoffeeMakersPage() {
   try {
-    const products = await getProductsByCollection('coffee-makers');
-    const fallbackProducts = products.length === 0 ? await getProductsByCategory('Coffee Makers') : products;
+    const allProducts = await getAllProducts();
+    const products = filterProductsByCategory(allProducts, 'Coffee Makers & Brewers');
 
     return (
       <>
@@ -33,7 +34,7 @@ export default async function CoffeeMakersPage() {
 
           <div className="container mx-auto px-4 py-8">
             <Suspense fallback={null}>
-              <ProductGrid products={fallbackProducts} showHeader={false} />
+              <ProductGrid products={products} showHeader={false} />
             </Suspense>
           </div>
         </div>
