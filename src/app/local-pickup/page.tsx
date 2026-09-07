@@ -103,9 +103,9 @@ export default function LocalPickupPage() {
                     <div className="mt-4 space-y-4 text-sm leading-7 text-[#5B6785]">
                       <address className="not-italic">
                         <span className="block font-semibold text-[#262626]">United States</span>
-                        305 Greif Pkwy
+                        680 N Golden Key St
                         <br />
-                        Delaware, OH 43015
+                        Gilbert, AZ 85233
                         <br />
                         United States
                       </address>

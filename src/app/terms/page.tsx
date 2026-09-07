@@ -196,25 +196,20 @@ const TermsPage = () => {
             <div className="bg-gray-50 rounded-lg p-6 space-y-3">
               <div>
                 <div className="font-medium text-[#262626] mb-1">Phone:</div>
-                <div className="text-gray-600">+19129231747</div>
+                <div className="text-gray-600">+1(786) 302-5205</div>
               </div>
               <div>
                 <div className="font-medium text-[#262626] mb-1">Email:</div>
                 <div className="text-gray-600">contact@takimia.com</div>
               </div>
               <div>
-                <div className="font-medium text-[#262626] mb-1">UK Registered Office:</div>
-                <div className="text-gray-600">Choats Rd, Barking, Dagenham RM9 6BF, United Kingdom</div>
-              </div>
-              <div>
-                <div className="font-medium text-[#262626] mb-1">US Dispatch Center:</div>
-                <div className="text-gray-600">305 Greif Pkwy, Delaware, OH 43015, United States</div>
+                <div className="font-medium text-[#262626] mb-1">Business Address:</div>
+                <div className="text-gray-600">680 N Golden Key St, Gilbert Arizona 85233 United States</div>
               </div>
               <div>
                 <div className="font-medium text-[#262626] mb-1">Hours:</div>
-                <div className="text-gray-600">Monday to Friday, 9:00 AM to 5:00 PM EST</div>
-                <div className="text-gray-600">Saturday, 10:00 AM to 3:00 PM EST</div>
-                <div className="text-gray-600">Sunday, Closed</div>
+                <div className="text-gray-600">Monday - Friday: 9:00 AM - 5:00 PM EST</div>
+                <div className="text-gray-600">Saturday - Sunday: Closed</div>
               </div>
             </div>
           </div>

@@ -36,34 +36,24 @@ export default function ContactPage() {
         'name': 'Takimia',
         'url': 'https://takimia.com',
         'email': 'contact@takimia.com',
-        'telephone': ['+19129231747'],
+        'telephone': ['+17863025205'],
         'contactPoint': [
           {
             '@type': 'ContactPoint',
-            'telephone': '+19129231747',
+            'telephone': '+17863025205',
             'contactType': 'customer service',
-            'areaServed': ['US', 'GB'],
+            'areaServed': ['US'],
             'availableLanguage': ['en'],
           },
         ],
-        'address': [
-          {
-            '@type': 'PostalAddress',
-            'streetAddress': 'Choats Rd',
-            'addressLocality': 'Barking',
-            'addressRegion': 'Dagenham',
-            'postalCode': 'RM9 6BF',
-            'addressCountry': 'GB',
-          },
-          {
-            '@type': 'PostalAddress',
-            'streetAddress': '305 Greif Pkwy',
-            'addressLocality': 'Delaware',
-            'addressRegion': 'OH',
-            'postalCode': '43015',
-            'addressCountry': 'US',
-          },
-        ],
+        'address': {
+          '@type': 'PostalAddress',
+          'streetAddress': '680 N Golden Key St',
+          'addressLocality': 'Gilbert',
+          'addressRegion': 'AZ',
+          'postalCode': '85233',
+          'addressCountry': 'US',
+        },
       },
     ],
   };
@@ -221,24 +211,17 @@ export default function ContactPage() {
                   <h2 className="text-xl font-bold text-[#262626] mb-6">Get in Touch</h2>
                   <div className="space-y-6">
                     <div className="flex items-start">
-                      <Building2 className="h-6 w-6 text-[#2e3868] mt-1 shrink-0" />
-                      <div className="ml-4">
-                        <h3 className="font-medium text-[#262626]">UK Registered Office</h3>
-                        <p className="text-gray-600 mt-1">Choats Rd, Barking, Dagenham RM9 6BF, United Kingdom</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start">
                       <MapPin className="h-6 w-6 text-[#2e3868] mt-1 shrink-0" />
                       <div className="ml-4">
-                        <h3 className="font-medium text-[#262626]">US Dispatch Center</h3>
-                        <p className="text-gray-600 mt-1">305 Greif Pkwy, Delaware, OH 43015, United States</p>
+                        <h3 className="font-medium text-[#262626]">Business Address</h3>
+                        <p className="text-gray-600 mt-1">680 N Golden Key St, Gilbert Arizona 85233 United States</p>
                       </div>
                     </div>
                     <div className="flex items-start">
                       <Phone className="h-6 w-6 text-[#2e3868] mt-1 shrink-0" />
                       <div className="ml-4">
                         <h3 className="font-medium text-[#262626]">Phone Support</h3>
-                        <p className="text-gray-600 mt-1"><span className="font-semibold">Phone:</span> +19129231747</p>
+                        <p className="text-gray-600 mt-1"><span className="font-semibold">Phone:</span> +1(786) 302-5205</p>
                       </div>
                     </div>
                     <div className="flex items-start">
@@ -252,8 +235,7 @@ export default function ContactPage() {
                       <h3 className="font-medium text-[#262626] mb-2">Business Hours</h3>
                       <ul className="text-gray-600 space-y-1">
                         <li>Monday - Friday: 9:00 AM - 5:00 PM EST</li>
-                        <li>Saturday: 10:00 AM - 3:00 PM EST</li>
-                        <li>Sunday: Closed</li>
+                        <li>Saturday - Sunday: Closed</li>
                       </ul>
                     </div>
                   </div>

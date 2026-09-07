@@ -138,27 +138,17 @@ export default function RootLayout({
                   "@type": "ContactPoint",
                   "contactType": "customer service",
                   "email": "contact@takimia.com",
-                  "telephone": "+19129231747",
+                  "telephone": "+17863025205",
                   "areaServed": ["GB", "US"]
                 },
-                "address": [
-                  {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Choats Rd",
-                    "addressLocality": "Barking",
-                    "addressRegion": "Dagenham",
-                    "postalCode": "RM9 6BF",
-                    "addressCountry": "GB"
-                  },
-                  {
-                    "@type": "PostalAddress",
-                    "streetAddress": "305 Greif Pkwy",
-                    "addressLocality": "Delaware",
-                    "addressRegion": "OH",
-                    "postalCode": "43015",
-                    "addressCountry": "US"
-                  }
-                ]
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "680 N Golden Key St",
+                  "addressLocality": "Gilbert",
+                  "addressRegion": "AZ",
+                  "postalCode": "85233",
+                  "addressCountry": "US"
+                }
               })
             }}
           />

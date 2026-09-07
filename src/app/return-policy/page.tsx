@@ -180,7 +180,7 @@ export default function ReturnPolicyPage() {
             <p>All returns are handled <strong>by mail</strong>. Here&apos;s how it works:</p>
             <ol className="list-decimal pl-6 space-y-3">
               <li>
-                <strong>Contact us</strong> at <a href="mailto:contact@takimia.com" className="text-blue-600 hover:underline font-semibold">contact@takimia.com</a> or call <span className="font-semibold">+19129231747</span>.
+                <strong>Contact us</strong> at <a href="mailto:contact@takimia.com" className="text-blue-600 hover:underline font-semibold">contact@takimia.com</a> or call <span className="font-semibold">+1(786) 302-5205</span>.
               </li>
               <li>
                 <strong>Get your free return label</strong>. We&apos;ll email you a prepaid label after approving your return request.
@@ -246,7 +246,7 @@ export default function ReturnPolicyPage() {
                   <span>Phone</span>
                 </div>
                 <div className="text-sm text-gray-600 pl-7 space-y-1">
-                  <div>+19129231747</div>
+                  <div>+1(786) 302-5205</div>
                 </div>
 
                 <div className="flex items-center gap-2 font-bold text-[#2e3868] pt-2">
@@ -261,16 +261,12 @@ export default function ReturnPolicyPage() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2 font-bold text-[#2e3868]">
                   <Building2 className="w-5 h-5 text-[#2e3868]" />
-                  <span>Our Addresses</span>
+                  <span>Our Address</span>
                 </div>
                 <div className="text-sm text-gray-600 pl-7 space-y-2">
                   <div>
-                    <strong className="text-gray-900 block">UK Registered Office:</strong>
-                    Choats Rd, Barking, Dagenham RM9 6BF, United Kingdom
-                  </div>
-                  <div>
-                    <strong className="text-gray-900 block">US Dispatch Center:</strong>
-                    305 Greif Pkwy, Delaware, OH 43015, United States
+                    <strong className="text-gray-900 block">Business Address:</strong>
+                    680 N Golden Key St, Gilbert Arizona 85233 United States
                   </div>
                 </div>
               </div>

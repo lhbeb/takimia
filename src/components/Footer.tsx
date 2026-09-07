@@ -27,8 +27,8 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center">
                 <Phone className="h-5 w-5 shrink-0 text-[#4575ba] mr-2" />
-                <a href="tel:+19129231747" className="hover:text-[#f5970c] transition-colors duration-300">
-                  <span className="font-semibold">United States:</span> +19129231747
+                <a href="tel:+17863025205" className="hover:text-[#f5970c] transition-colors duration-300">
+                  <span className="font-semibold">United States:</span> +1(786) 302-5205
                 </a>
               </div>
               <div className="flex items-center">
@@ -40,15 +40,8 @@ const Footer = () => {
               <div className="flex items-start">
                 <MapPin className="h-5 w-5 shrink-0 text-[#4575ba] mr-2 mt-1" />
                 <div>
-                  <span className="block font-semibold text-white">UK Registered Office</span>
-                  <span>Choats Rd, Barking, Dagenham RM9 6BF, United Kingdom</span>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <MapPin className="h-5 w-5 shrink-0 text-[#4575ba] mr-2 mt-1" />
-                <div>
-                  <span className="block font-semibold text-white">US Dispatch Center</span>
-                  <span>305 Greif Pkwy, Delaware, OH 43015, United States</span>
+                  <span className="block font-semibold text-white">Business Address</span>
+                  <span>680 N Golden Key St, Gilbert Arizona 85233 United States</span>
                 </div>
               </div>
               <div className="pt-2 flex gap-3">

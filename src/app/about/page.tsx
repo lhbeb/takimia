@@ -51,31 +51,21 @@ export default function AboutPage() {
         'description':
           'Ecommerce store serving the United Kingdom and United States with premium coffee machines, espresso makers, precision grinders, and barista essentials.',
         'email': 'contact@takimia.com',
-        'telephone': ['+19129231747'],
-        'address': [
-          {
-            '@type': 'PostalAddress',
-            'streetAddress': 'Choats Rd',
-            'addressLocality': 'Barking',
-            'addressRegion': 'Dagenham',
-            'postalCode': 'RM9 6BF',
-            'addressCountry': 'GB',
-          },
-          {
-            '@type': 'PostalAddress',
-            'streetAddress': '305 Greif Pkwy',
-            'addressLocality': 'Delaware',
-            'addressRegion': 'OH',
-            'postalCode': '43015',
-            'addressCountry': 'US',
-          },
-        ],
+        'telephone': ['+17863025205'],
+        'address': {
+          '@type': 'PostalAddress',
+          'streetAddress': '680 N Golden Key St',
+          'addressLocality': 'Gilbert',
+          'addressRegion': 'AZ',
+          'postalCode': '85233',
+          'addressCountry': 'US',
+        },
         'contactPoint': [
           {
             '@type': 'ContactPoint',
-            'telephone': '+19129231747',
+            'telephone': '+17863025205',
             'contactType': 'customer service',
-            'areaServed': ['GB', 'US'],
+            'areaServed': ['US'],
             'availableLanguage': ['en'],
           },
         ],
@@ -400,16 +390,9 @@ export default function AboutPage() {
             <div className="bg-[#F0F6FF] rounded-xl p-6 border border-[#2e3868]/10">
               <div className="flex items-center gap-3 mb-3">
                 <MapPin className="h-5 w-5 text-[#2e3868]" />
-                <div className="font-medium text-[#262626]">UK Registered Office</div>
+                <div className="font-medium text-[#262626]">Business Address</div>
               </div>
-              <div className="text-gray-600 ml-8">Choats Rd, Barking, Dagenham RM9 6BF, United Kingdom</div>
-            </div>
-            <div className="bg-[#F0F6FF] rounded-xl p-6 border border-[#2e3868]/10">
-              <div className="flex items-center gap-3 mb-3">
-                <MapPin className="h-5 w-5 text-[#2e3868]" />
-                <div className="font-medium text-[#262626]">US Dispatch Center</div>
-              </div>
-              <div className="text-gray-600 ml-8">305 Greif Pkwy, Delaware, OH 43015, United States</div>
+              <div className="text-gray-600 ml-8">680 N Golden Key St, Gilbert Arizona 85233 United States</div>
             </div>
             <div className="bg-[#F0F6FF] rounded-xl p-6 border border-[#2e3868]/10">
               <div className="flex items-center gap-3 mb-3">
@@ -418,8 +401,8 @@ export default function AboutPage() {
               </div>
               <div className="ml-8 space-y-3 text-gray-600">
                 <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-1">
-                  <a href="tel:+19129231747" className="whitespace-nowrap hover:text-[#2e3868] transition-colors">
-                    +19129231747
+                  <a href="tel:+17863025205" className="whitespace-nowrap hover:text-[#2e3868] transition-colors">
+                    +1(786) 302-5205
                   </a>
                 </div>
               </div>
@@ -437,9 +420,8 @@ export default function AboutPage() {
                 <div className="font-medium text-[#262626]">Business Hours:</div>
               </div>
               <div className="text-gray-600 ml-8 space-y-1">
-                <div>Monday to Friday, 9:00 AM to 5:00 PM EST</div>
-                <div>Saturday, 10:00 AM to 3:00 PM EST</div>
-                <div>Sunday, Closed</div>
+                <div>Monday - Friday: 9:00 AM - 5:00 PM EST</div>
+                <div>Saturday - Sunday: Closed</div>
               </div>
             </div>
           </div>

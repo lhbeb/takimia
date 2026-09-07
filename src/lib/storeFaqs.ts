@@ -62,7 +62,7 @@ export const STORE_FAQS: readonly StoreFaq[] = [
   {
     question: 'How can I contact Takimia?',
     answer:
-      'You can use our contact form, email contact@takimia.com, or call +19129231747 during published support hours.',
+      'You can use our contact form, email contact@takimia.com, or call +1(786) 302-5205 during published support hours.',
     linkHref: '/contact',
     linkLabel: 'Contact our team',
   },
