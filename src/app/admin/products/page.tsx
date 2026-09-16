@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -40,6 +40,28 @@ const isGmcEnabled = (product: Product) => product.meta?.gmc_enabled === true;
 
 type ViewMode = 'grid' | 'list';
 
+const getInitialPage = () => {
+  if (typeof window === 'undefined') return 1;
+
+  const page = Number.parseInt(new URLSearchParams(window.location.search).get('page') || '1', 10);
+  return Number.isFinite(page) && page > 0 ? page : 1;
+};
+
+const getPageItems = (currentPage: number, totalPages: number): Array<number | string> => {
+  if (totalPages <= 7) return Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const pages: Array<number | string> = [1];
+  const start = Math.max(2, currentPage - 1);
+  const end = Math.min(totalPages - 1, currentPage + 1);
+
+  if (start > 2) pages.push('start-ellipsis');
+  for (let page = start; page <= end; page += 1) pages.push(page);
+  if (end < totalPages - 1) pages.push('end-ellipsis');
+  pages.push(totalPages);
+
+  return pages;
+};
+
 export default function AdminProductsPage() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -53,7 +75,8 @@ export default function AdminProductsPage() {
   const [listedByFilter, setListedByFilter] = useState<string>('all');
   const [checkoutFilter, setCheckoutFilter] = useState<'all' | 'stripe' | 'kofi' | 'buymeacoffee' | 'external' | 'paypal-invoice' | 'paypal-unclaimed' | 'paypal-direct' | 'paypal-api'>('all');
   const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
+  const filtersReadyRef = useRef(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [togglingFeatured, setTogglingFeatured] = useState<string | null>(null);
   const [togglingGmc, setTogglingGmc] = useState<Set<string>>(new Set());
@@ -196,8 +219,24 @@ export default function AdminProductsPage() {
     }
 
     setFilteredProducts(filtered);
-    setCurrentPage(1);
   }, [searchQuery, statusFilter, featuredFilter, stockFilter, listedByFilter, checkoutFilter, products]);
+
+  // Reset only when the administrator changes a filter, not when a product is updated.
+  useEffect(() => {
+    if (!filtersReadyRef.current) {
+      filtersReadyRef.current = true;
+      return;
+    }
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, featuredFilter, stockFilter, listedByFilter, checkoutFilter]);
+
+  // Keep the current page in the URL so refreshes and edit/back navigation retain context.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (currentPage > 1) url.searchParams.set('page', String(currentPage));
+    else url.searchParams.delete('page');
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
+  }, [currentPage]);
 
   const handleDelete = async (slug: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
@@ -810,10 +849,22 @@ export default function AdminProductsPage() {
   };
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const safeTotalPages = Math.max(1, totalPages);
+  const pageItems = getPageItems(currentPage, safeTotalPages);
+  const firstVisibleProduct = filteredProducts.length === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const lastVisibleProduct = Math.min(currentPage * itemsPerPage, filteredProducts.length);
+  const productListPath = currentPage > 1 ? `/admin/products?page=${currentPage}` : '/admin/products';
+  const getEditHref = (slug: string) =>
+    `/admin/products/${slug}/edit?returnTo=${encodeURIComponent(productListPath)}`;
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  useEffect(() => {
+    if (loading) return;
+    setCurrentPage(page => Math.min(Math.max(1, page), safeTotalPages));
+  }, [loading, safeTotalPages]);
 
   if (loading) {
     return <AdminLoading message="Loading products..." />;
@@ -1274,7 +1325,7 @@ export default function AdminProductsPage() {
                     <Eye className="h-4 w-4 text-gray-700" />
                   </button>
                   <Link
-                    href={`/admin/products/${product.slug}/edit`}
+                    href={getEditHref(product.slug)}
                     className="p-2 bg-white rounded-lg hover:bg-gray-100 transition-colors"
                   >
                     <Edit className="h-4 w-4 text-gray-700" />
@@ -1598,7 +1649,7 @@ export default function AdminProductsPage() {
                           )}
                         </button>
                         <Link
-                          href={`/admin/products/${product.slug}/edit`}
+                          href={getEditHref(product.slug)}
                           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                         >
                           <Edit className="h-4 w-4 text-gray-500" />
@@ -1706,7 +1757,7 @@ export default function AdminProductsPage() {
                             </button>
 
                             <Link
-                              href={`/admin/products/${product.slug}/edit`}
+                              href={getEditHref(product.slug)}
                               onClick={() => setOpenDropdown(null)}
                               className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-3 transition-colors block"
                             >
@@ -1749,26 +1800,50 @@ export default function AdminProductsPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-6 flex items-center justify-center gap-2">
-          <button
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="p-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
+        <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:flex-row">
+          <p className="text-sm text-gray-600">
+            Showing <span className="font-semibold text-gray-900">{firstVisibleProduct}–{lastVisibleProduct}</span> of{' '}
+            <span className="font-semibold text-gray-900">{filteredProducts.length}</span> products
+          </p>
 
-          <span className="px-4 py-2 text-sm text-gray-600">
-            Page {currentPage} of {totalPages}
-          </span>
+          <nav className="flex items-center gap-1" aria-label="Product list pagination">
+            <button
+              onClick={() => setCurrentPage(page => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Previous page"
+              title="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
 
-          <button
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="p-2 rounded-lg bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
+            {pageItems.map(item => typeof item === 'number' ? (
+              <button
+                key={item}
+                onClick={() => setCurrentPage(item)}
+                aria-current={currentPage === item ? 'page' : undefined}
+                aria-label={`Go to page ${item}`}
+                className={`h-9 min-w-9 rounded-lg px-2 text-sm font-medium transition-colors ${currentPage === item
+                  ? 'bg-[#2e3868] text-white shadow-sm'
+                  : 'border border-gray-200 text-gray-700 hover:bg-gray-50'
+                  }`}
+              >
+                {item}
+              </button>
+            ) : (
+              <span key={item} className="flex h-9 min-w-7 items-center justify-center text-gray-400" aria-hidden="true">…</span>
+            ))}
+
+            <button
+              onClick={() => setCurrentPage(page => Math.min(totalPages, page + 1))}
+              disabled={currentPage === totalPages}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Next page"
+              title="Next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </nav>
         </div>
       )}
     </AdminLayout>
