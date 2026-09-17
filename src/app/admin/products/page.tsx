@@ -78,6 +78,9 @@ export default function AdminProductsPage() {
   const [currentPage, setCurrentPage] = useState(getInitialPage);
   const filtersReadyRef = useRef(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDeleteSlug, setPendingDeleteSlug] = useState<string | null>(null);
+  const [pendingBulkDelete, setPendingBulkDelete] = useState(false);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
   const [togglingFeatured, setTogglingFeatured] = useState<string | null>(null);
   const [togglingGmc, setTogglingGmc] = useState<Set<string>>(new Set());
   const [bulkUpdatingGmc, setBulkUpdatingGmc] = useState<'include' | 'exclude' | null>(null);
@@ -239,8 +242,6 @@ export default function AdminProductsPage() {
   }, [currentPage]);
 
   const handleDelete = async (slug: string) => {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-
     setDeletingId(slug);
     try {
       const token = localStorage.getItem('admin_token');
@@ -264,6 +265,40 @@ export default function AdminProductsPage() {
       setError('Failed to delete product');
     } finally {
       setDeletingId(null);
+      setPendingDeleteSlug(null);
+    }
+  };
+
+  const requestDelete = (slug: string) => setPendingDeleteSlug(slug);
+
+  const requestBulkDelete = () => {
+    if (selectedProducts.size < 2) return;
+    setPendingBulkDelete(true);
+  };
+
+  const handleBulkDelete = async () => {
+    const slugs = Array.from(selectedProducts);
+    if (slugs.length < 2) return;
+    setBulkDeleting(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('admin_token');
+      const results = await Promise.all(slugs.map(async slug => {
+        const response = await fetch(`/api/admin/products/${encodeURIComponent(slug)}`, {
+          method: 'DELETE',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        return { slug, ok: response.ok };
+      }));
+      const failed = results.filter(result => !result.ok);
+      if (failed.length) throw new Error(`${failed.length} product${failed.length === 1 ? '' : 's'} could not be deleted.`);
+      setSelectedProducts(new Set());
+      setPendingBulkDelete(false);
+      await fetchProducts();
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete selected products');
+    } finally {
+      setBulkDeleting(false);
     }
   };
 
@@ -875,6 +910,53 @@ export default function AdminProductsPage() {
       title="Products"
       subtitle={`${products.length} products • ${products.filter(p => p.published).length} published • ${products.filter(p => !p.published).length} drafts • ${featuredCount}/${FEATURE_LIMIT} featured • ${products.filter(isGmcEnabled).length} GMC • ${products.filter(p => p.inStock === false).length} sold out`}
     >
+      {pendingDeleteSlug && (() => {
+        const pendingProduct = products.find(product => product.slug === pendingDeleteSlug);
+        if (!pendingProduct) return null;
+        return (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="delete-product-title">
+            <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl">
+              <div className="mb-4 flex items-start justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-red-100 p-2 text-red-600"><Trash2 className="h-5 w-5" /></div>
+                  <h2 id="delete-product-title" className="text-lg font-semibold text-gray-900">Delete product?</h2>
+                </div>
+                <button type="button" onClick={() => setPendingDeleteSlug(null)} className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700" aria-label="Close confirmation"><X className="h-5 w-5" /></button>
+              </div>
+              <p className="text-sm leading-6 text-gray-600">Are you sure you want to delete <strong className="text-gray-900">{pendingProduct.title}</strong>? This action cannot be undone.</p>
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={() => setPendingDeleteSlug(null)} className="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</button>
+                <button type="button" onClick={() => handleDelete(pendingDeleteSlug)} disabled={deletingId === pendingDeleteSlug} className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60">
+                  {deletingId === pendingDeleteSlug && <RefreshCw className="h-4 w-4 animate-spin" />}
+                  Delete product
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+      {pendingBulkDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="bulk-delete-product-title">
+          <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-2xl">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-red-100 p-2 text-red-600"><Trash2 className="h-5 w-5" /></div>
+                <h2 id="bulk-delete-product-title" className="text-lg font-semibold text-gray-900">Delete selected products?</h2>
+              </div>
+              <button type="button" onClick={() => setPendingBulkDelete(false)} className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700" aria-label="Close bulk delete confirmation"><X className="h-5 w-5" /></button>
+            </div>
+            <p className="text-sm leading-6 text-gray-600">Are you sure you want to permanently delete <strong className="text-gray-900">{selectedProducts.size} selected products</strong>? This action cannot be undone.</p>
+            <div className="mt-6 flex justify-end gap-3">
+              <button type="button" onClick={() => setPendingBulkDelete(false)} disabled={bulkDeleting} className="rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60">Cancel</button>
+              <button type="button" onClick={handleBulkDelete} disabled={bulkDeleting} className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60">
+                {bulkDeleting && <RefreshCw className="h-4 w-4 animate-spin" />}
+                Delete {selectedProducts.size} products
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Error Alert */}
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center justify-between">
@@ -1121,6 +1203,17 @@ export default function AdminProductsPage() {
                   )}
                   <span className="font-medium">{exporting ? 'Exporting...' : `Export .zip (${selectedProducts.size})`}</span>
                 </button>
+                {adminRole === 'SUPER_ADMIN' && selectedProducts.size >= 2 && (
+                  <button
+                    onClick={requestBulkDelete}
+                    disabled={bulkDeleting}
+                    className="inline-flex items-center justify-center gap-2 px-3 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors shadow-lg shadow-red-500/25 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm shrink-0"
+                    title="Delete all selected products"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    <span className="font-medium">Bulk delete ({selectedProducts.size})</span>
+                  </button>
+                )}
               </>
             )}
 
@@ -1333,7 +1426,7 @@ export default function AdminProductsPage() {
                   {/* Only SUPER_ADMIN can delete products */}
                   {adminRole === 'SUPER_ADMIN' && (
                     <button
-                      onClick={() => handleDelete(product.slug)}
+                      onClick={() => requestDelete(product.slug)}
                       disabled={deletingId === product.slug}
                       className="p-2 bg-white rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
                       title="Delete product (Super Admin only)"
@@ -1657,7 +1750,7 @@ export default function AdminProductsPage() {
                         {/* Only SUPER_ADMIN can delete products */}
                         {adminRole === 'SUPER_ADMIN' && (
                           <button
-                            onClick={() => handleDelete(product.slug)}
+                            onClick={() => requestDelete(product.slug)}
                             disabled={deletingId === product.slug}
                             className="p-2 hover:bg-red-50 rounded-lg transition-colors"
                             title="Delete product (Super Admin only)"
@@ -1771,7 +1864,7 @@ export default function AdminProductsPage() {
                             {adminRole === 'SUPER_ADMIN' && (
                               <button
                                 onClick={() => {
-                                  handleDelete(product.slug);
+                                  requestDelete(product.slug);
                                   setOpenDropdown(null);
                                 }}
                                 disabled={deletingId === product.slug}

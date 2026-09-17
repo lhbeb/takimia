@@ -39,7 +39,7 @@ interface ScriptCard {
 }
 
 // ─── Available scripts ────────────────────────────────────────────────────────
-const CHECKOUT_FLOWS = ['buymeacoffee', 'stripe', 'kofi', 'external', 'paypal-invoice', 'paypal-unclaimed', 'paypal-direct', 'paypal-api'];
+const CHECKOUT_FLOWS = ['buymeacoffee', 'stripe', 'stripe-hosted', 'kofi', 'external', 'paypal-invoice', 'paypal-unclaimed', 'paypal-direct', 'paypal-api'];
 const LISTED_BY_ADMINS = ['walid', 'abdo', 'jebbar', 'amine', 'mehdi', 'othmane', 'janah', 'youssef', 'yassine'];
 
 const SCRIPTS: ScriptCard[] = [
@@ -79,11 +79,12 @@ const SCRIPTS: ScriptCard[] = [
             fromFlow: ['all', ...CHECKOUT_FLOWS],
             toFlow: CHECKOUT_FLOWS,
         },
-        paramOptionLabels: {
-            fromFlow: {
-                all: 'All flows',
-                buymeacoffee: '☕ Buy Me a Coffee',
-                stripe: '💳 Stripe',
+            paramOptionLabels: {
+                fromFlow: {
+                    all: 'All flows',
+                    buymeacoffee: '☕ Buy Me a Coffee',
+                    stripe: '💳 Stripe Embedded',
+                    'stripe-hosted': '💳 Stripe Hosted',
                 kofi: '☕ Ko-fi',
                 external: '🔗 External',
                 'paypal-invoice': '🔵 PayPal Invoice/Request (Telegram Chat)',
@@ -91,9 +92,10 @@ const SCRIPTS: ScriptCard[] = [
                 'paypal-direct': '🔵 PayPal Checkout Direct',
                 'paypal-api': '🔵 PayPal Orders API',
             },
-            toFlow: {
-                buymeacoffee: '☕ Buy Me a Coffee',
-                stripe: '💳 Stripe',
+                toFlow: {
+                    buymeacoffee: '☕ Buy Me a Coffee',
+                    stripe: '💳 Stripe Embedded',
+                    'stripe-hosted': '💳 Stripe Hosted',
                 kofi: '☕ Ko-fi',
                 external: '🔗 External',
                 'paypal-invoice': '🔵 PayPal Invoice/Request (Telegram Chat)',

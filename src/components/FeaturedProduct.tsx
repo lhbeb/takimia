@@ -41,7 +41,7 @@ const FeaturedProduct: React.FC<FeaturedProductProps> = ({ product }) => {
               />
               {isSoldOut && (
                 <div className="absolute inset-0 bg-[rgba(0,0,0,0.382)] flex items-center justify-center">
-                  <div className="bg-[#f5970c] rounded-lg px-7 py-2.5">
+                  <div className="bg-[#79D7F2] rounded-lg px-7 py-2.5">
                     <span className="sold-out-badge text-[#2e3868] text-base md:text-lg uppercase tracking-wider whitespace-nowrap font-bold">
                       Sold Out
                     </span>

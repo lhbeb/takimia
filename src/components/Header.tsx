@@ -147,9 +147,9 @@ const Header = () => {
                   className="flex items-center gap-1.5 sm:gap-2 hover:opacity-80 transition-opacity flex-wrap justify-center"
                   aria-label="Inquiries? Live Chat Available 24/7"
                 >
-                  <MessageSquare className="w-4 h-4 sm:w-4.5 sm:h-4.5 flex-shrink-0 text-[#f5970c]" />
+                  <MessageSquare className="w-4 h-4 sm:w-4.5 sm:h-4.5 flex-shrink-0 text-[#79D7F2]" />
                   <span className="whitespace-nowrap">Inquiries? <span className="font-bold">Live Chat Available 24/7</span></span>
-                  <span className="underline whitespace-nowrap font-bold text-[#f5970c] ml-1">Chat With Us</span>
+                  <span className="underline whitespace-nowrap font-bold text-[#79D7F2] ml-1">Chat With Us</span>
                 </Link>
               </div>
             ) : (
@@ -226,7 +226,7 @@ const Header = () => {
               {isSticky && (
                 <button
                   onClick={() => setIsSearchOpen(true)}
-                  className="lg:hidden text-[#2e3868] hover:text-[#f5970c] transition-colors duration-300"
+                  className="lg:hidden text-[#2e3868] hover:text-[#79D7F2] transition-colors duration-300"
                   aria-label="Search products"
                 >
                   <Search className="h-5 w-5" />
@@ -236,7 +236,7 @@ const Header = () => {
               {/* Help Center Icon - Desktop */}
               <Link
                 href="/contact"
-                className="hidden sm:flex text-[#2e3868] hover:text-[#f5970c] transition-colors duration-300"
+                className="hidden sm:flex text-[#2e3868] hover:text-[#79D7F2] transition-colors duration-300"
                 aria-label="Help Center"
               >
                 <Info className="h-5 w-5" />
@@ -245,12 +245,12 @@ const Header = () => {
               {/* Cart - PRESERVED with color update */}
               <button
                 onClick={handleCartClick}
-                className="relative text-[#2e3868] hover:text-[#f5970c] transition-colors duration-300"
+                className="relative text-[#2e3868] hover:text-[#79D7F2] transition-colors duration-300"
                 aria-label={`Shopping cart ${cartCount > 0 ? `with ${cartCount} items` : '(empty)'}`}
               >
                 <ShoppingCart className="h-5 w-5" />
                 <ClientOnly>
-                  <span className={`absolute -top-2 -right-2 bg-[#f5970c] text-[#2e3868] text-xs rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center font-semibold transition-opacity duration-300 ${cartCount > 0 ? 'opacity-100' : 'opacity-0'}`}>
+                  <span className={`absolute -top-2 -right-2 bg-[#79D7F2] text-[#2e3868] text-xs rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center font-semibold transition-opacity duration-300 ${cartCount > 0 ? 'opacity-100' : 'opacity-0'}`}>
                     {cartCount}
                   </span>
                 </ClientOnly>
@@ -259,7 +259,7 @@ const Header = () => {
               {/* Mobile menu button */}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="lg:hidden text-[#2e3868] hover:text-[#f5970c] transition-colors duration-300"
+                className="lg:hidden text-[#2e3868] hover:text-[#79D7F2] transition-colors duration-300"
                 aria-label="Toggle mobile menu"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

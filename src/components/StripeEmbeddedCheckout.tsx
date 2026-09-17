@@ -21,6 +21,7 @@ interface StripeEmbeddedCheckoutProps {
     images?: string[];
   };
   sellerName?: string | null;
+  compact?: boolean;
   onBack?: () => void;
 }
 
@@ -29,13 +30,16 @@ export default function StripeEmbeddedCheckout({
   shippingData,
   product,
   sellerName,
+  compact = false,
   onBack,
 }: StripeEmbeddedCheckoutProps) {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
   const [configError, setConfigError] = useState('');
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (!compact) {
+      window.scrollTo(0, 0);
+    }
 
     const loadStripeConfig = async () => {
       try {
@@ -54,7 +58,7 @@ export default function StripeEmbeddedCheckout({
     };
 
     loadStripeConfig();
-  }, []);
+  }, [compact]);
 
   const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -62,9 +66,9 @@ export default function StripeEmbeddedCheckout({
   }).format(product.price);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f8fafc] to-[#f0fdfa] px-0 py-0 sm:px-4 sm:py-8">
-      <div className="mx-auto w-full max-w-6xl overflow-hidden bg-white shadow-none sm:rounded-3xl sm:border sm:border-gray-100 sm:shadow-2xl">
-        <div className="border-b border-gray-100 p-5 sm:p-8">
+    <div className={compact ? 'w-full' : 'min-h-screen bg-gradient-to-br from-[#e0e7ff] via-[#f8fafc] to-[#f0fdfa] px-0 py-0 sm:px-4 sm:py-8'}>
+      <div className={compact ? 'w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm' : 'mx-auto w-full max-w-6xl overflow-hidden bg-white shadow-none sm:rounded-3xl sm:border sm:border-gray-100 sm:shadow-2xl'}>
+        <div className={compact ? 'border-b border-gray-100 p-4' : 'border-b border-gray-100 p-5 sm:p-8'}>
           {onBack && (
             <button
               type="button"
@@ -76,19 +80,19 @@ export default function StripeEmbeddedCheckout({
             </button>
           )}
 
-          <div className="mb-6 flex flex-col items-center text-center">
+          <div className={compact ? 'mb-4 flex flex-col items-center text-center' : 'mb-6 flex flex-col items-center text-center'}>
             <span className="mb-2 inline-flex items-center justify-center rounded-full bg-blue-100 p-2">
               <Check className="h-7 w-7 text-[#2e3868]" />
             </span>
-            <h1 className="text-2xl font-extrabold tracking-tight text-[#262626] sm:text-3xl">
+            <h1 className={compact ? 'text-lg font-extrabold tracking-tight text-[#262626]' : 'text-2xl font-extrabold tracking-tight text-[#262626] sm:text-3xl'}>
               Secure Payment
             </h1>
-            <p className="mt-2 text-base text-gray-600">
+            <p className="mt-2 text-sm text-gray-600">
               Complete your payment below without leaving Takimia.
             </p>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className={compact ? 'grid gap-3' : 'grid gap-4 lg:grid-cols-2'}>
             <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5">
               <div className="mb-2 flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-[#2e3868]" />
@@ -131,7 +135,7 @@ export default function StripeEmbeddedCheckout({
           </div>
         </div>
 
-        <div className="min-h-[640px] p-3 sm:p-8">
+        <div className={compact ? 'min-h-[420px] p-2' : 'min-h-[640px] p-3 sm:p-8'}>
           {configError ? (
             <div className="rounded-2xl border border-red-100 bg-red-50 p-5 text-sm font-medium text-red-700">
               {configError}

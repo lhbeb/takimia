@@ -775,23 +775,30 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                         </p>
                       </div>
                     ) : (
-                      <button
-                        onClick={handleBuyNow}
-                        disabled={isAddingToCart || isBuyingNow}
-                        className="hidden lg:flex w-full bg-transparent border-2 border-[#2e3868] hover:border-[#1f274a] text-[#2e3868] hover:text-[#1f274a] py-4 px-6 rounded-xl font-semibold transition-colors duration-200 items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isBuyingNow ? (
-                          <>
-                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2e3868] mr-2"></div>
-                            Processing...
-                          </>
-                        ) : (
-                          <>
-                            <Zap className="h-5 w-5 mr-2" />
-                            Buy Now
-                          </>
+                      <div className="hidden lg:flex flex-col gap-1.5">
+                        <button
+                          onClick={handleBuyNow}
+                          disabled={isAddingToCart || isBuyingNow}
+                          className="w-full bg-transparent border-2 border-[#2e3868] hover:border-[#1f274a] text-[#2e3868] hover:text-[#1f274a] py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isBuyingNow ? (
+                            <>
+                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2e3868] mr-2"></div>
+                              Processing...
+                            </>
+                          ) : (
+                            <>
+                              <Zap className="h-5 w-5 mr-2" />
+                              {product.checkoutFlow === 'stripe' ? 'Secure Stripe Checkout' : 'Buy Now'}
+                            </>
+                          )}
+                        </button>
+                        {product.checkoutFlow === 'stripe' && (
+                          <p className="text-center text-[11px] font-medium text-gray-500">
+                            Verify delivery first, then pay with card, Link, Apple Pay, or Google Pay when eligible.
+                          </p>
                         )}
-                      </button>
+                      </div>
                     )}
                   </>
                 )}

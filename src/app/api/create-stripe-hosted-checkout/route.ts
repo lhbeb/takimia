@@ -5,25 +5,11 @@ import { getProductBySlug } from '@/lib/supabase/products';
 import { getStripeConfig } from '@/lib/supabase/payment-settings';
 import { resolveBaseUrl } from '@/lib/url';
 
-function getSafeStripeError(error: any): string {
-  console.error('[Stripe Error Details]:', { type: error.type, code: error.code, message: error.message });
-  if (error.type === 'card_error') return 'There was an issue with your payment method. Please try a different card or email contact@takimia.com';
-  return 'Payment processing is temporarily unavailable. Please email contact@takimia.com';
-}
-
 export async function POST(request: NextRequest) {
   try {
     const stripeConfig = await getStripeConfig();
-    if (!stripeConfig.isActive || !stripeConfig.secretKey || !stripeConfig.publishableKey) {
-      return NextResponse.json(
-        { error: 'Stripe is not configured. Please contact support to complete this order.' },
-        { status: 503 }
-      );
-    }
-
-    const stripe = new Stripe(stripeConfig.secretKey, { apiVersion: '2026-01-28.clover' as any });
+    const stripe = new Stripe(stripeConfig.secretKey || 'sk_test_placeholder', { apiVersion: '2026-01-28.clover' as any });
     const { orderId, product, shippingData } = await request.json();
-
     if (!orderId || !product?.slug || !shippingData) {
       return NextResponse.json({ error: 'Missing required data: orderId, product or shippingData' }, { status: 400 });
     }
@@ -35,7 +21,6 @@ export async function POST(request: NextRequest) {
     const dbProduct = await getProductBySlug(product.slug);
     if (!dbProduct) return NextResponse.json({ error: 'This product is no longer available for purchase.' }, { status: 404 });
     if (dbProduct.inStock === false) return NextResponse.json({ error: 'Sorry, this item is currently sold out.' }, { status: 409 });
-
     const order = await getOrderById(orderId);
     if (!order || order.product_slug !== dbProduct.slug) {
       return NextResponse.json({ error: 'Order does not match this product. Please start checkout again.' }, { status: 400 });
@@ -44,23 +29,19 @@ export async function POST(request: NextRequest) {
 
     const origin = process.env.NODE_ENV === 'development' ? request.nextUrl.origin : resolveBaseUrl();
     const session = await stripe.checkout.sessions.create({
-      ui_mode: 'embedded',
-      // Card enables Apple Pay/Google Pay when the domain/browser is eligible;
-      // Link exposes Stripe Link in the embedded payment form.
-      payment_method_types: ['card', 'link'],
+      payment_method_types: ['card'],
       line_items: [{
         price_data: {
           currency: dbProduct.currency?.toLowerCase() || 'usd',
-          product_data: {
-            name: `Takimia order - ${orderId}`,
-            images: dbProduct.images?.length ? [dbProduct.images[0]] : undefined,
-          },
+          product_data: { name: `Takimia order - ${orderId}` },
           unit_amount: Math.round(dbProduct.price * 100),
         },
         quantity: 1,
       }],
       mode: 'payment',
-      return_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/checkout?payment=cancelled&provider=stripe-hosted`,
+      client_reference_id: orderId,
       customer_email: shippingData.email,
       payment_intent_data: {
         shipping: {
@@ -76,12 +57,7 @@ export async function POST(request: NextRequest) {
         },
       },
       expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
-      metadata: {
-        order_id: orderId,
-        product_slug: dbProduct.slug,
-        product_id: dbProduct.id,
-        customer_email: shippingData.email,
-      },
+      metadata: { order_id: orderId, product_slug: dbProduct.slug, product_id: dbProduct.id },
     });
 
     const linked = await updateOrderStripeStatus(orderId, {
@@ -90,9 +66,10 @@ export async function POST(request: NextRequest) {
       checkout_expires_at: new Date(Date.now() + 31 * 60 * 1000).toISOString(),
     });
     if (!linked) throw new Error('Failed to link Stripe session to order');
-
-    return NextResponse.json({ clientSecret: session.client_secret, sessionId: session.id });
+    if (!session.url) throw new Error('Stripe did not return a hosted Checkout URL');
+    return NextResponse.json({ url: session.url, sessionId: session.id });
   } catch (error: any) {
-    return NextResponse.json({ error: getSafeStripeError(error) }, { status: 500 });
+    console.error('[Stripe Hosted Error]', error);
+    return NextResponse.json({ error: 'Payment processing is temporarily unavailable. Please email contact@takimia.com' }, { status: 500 });
   }
 }

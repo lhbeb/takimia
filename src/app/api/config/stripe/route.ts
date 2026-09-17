@@ -6,6 +6,13 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
     try {
         const config = await getStripeConfig();
+
+        if (!config.isActive || !config.publishableKey) {
+            return NextResponse.json(
+                { error: 'Stripe is not configured' },
+                { status: 503 }
+            );
+        }
         
         return NextResponse.json({
             publishableKey: config.publishableKey,

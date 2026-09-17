@@ -4,11 +4,12 @@ import { useState } from 'react';
 import type { FormEventHandler, MouseEvent, ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, ChevronDown, Globe2, Mail, Store, Trash, User } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ChevronDown, CreditCard, Globe2, LockKeyhole, Mail, ShieldCheck, Store, Trash, User } from 'lucide-react';
 import CheckoutNotifier from '@/components/CheckoutNotifier';
 import CountrySelect from '@/components/CountrySelect';
 import PaypalApiRedirectButton from '@/components/PaypalApiRedirectButton';
 import PaypalRedirectButton from '@/components/PaypalRedirectButton';
+import StripeEmbeddedCheckout from '@/components/StripeEmbeddedCheckout';
 import type { CartItem } from '@/utils/cart';
 import type { CheckoutFormController } from './useCheckoutForm';
 import type { PaypalApiInitializationResult, PaypalPaymentInitializationResult } from './types';
@@ -20,7 +21,9 @@ interface CheckoutShippingStepProps {
   isSendingEmail: boolean;
   isRedirecting: boolean;
   checkoutError: string;
+  stripeClientSecret: string | null;
   onSubmit: FormEventHandler<HTMLFormElement>;
+  onLockedPaymentAttempt: () => void;
   onPaypalBeforePayment: () => Promise<PaypalPaymentInitializationResult>;
   onPaypalApiBeforePayment: () => Promise<PaypalApiInitializationResult>;
   onClearCart: () => void;
@@ -382,11 +385,11 @@ function ContinueButton({
         <>
           <div className="animate-spin rounded-full h-6 w-6 border-b-3 border-white mr-3" />
           <span className="text-xl font-bold">
-            {isSendingEmail ? 'Confirming Address...' : 'Redirecting...'}
+            {isSendingEmail ? 'Verifying Address...' : 'Redirecting...'}
           </span>
         </>
       ) : (
-        <span className="text-xl font-bold">Continue to Payment</span>
+        <span className="text-xl font-bold">Verify Address</span>
       )}
     </button>
   );
@@ -430,6 +433,118 @@ function SecureCheckoutInfo({ mobile = false }: { mobile?: boolean }) {
   );
 }
 
+function formatVerifiedAddress(form: CheckoutFormController) {
+  const parts = [
+    form.shippingData.streetAddress,
+    form.shippingData.addressLine2,
+    form.shippingData.city,
+    form.shippingData.state,
+    form.shippingData.zipCode,
+    form.shippingData.country,
+  ].filter(Boolean);
+
+  return parts.join(', ');
+}
+
+function AddressVerifiedNotice({ form }: { form: CheckoutFormController }) {
+  return (
+    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800" role="status">
+      <div className="flex items-start gap-3">
+        <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600" />
+        <div>
+          <p className="font-bold">Address verified</p>
+          <p className="mt-1 leading-6">Address verified at {formatVerifiedAddress(form)}.</p>
+          <p className="mt-2 text-xs font-medium text-emerald-700">Your order notice was saved and sent. Complete payment securely below.</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PaymentMethodBadges() {
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold uppercase tracking-wide text-[#2e3868]">
+      {['Card', 'Link', 'Apple Pay', 'Google Pay'].map((method) => (
+        <span key={method} className="rounded-full border border-[#2e3868]/15 bg-[#2e3868]/5 px-3 py-1">
+          {method}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function LockedPaymentPanel({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full rounded-2xl border border-dashed border-[#2e3868]/25 bg-white p-6 text-left shadow-sm transition hover:border-[#2e3868]/45 hover:bg-[#f5f7fb] focus:outline-none focus:ring-4 focus:ring-[#2e3868]/20"
+      aria-label="Verify address before payment"
+    >
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#2e3868]/8 text-[#2e3868]">
+        <LockKeyhole className="h-6 w-6" />
+      </div>
+      <h3 className="text-lg font-bold text-[#262626]">Payment locked until address verification</h3>
+      <p className="mt-2 text-sm leading-6 text-gray-600">
+        Enter your delivery address and select Verify Address first. Once it is verified, Stripe payment opens here with eligible card, Link, Apple Pay, and Google Pay options.
+      </p>
+      <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-[#2e3868]">
+        <ShieldCheck className="h-4 w-4" />
+        SSL encrypted checkout
+      </div>
+      <div className="mt-4">
+        <PaymentMethodBadges />
+      </div>
+    </button>
+  );
+}
+
+function StripePaymentPanel({
+  stripeClientSecret,
+  form,
+  cartItem,
+  sellerName,
+  onLockedPaymentAttempt,
+}: {
+  stripeClientSecret: string | null;
+  form: CheckoutFormController;
+  cartItem: CartItem;
+  sellerName: string | null;
+  onLockedPaymentAttempt: () => void;
+}) {
+  const { product } = cartItem;
+
+  if (!stripeClientSecret) {
+    return <LockedPaymentPanel onClick={onLockedPaymentAttempt} />;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-[#2e3868]/10 bg-white p-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#2e3868]/8 text-[#2e3868]">
+            <CreditCard className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="text-sm font-bold text-[#262626]">Secure Stripe payment</p>
+            <p className="text-xs text-gray-500">Eligible wallets appear automatically by browser and device.</p>
+          </div>
+        </div>
+        <div className="mt-4">
+          <PaymentMethodBadges />
+        </div>
+      </div>
+      <StripeEmbeddedCheckout
+        clientSecret={stripeClientSecret}
+        shippingData={form.shippingData}
+        product={{ title: product.title, price: product.price, currency: product.currency, images: product.images }}
+        sellerName={sellerName}
+        compact
+      />
+    </div>
+  );
+}
+
 function formatPrice(cartItem: CartItem, amount: number) {
   const { product } = cartItem;
   const currency = product.currency || 'USD';
@@ -455,7 +570,9 @@ export default function CheckoutShippingStep({
   isSendingEmail,
   isRedirecting,
   checkoutError,
+  stripeClientSecret,
   onSubmit,
+  onLockedPaymentAttempt,
   onPaypalBeforePayment,
   onPaypalApiBeforePayment,
   onClearCart,
@@ -540,9 +657,20 @@ export default function CheckoutShippingStep({
             <div className="max-w-7xl mx-auto flex gap-4 lg:gap-8 items-start">
               <div className="flex-1 bg-white rounded-2xl shadow-sm p-6 lg:p-8 border border-gray-100 flex justify-center">
                 <div className="w-full max-w-[750px]">
-                  <h2 className="text-xl lg:text-2xl font-bold text-[#262626] mb-6 lg:mb-8 text-left">Delivery Address</h2>
+                  <div className="mb-6 flex items-center justify-between gap-3 lg:mb-8">
+                    <h2 className="text-xl lg:text-2xl font-bold text-[#262626]">Delivery Address</h2>
+                    {stripeClientSecret && <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" />Address verified</span>}
+                  </div>
                   <form onSubmit={onSubmit} className="space-y-6">
                     <AddressFields form={form} />
+                    {stripeClientSecret && <AddressVerifiedNotice form={form} />}
+                    {checkoutError && (
+                      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800" role="alert">
+                        <p className="font-semibold">Address verification needs attention</p>
+                        <p className="mt-1">{checkoutError}</p>
+                        <button type="button" onClick={onDismissCheckoutError} className="mt-2 text-xs font-medium text-red-700 underline">Dismiss</button>
+                      </div>
+                    )}
                     <div className="hidden lg:block mt-8">
                       {product.checkoutFlow === 'paypal-direct' ? (
                         <PaypalRedirectButton
@@ -556,7 +684,11 @@ export default function CheckoutShippingStep({
                           disabled={isSendingEmail || !form.isFormValid}
                         />
                       ) : (
-                        <ContinueButton isSendingEmail={isSendingEmail} isRedirecting={isRedirecting} />
+                        stripeClientSecret ? (
+                          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center text-sm font-semibold text-emerald-700">Address verified. Complete payment in the Stripe panel.</div>
+                        ) : (
+                          <ContinueButton isSendingEmail={isSendingEmail} isRedirecting={isRedirecting} />
+                        )
                       )}
                     </div>
                   </form>
@@ -565,6 +697,15 @@ export default function CheckoutShippingStep({
               </div>
 
               <div className="w-96 flex-shrink-0">
+                {product.checkoutFlow === 'stripe' ? (
+                  <StripePaymentPanel
+                    stripeClientSecret={stripeClientSecret}
+                    form={form}
+                    cartItem={cartItem}
+                    sellerName={sellerName}
+                    onLockedPaymentAttempt={onLockedPaymentAttempt}
+                  />
+                ) : (
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
                   {/* Header */}
@@ -644,15 +785,20 @@ export default function CheckoutShippingStep({
                   </div>
 
                 </div>
+                )}
               </div>
             </div>
           </div>
 
           <div className="lg:hidden">
             <div className="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-              <h2 className="text-xl font-bold text-[#262626] mb-6">Delivery Address</h2>
+              <div className="mb-6 flex items-center justify-between gap-3">
+                <h2 className="text-xl font-bold text-[#262626]">Delivery Address</h2>
+                {stripeClientSecret && <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" />Address verified</span>}
+              </div>
               <form onSubmit={onSubmit} className="space-y-6">
                 <AddressFields form={form} mobile />
+                {stripeClientSecret && <AddressVerifiedNotice form={form} />}
 
                 {checkoutError && (
                   <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
@@ -668,12 +814,22 @@ export default function CheckoutShippingStep({
                   </div>
                 )}
 
-                {product.checkoutFlow !== 'paypal-direct' && product.checkoutFlow !== 'paypal-api' && (
+                {product.checkoutFlow === 'stripe' && (
+                  <StripePaymentPanel
+                    stripeClientSecret={stripeClientSecret}
+                    form={form}
+                    cartItem={cartItem}
+                    sellerName={sellerName}
+                    onLockedPaymentAttempt={onLockedPaymentAttempt}
+                  />
+                )}
+
+                {product.checkoutFlow !== 'paypal-direct' && product.checkoutFlow !== 'paypal-api' && !stripeClientSecret && (
                   <MobileCheckoutCTA
                     disabled={isSendingEmail || isRedirecting}
                     isLoading={isSendingEmail || isRedirecting}
-                    loadingLabel={isSendingEmail ? 'Confirming Address...' : 'Redirecting...'}
-                    label="Continue to Payment"
+                    loadingLabel={isSendingEmail ? 'Verifying Address...' : 'Redirecting...'}
+                    label="Verify Address"
                   />
                 )}
 

@@ -178,7 +178,7 @@ const TrackPage = () => {
                   <button
                     type="submit"
                     disabled={!isScriptReady || isSubmitting}
-                    className="inline-flex h-14 items-center justify-center rounded-2xl bg-[#f5970c] px-6 text-sm font-semibold text-[#2e3868] transition hover:bg-[#FFF7A0] disabled:cursor-not-allowed disabled:bg-[#D7DEF0] disabled:text-[#6E7AA1]"
+                    className="inline-flex h-14 items-center justify-center rounded-2xl bg-[#79D7F2] px-6 text-sm font-semibold text-[#2e3868] transition hover:bg-[#A9EAFE] disabled:cursor-not-allowed disabled:bg-[#D7DEF0] disabled:text-[#6E7AA1]"
                   >
                     {isSubmitting ? "Loading..." : "Track Order"}
                   </button>
@@ -228,7 +228,7 @@ const TrackPage = () => {
                 </p>
                 <a
                   href="mailto:contact@takimia.com"
-                  className="mt-5 inline-flex items-center justify-center rounded-2xl border border-[#2e3868]/15 bg-[#f5970c] px-5 py-3 text-sm font-semibold text-[#2e3868] transition hover:bg-[#FFF7A0]"
+                  className="mt-5 inline-flex items-center justify-center rounded-2xl border border-[#2e3868]/15 bg-[#79D7F2] px-5 py-3 text-sm font-semibold text-[#2e3868] transition hover:bg-[#A9EAFE]"
                 >
                   Contact Support
                 </a>

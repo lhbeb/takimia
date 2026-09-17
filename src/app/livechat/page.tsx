@@ -26,7 +26,7 @@ export default function LiveChatPage() {
         {/* Background decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
           <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-gradient-to-br from-blue-400/30 to-transparent blur-3xl" />
-          <div className="absolute top-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-tl from-[#f5970c]/20 to-transparent blur-3xl" />
+          <div className="absolute top-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-tl from-[#79D7F2]/20 to-transparent blur-3xl" />
         </div>
 
         <div className="relative z-10 flex flex-col h-full">
@@ -58,7 +58,7 @@ export default function LiveChatPage() {
 
               <a
                 href="#live-chat"
-                className="flex w-fit items-center gap-2 text-sm font-semibold text-[#f5970c] lg:hidden"
+                className="flex w-fit items-center gap-2 text-sm font-semibold text-[#79D7F2] lg:hidden"
                 aria-label="Scroll down to live chat"
               >
                 Live chat below
@@ -70,7 +70,7 @@ export default function LiveChatPage() {
           <div className={`mt-auto hidden gap-6 transition-all duration-700 delay-200 lg:grid ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10 shadow-lg backdrop-blur-sm">
-                <Zap className="w-5 h-5 text-[#f5970c]" />
+                <Zap className="w-5 h-5 text-[#79D7F2]" />
               </div>
               <div>
                 <h3 className="font-semibold text-white mb-1">Instant Responses</h3>
@@ -80,7 +80,7 @@ export default function LiveChatPage() {
             
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10 shadow-lg backdrop-blur-sm">
-                <ShieldCheck className="w-5 h-5 text-[#f5970c]" />
+                <ShieldCheck className="w-5 h-5 text-[#79D7F2]" />
               </div>
               <div>
                 <h3 className="font-semibold text-white mb-1">Secure & Private</h3>
@@ -90,7 +90,7 @@ export default function LiveChatPage() {
 
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10 shadow-lg backdrop-blur-sm">
-                <HeartHandshake className="w-5 h-5 text-[#f5970c]" />
+                <HeartHandshake className="w-5 h-5 text-[#79D7F2]" />
               </div>
               <div>
                 <h3 className="font-semibold text-white mb-1">Real Human Support</h3>
@@ -105,7 +105,7 @@ export default function LiveChatPage() {
       <div id="live-chat" className="relative flex w-full scroll-mt-4 items-center justify-center p-3 sm:p-6 md:p-8 lg:w-7/12 lg:p-12 xl:w-1/2">
         {/* Abstract background blobs for right side */}
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-200/40 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-[#f5970c]/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-[#79D7F2]/20 rounded-full blur-3xl" />
 
         <div className={`relative z-10 flex h-[75svh] min-h-[560px] w-full max-w-[500px] flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl shadow-blue-900/10 transition-all duration-700 delay-300 sm:h-[700px] sm:max-h-[80vh] sm:rounded-3xl ${isLoaded ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-12 opacity-0 scale-95'}`}>
           <div className="bg-slate-50 border-b border-slate-100 p-4 flex items-center justify-between z-20">

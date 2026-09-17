@@ -146,9 +146,9 @@ export default function AboutPage() {
                   2
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#262626] mb-2">We negotiate deals across major online marketplaces</h3>
+                  <h3 className="text-xl font-bold text-[#262626] mb-2">We compare supplier options before purchasing</h3>
                   <p className="text-gray-700">
-                    Our dedicated team searches Facebook Marketplace, OfferUp, eBay, Kleinanzeigen, and other local platforms. We negotiate directly with private sellers, compare prices, and secure the highest value possible, which allows us to keep prices low and inventory diverse.
+                    Our team reviews available inventory from independent suppliers, resale channels, wholesale sources, and local opportunities. We compare product details and market pricing before buying, which helps us keep inventory useful and competitively priced.
                   </p>
                 </div>
               </div>
@@ -160,9 +160,9 @@ export default function AboutPage() {
                   3
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#262626] mb-2">We partner with the return and liquidation departments of major retailers</h3>
+                  <h3 className="text-xl font-bold text-[#262626] mb-2">We buy vetted overstock, return, and liquidation inventory</h3>
                   <p className="text-gray-700 mb-2">
-                    When possible, we obtain bulk lots from companies such as Amazon, Target, Best Buy, and others. These lots include overstock, open box items, shelf pulls, refurbished pieces, and customer returns.
+                    When suitable inventory is available, we purchase from established wholesale, liquidation, and surplus channels. These lots may include overstock, open-box items, shelf pulls, refurbished pieces, and customer returns.
                   </p>
                   <p className="text-gray-700">
                     Every product is carefully inspected, tested, cleaned, or refurbished before being listed.
@@ -177,9 +177,9 @@ export default function AboutPage() {
                   4
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#262626] mb-2">We hunt for deals locally</h3>
+                  <h3 className="text-xl font-bold text-[#262626] mb-2">We review local and wholesale opportunities</h3>
                   <p className="text-gray-700">
-                    Our team regularly visits community auctions, garage sales, estate sales, local wholesalers, and liquidation centers. This allows us to discover unique finds and high value items that are often unavailable in traditional stores.
+                    Our team may review local auctions, regional wholesalers, surplus sellers, and liquidation centers. This helps us find useful equipment and value-priced inventory that fits the Takimia catalog.
                   </p>
                 </div>
               </div>
@@ -201,38 +201,38 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Private Sellers Section */}
+        {/* Inventory Review Section */}
         <div className="bg-white rounded-2xl shadow-lg border border-[#2e3868]/10 p-8 mb-12">
           <div className="flex items-center gap-4 mb-6">
             <div className="p-3 bg-[#2e3868]/10 rounded-xl">
               <Users className="h-8 w-8 text-[#2e3868]" />
             </div>
-            <h2 className="text-3xl font-bold text-[#262626]">A New Addition to Our Model: Approved Private Sellers</h2>
+            <h2 className="text-3xl font-bold text-[#262626]">How We Review Inventory Before It Goes Live</h2>
           </div>
           <p className="text-gray-700 mb-4 text-lg">
-            Over the past three years, we have expanded our sourcing model by partnering with a network of private sellers who share the same dedication to quality and fairness as our in-house team.
+            Takimia may source products from vetted suppliers, wholesalers, liquidation channels, local auctions, and other independent inventory sources.
           </p>
           <p className="text-gray-700 mb-6">
-            These private sellers find, source, and curate their own products, then ship their items to our warehouse. Once the items arrive, our inspection team performs a full evaluation, which includes:
+            Before a product is listed, our team reviews the available product details and confirms that the listing is clear for customers. This includes:
           </p>
 
           <div className="grid md:grid-cols-3 gap-4 mb-6">
             <div className="bg-[#F0F6FF] rounded-lg p-4 border border-[#2e3868]/10">
               <CheckCircle2 className="h-6 w-6 text-[#2e3868] mb-2" />
-              <p className="text-gray-700 font-medium">verifying authentic condition</p>
+              <p className="text-gray-700 font-medium">reviewing the listed condition</p>
             </div>
             <div className="bg-[#F0F6FF] rounded-lg p-4 border border-[#2e3868]/10">
               <Zap className="h-6 w-6 text-[#2e3868] mb-2" />
-              <p className="text-gray-700 font-medium">confirming that the product works perfectly</p>
+              <p className="text-gray-700 font-medium">checking product details and availability</p>
             </div>
             <div className="bg-[#F0F6FF] rounded-lg p-4 border border-[#2e3868]/10">
               <DollarSign className="h-6 w-6 text-[#2e3868] mb-2" />
-              <p className="text-gray-700 font-medium">validating that the price reflects real market value</p>
+              <p className="text-gray-700 font-medium">validating price, shipping, and return information</p>
             </div>
           </div>
 
           <p className="text-gray-700 mb-6 bg-[#F0F6FF] rounded-lg p-4 border border-[#2e3868]/10">
-            Only after the inspection is complete does the item become available for purchase.
+            We update or remove listings when information changes, and we contact customers if an order cannot be fulfilled as described.
           </p>
 
           <div className="bg-[#F0F6FF] rounded-lg p-6 border border-[#2e3868]/10">
@@ -241,20 +241,20 @@ export default function AboutPage() {
               How it works for customers
             </h3>
             <p className="text-gray-700 mb-3">
-              When you purchase from a private seller on our platform, it is clearly stated on the product page. The seller sends the item to us first, we inspect it, and only then do we ship it to you.
+              Product pages are designed to show the information customers need before purchase, including condition, pricing, availability, shipping, and return details.
             </p>
             <p className="text-gray-700 mb-3">
-              This process protects buyers and ensures that every product, whether sold by us or by a trusted partner, meets the same high standard.
+              If the final fulfillment review shows that an item is unavailable or different from the listing, we cancel or refund the order instead of shipping something unexpected.
             </p>
             <p className="text-gray-700">
-              Private sellers benefit by earning their own fair profits, while customers benefit from greater variety and consistent quality control.
+              This keeps the shopping experience transparent while allowing us to offer a broader selection of coffee equipment at competitive prices.
             </p>
           </div>
         </div>
 
         {/* Our Mission */}
         <div className="bg-gradient-to-r from-[#2e3868] to-[#2e3868] rounded-2xl shadow-lg p-10 mb-12 text-[#F0F6FF] text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#f5970c]/15 rounded-full mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#79D7F2]/15 rounded-full mb-6">
             <Target className="h-8 w-8" />
           </div>
           <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
@@ -269,7 +269,7 @@ export default function AboutPage() {
         {/* What Makes Us Different */}
         <div className="bg-white rounded-2xl shadow-lg border border-[#2e3868]/10 p-8 mb-12">
           <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 bg-[#f5970c] rounded-xl">
+            <div className="p-3 bg-[#79D7F2] rounded-xl">
               <Sparkles className="h-8 w-8 text-[#2e3868]" />
             </div>
             <h2 className="text-3xl font-bold text-[#262626]">What Makes Us Different</h2>
@@ -321,7 +321,7 @@ export default function AboutPage() {
         {/* Our Values */}
         <div className="bg-white rounded-2xl shadow-lg border border-[#2e3868]/10 p-8 mb-12">
           <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 bg-[#f5970c] rounded-xl">
+            <div className="p-3 bg-[#79D7F2] rounded-xl">
               <Heart className="h-8 w-8 text-[#2e3868]" />
             </div>
             <h2 className="text-3xl font-bold text-[#262626]">Our Values</h2>
@@ -329,25 +329,25 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-[#F0F6FF] rounded-xl p-6 text-center border border-[#2e3868]/10">
-              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#f5970c]">
+              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#79D7F2]">
                 <Shield className="h-8 w-8 text-[#2e3868]" />
               </div>
               <h3 className="font-bold text-[#262626] text-lg">Integrity</h3>
             </div>
             <div className="bg-[#F0F6FF] rounded-xl p-6 text-center border border-[#2e3868]/10">
-              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#f5970c]">
+              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#79D7F2]">
                 <Award className="h-8 w-8 text-[#2e3868]" />
               </div>
               <h3 className="font-bold text-[#262626] text-lg">Quality</h3>
             </div>
             <div className="bg-[#F0F6FF] rounded-xl p-6 text-center border border-[#2e3868]/10">
-              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#f5970c]">
+              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#79D7F2]">
                 <Users className="h-8 w-8 text-[#2e3868]" />
               </div>
               <h3 className="font-bold text-[#262626] text-lg">Customer Trust</h3>
             </div>
             <div className="bg-[#F0F6FF] rounded-xl p-6 text-center border border-[#2e3868]/10">
-              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#f5970c]">
+              <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#79D7F2]">
                 <Zap className="h-8 w-8 text-[#2e3868]" />
               </div>
               <h3 className="font-bold text-[#262626] text-lg">Innovation and continuous improvement</h3>

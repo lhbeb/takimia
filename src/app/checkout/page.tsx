@@ -35,6 +35,7 @@ const CheckoutPage: React.FC = () => {
   const [paypalConfirmationOrderId, setPaypalConfirmationOrderId] = useState<string | null>(null);
   const [showPaypalDirect, setShowPaypalDirect] = useState(false);
   const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(null);
+  const [verifiedAddressSignature, setVerifiedAddressSignature] = useState('');
   const [assignedCheckoutLink, setAssignedCheckoutLink] = useState<string | null>(null);
   const [paypalDirectOrderId, setPaypalDirectOrderId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState('');
@@ -120,6 +121,27 @@ const CheckoutPage: React.FC = () => {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
   }, [isRedirecting]);
+
+  const currentAddressSignature = [
+    form.shippingData.fullName || '',
+    form.shippingData.countryCode || '',
+    form.shippingData.country || '',
+    form.shippingData.streetAddress || '',
+    form.shippingData.addressLine2 || '',
+    form.shippingData.city || '',
+    form.shippingData.state || '',
+    form.shippingData.zipCode || '',
+    form.shippingData.email || '',
+  ].join('|');
+
+  useEffect(() => {
+    if (!stripeClientSecret || !verifiedAddressSignature) return;
+    if (currentAddressSignature === verifiedAddressSignature) return;
+
+    setStripeClientSecret(null);
+    setVerifiedAddressSignature('');
+    setCheckoutError('Delivery details changed. Please verify the address again before payment.');
+  }, [currentAddressSignature, stripeClientSecret, verifiedAddressSignature]);
 
   const sendShippingEmail = async (
     shippingData: ShippingData,
@@ -339,6 +361,8 @@ const CheckoutPage: React.FC = () => {
     event.preventDefault();
     console.log('🚀 [Checkout] Form submitted');
 
+    if (isSendingEmail || isRedirecting || stripeClientSecret) return;
+
     if (!cartItem?.product) {
       console.error('❌ [Checkout] No cart item or product found!', { cartItem });
       alert('Product information is missing. Please go back and try again.');
@@ -363,6 +387,7 @@ const CheckoutPage: React.FC = () => {
     if (!form.shippingData.email) {
       console.error('❌ [Checkout] Email is required');
       form.setEmailError('Email address is required');
+      setCheckoutError('Address verification is required before payment. Enter a valid email address and complete the delivery address.');
       return;
     }
 
@@ -370,18 +395,19 @@ const CheckoutPage: React.FC = () => {
     if (!emailRegex.test(form.shippingData.email)) {
       console.error('❌ [Checkout] Invalid email format');
       form.setEmailError('Please enter a valid email address (e.g., example@email.com)');
+      setCheckoutError('Address verification could not continue because the email address is invalid.');
       return;
     }
 
     if (form.requiresCountry && (!form.shippingData.countryCode || !form.shippingData.country)) {
       console.error('❌ [Checkout] Delivery country is required');
-      alert('Please select a delivery country');
+      setCheckoutError('Please select a delivery country before verifying your address.');
       return;
     }
 
     if (!form.isPostalCodeValid) {
       console.error('❌ [Checkout] Invalid zip code');
-      alert(form.addressConfig.zipTitle);
+      setCheckoutError(`Address verification failed: ${form.addressConfig.zipTitle}`);
       return;
     }
 
@@ -393,7 +419,7 @@ const CheckoutPage: React.FC = () => {
 
     if (missingFields.length > 0) {
       console.error('❌ [Checkout] Missing required fields:', missingFields);
-      alert('Please fill in all required fields');
+      setCheckoutError(`Address verification failed. Please complete: ${missingFields.join(', ')}.`);
       return;
     }
 
@@ -456,12 +482,32 @@ const CheckoutPage: React.FC = () => {
           const data = await response.json();
           if (data.clientSecret) {
             setStripeClientSecret(data.clientSecret);
+            setVerifiedAddressSignature(currentAddressSignature);
           } else {
             console.error('❌ [Checkout] Stripe session creation failed:', data);
             setCheckoutError(data.error || 'Failed to initialize payment. Please try again.');
           }
         } catch (error) {
           console.error('❌ [Checkout] Failed connecting to Stripe:', error);
+          setCheckoutError('Could not connect to payment provider. Please check your connection and try again.');
+        }
+      } else if (checkoutFlow === 'stripe-hosted') {
+        console.log('💳 [Checkout] Stripe Hosted flow: Creating Hosted Checkout Session');
+        try {
+          setIsRedirecting(true);
+          const response = await fetch('/api/create-stripe-hosted-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId, product, shippingData: form.shippingData }),
+          });
+          const data = await response.json();
+          if (response.ok && data.url) window.location.assign(data.url);
+          else {
+            setIsRedirecting(false);
+            setCheckoutError(data.error || 'Failed to initialize payment. Please try again.');
+          }
+        } catch {
+          setIsRedirecting(false);
           setCheckoutError('Could not connect to payment provider. Please check your connection and try again.');
         }
       } else if (checkoutFlow === 'paypal-invoice' || checkoutFlow === 'paypal-unclaimed') {
@@ -521,6 +567,13 @@ const CheckoutPage: React.FC = () => {
     }, true);
   };
 
+  const handleLockedPaymentAttempt = () => {
+    setCheckoutError('Payment is locked until your delivery address is verified. Complete the required fields, then click Verify Address.');
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   if (!cartItem) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -544,7 +597,7 @@ const CheckoutPage: React.FC = () => {
     showPaypalDirect
   );
 
-  if (hasActiveCheckoutFlow) {
+  if (hasActiveCheckoutFlow && !stripeClientSecret) {
     return (
       <CheckoutFlowView
         product={cartItem.product}
@@ -587,10 +640,12 @@ const CheckoutPage: React.FC = () => {
       cartItem={cartItem}
       sellerName={sellerName}
       form={form}
-      isSendingEmail={isSendingEmail}
-      isRedirecting={isRedirecting}
+    isSendingEmail={isSendingEmail}
+    isRedirecting={isRedirecting}
       checkoutError={checkoutError}
+      stripeClientSecret={stripeClientSecret}
       onSubmit={handleContinueToCheckout}
+      onLockedPaymentAttempt={handleLockedPaymentAttempt}
       onPaypalBeforePayment={handlePaypalBeforePayment}
       onPaypalApiBeforePayment={handlePaypalApiBeforePayment}
       onClearCart={handleClearCart}

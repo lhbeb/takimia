@@ -35,7 +35,7 @@ export default function FrequentlyAskedQuestionsPage() {
 
       <section className="bg-[#2e3868] px-4 py-14 text-[#F0F6FF] sm:py-20">
         <div className="container mx-auto max-w-4xl">
-          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#f5970c] text-[#2e3868]">
+          <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#79D7F2] text-[#2e3868]">
             <HelpCircle className="h-6 w-6" aria-hidden="true" />
           </div>
           <h1 className="max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
@@ -55,7 +55,7 @@ export default function FrequentlyAskedQuestionsPage() {
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-5 py-5 text-left text-base font-bold text-[#2e3868] marker:content-none sm:py-6 sm:text-lg">
                   <span>{faq.question}</span>
                   <Plus
-                    className="h-5 w-5 shrink-0 text-[#f5970c] transition-transform duration-200 group-open:rotate-45"
+                    className="h-5 w-5 shrink-0 text-[#79D7F2] transition-transform duration-200 group-open:rotate-45"
                     aria-hidden="true"
                   />
                 </summary>
@@ -64,7 +64,7 @@ export default function FrequentlyAskedQuestionsPage() {
                   {faq.linkHref && faq.linkLabel && (
                     <Link
                       href={faq.linkHref}
-                      className="mt-3 inline-flex items-center gap-1.5 font-semibold text-[#2e3868] underline decoration-[#f5970c] decoration-2 underline-offset-4"
+                      className="mt-3 inline-flex items-center gap-1.5 font-semibold text-[#2e3868] underline decoration-[#79D7F2] decoration-2 underline-offset-4"
                     >
                       {faq.linkLabel}
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -84,7 +84,7 @@ export default function FrequentlyAskedQuestionsPage() {
             </div>
             <Link
               href="/contact"
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#f5970c] px-5 py-3 text-sm font-bold text-[#2e3868] transition-colors hover:bg-[#ffad2f]"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#79D7F2] px-5 py-3 text-sm font-bold text-[#2e3868] transition-colors hover:bg-[#A9EAFE]"
             >
               Contact Us
               <ArrowRight className="h-4 w-4" aria-hidden="true" />

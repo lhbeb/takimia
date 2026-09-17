@@ -22,9 +22,9 @@ const TermsPage = () => {
           <div>
             <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">1. Overview</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Takimia operates as a direct retailer and as a curated marketplace.</li>
-              <li>We source products through auctions, private sellers, liquidators, wholesalers, and other third-party suppliers.</li>
-              <li>We also allow approved private sellers to list items on our platform after a full inspection by our team.</li>
+              <li>Takimia operates as an online retailer for coffee machines, espresso makers, and related equipment.</li>
+              <li>We source inventory through vetted wholesale, liquidation, surplus, and supplier channels.</li>
+              <li>Every product listing is reviewed by our team before it is published.</li>
               <li>All purchases made through Takimia are processed under these Terms.</li>
             </ul>
           </div>
@@ -40,40 +40,39 @@ const TermsPage = () => {
             </ul>
           </div>
 
-          {/* Section 3: Marketplace and Private Seller Terms */}
+          {/* Section 3: Sourcing and Fulfillment Terms */}
           <div>
-            <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">3. Marketplace and Private Seller Terms</h2>
+            <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">3. Sourcing and Fulfillment Terms</h2>
             <p className="mb-4">
-              Takimia hosts a controlled marketplace where approved private sellers may offer products.
+              Takimia may purchase inventory from independent suppliers, wholesalers, liquidation sources, and other vetted third-party channels. Products are offered for sale by Takimia unless a product page clearly states otherwise.
             </p>
 
-            <h3 className="text-xl font-bold text-[#262626] mt-6 mb-3">3.1 Seller Onboarding Process</h3>
+            <h3 className="text-xl font-bold text-[#262626] mt-6 mb-3">3.1 Supplier Review Process</h3>
             <ul className="list-disc pl-6 space-y-2 mb-4">
-              <li>Private sellers must be screened and approved before listing items.</li>
-              <li>Sellers send their inventory to our warehouse, where it is inspected, authenticated, tested, and verified before any listing goes live.</li>
+              <li>Inventory sources are reviewed before items are listed.</li>
+              <li>Product information, condition, pricing, and images are checked before publication.</li>
             </ul>
 
             <h3 className="text-xl font-bold text-[#262626] mt-6 mb-3">3.2 Fulfillment Process</h3>
-            <p className="mb-2">When you purchase an item from a third-party seller:</p>
+            <p className="mb-2">When you purchase an item from Takimia:</p>
             <ul className="list-disc pl-6 space-y-2 mb-4">
-              <li>It is clearly indicated on the product page.</li>
-              <li>The seller sends the item to our warehouse if it is not already stored with us.</li>
-              <li>Our inspection team confirms the condition, functionality, and price accuracy.</li>
-              <li>Only after passing inspection is the item shipped to the customer.</li>
+              <li>The product page provides the available product details, price, condition, and delivery information.</li>
+              <li>Our team prepares the order for shipment through the fulfillment method available for that item.</li>
+              <li>If an item cannot be fulfilled as listed, we will contact you, cancel the order, or issue a refund.</li>
             </ul>
             <p className="mb-4">
-              Takimia reserves the right to reject, refund, or cancel any order if the item fails inspection.
+              Takimia reserves the right to reject, refund, or cancel any order if the item is unavailable, fails final review, or cannot be shipped as described.
             </p>
 
-            <h3 className="text-xl font-bold text-[#262626] mt-6 mb-3">3.3 Seller Responsibility</h3>
-            <p className="mb-2">Sellers on the Takimia platform are responsible for:</p>
+            <h3 className="text-xl font-bold text-[#262626] mt-6 mb-3">3.3 Product Accuracy</h3>
+            <p className="mb-2">Takimia works to keep product pages accurate by reviewing:</p>
             <ul className="list-disc pl-6 space-y-2 mb-4">
-              <li>The authenticity of their products</li>
-              <li>Providing accurate condition descriptions</li>
-              <li>Meeting our quality and safety standards</li>
+              <li>Product titles, images, and descriptions</li>
+              <li>Condition notes and availability</li>
+              <li>Price, shipping, and return information</li>
             </ul>
             <p>
-              Takimia is not responsible for inaccurate representations made by sellers, although we take all reasonable steps to verify product condition before shipment.
+              If we discover inaccurate information, we may update the listing, contact affected customers, cancel the order, or issue a refund.
             </p>
           </div>
 
@@ -94,13 +93,13 @@ const TermsPage = () => {
           <div>
             <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">5. Sourcing Transparency</h2>
             <p className="mb-4">
-              By using our website, you acknowledge that Takimia sources products through:
+              Takimia may source products through:
             </p>
             <ul className="list-disc pl-6 space-y-2 mb-4">
               <li>Online auctions and bidding platforms</li>
-              <li>Private sellers and independent sourcers</li>
-              <li>Liquidation and return departments of major retailers</li>
-              <li>Garage sales, local auctions, and community sales</li>
+              <li>Independent suppliers and sourcers</li>
+              <li>Wholesale, liquidation, and surplus inventory channels</li>
+              <li>Local auctions and community sales</li>
               <li>Wholesalers and bulk suppliers</li>
             </ul>
             <p>

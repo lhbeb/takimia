@@ -15,6 +15,7 @@ import FacebookPixel from "@/components/FacebookPixel";
 import { AdminRouteCheck, PublicRouteOnly, AdminRouteOnly, CheckoutRouteOnly } from "@/components/AdminRouteCheck";
 import GlobalErrorReporter from "@/components/GlobalErrorReporter";
 import LiveChatWidget from "@/components/LiveChatWidget";
+import GoogleTagTracker from "@/components/GoogleTagTracker";
 import FixedSocialRail from "@/components/FixedSocialRail";
 
 const dmSans = DM_Sans({
@@ -100,6 +101,14 @@ export default function RootLayout({
         {/* Google Merchant Center Domain Claim Verification */}
         <meta name="google-site-verification" content="o8gC6haURQ1t7L9G8xfh_-5imCYNPmnhjnt2IrgEPco" />
         <meta name="google-site-verification" content="whWwvqC20XmxK8qOhFgMP6wWGrqw2QYp-W-OSxNmlW8" />
+        {/* Takimia Google Ads tag. Replace the hardcoded placeholder in
+            src/lib/googleAds.ts with Takimia's own AW ID before launch. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];window.gtag=window.gtag||function(){window.dataLayer.push(arguments)};window.gtag('js',new Date());window.gtag('config','AW-00000000000');`,
+          }}
+        />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-00000000000" strategy="afterInteractive" />
         {/* Meta Pixel base snippet + init.
             Loaded synchronously in <head> (NOT afterInteractive) so `window.fbq` exists
             before React hydrates. This removes the race that silently dropped PageView,
@@ -238,6 +247,7 @@ export default function RootLayout({
         </AdminRouteCheck>
         <FixedSocialRail />
         <LiveChatWidget />
+        <GoogleTagTracker />
         <SpeedInsights />
       </body>
     </html>

@@ -195,8 +195,8 @@ function ThankYouContent() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Package className="w-4 h-4 text-orange-600" />
+                <div className="w-8 h-8 bg-[#79D7F2]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Package className="w-4 h-4 text-[#2e3868]" />
                 </div>
                 <div className="text-left">
                   <h3 className="font-medium text-[#262626]">Shipping</h3>

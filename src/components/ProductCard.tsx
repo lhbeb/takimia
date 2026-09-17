@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           />
           {isSoldOut && (
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.65)] flex items-center justify-center rounded-t-md">
-              <div className="bg-[#f5970c] rounded-lg px-5 py-2">
+              <div className="bg-[#79D7F2] rounded-lg px-5 py-2">
                 <span className="sold-out-badge text-[#2e3868] text-sm uppercase tracking-wider whitespace-nowrap font-bold">
                   Sold Out
                 </span>

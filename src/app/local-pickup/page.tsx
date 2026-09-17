@@ -25,7 +25,7 @@ export default function LocalPickupPage() {
       <div className="container mx-auto px-4">
         <div className="overflow-hidden rounded-[32px] border border-[#D6E3FF] bg-white shadow-[0_24px_80px_rgba(0,48,153,0.10)]">
           <section className="bg-gradient-to-br from-[#2e3868] via-[#2e3868] to-[#2e3868] px-6 py-10 text-[#F0F6FF] sm:px-10 sm:py-12">
-            <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#f5970c]">
+            <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#79D7F2]">
               Local Pickup Guide
             </div>
             <h1 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">

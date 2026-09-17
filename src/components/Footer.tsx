@@ -27,13 +27,13 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center">
                 <Phone className="h-5 w-5 shrink-0 text-[#4575ba] mr-2" />
-                <a href="tel:+17863025205" className="hover:text-[#f5970c] transition-colors duration-300">
+                <a href="tel:+17863025205" className="hover:text-[#79D7F2] transition-colors duration-300">
                   <span className="font-semibold">United States:</span> +1(786) 302-5205
                 </a>
               </div>
               <div className="flex items-center">
                 <Mail className="h-5 w-5 text-[#4575ba] mr-2" />
-                <a href="mailto:contact@takimia.com" className="hover:text-[#f5970c] transition-colors duration-300">
+                <a href="mailto:contact@takimia.com" className="hover:text-[#79D7F2] transition-colors duration-300">
                   contact@takimia.com
                 </a>
               </div>
@@ -83,27 +83,27 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-[#F0F6FF] mb-4">Navigation</h3>
             <ul className="space-y-2">
-              <li><Link href="/" className="hover:text-[#f5970c] transition-colors duration-300">Home</Link></li>
-              <li><Link href="/#products" className="hover:text-[#f5970c] transition-colors duration-300">Products</Link></li>
-              <li><Link href="/#featured" className="hover:text-[#f5970c] transition-colors duration-300">Featured</Link></li>
-              <li><Link href="/track" className="hover:text-[#f5970c] transition-colors duration-300">Track Order</Link></li>
-              <li><Link href="/livechat" className="hover:text-[#f5970c] transition-colors duration-300 font-semibold text-white">Live Chat</Link></li>
-              <li><Link href="/contact" className="hover:text-[#f5970c] transition-colors duration-300">Contact Us</Link></li>
+              <li><Link href="/" className="hover:text-[#79D7F2] transition-colors duration-300">Home</Link></li>
+              <li><Link href="/#products" className="hover:text-[#79D7F2] transition-colors duration-300">Products</Link></li>
+              <li><Link href="/#featured" className="hover:text-[#79D7F2] transition-colors duration-300">Featured</Link></li>
+              <li><Link href="/track" className="hover:text-[#79D7F2] transition-colors duration-300">Track Order</Link></li>
+              <li><Link href="/livechat" className="hover:text-[#79D7F2] transition-colors duration-300 font-semibold text-white">Live Chat</Link></li>
+              <li><Link href="/contact" className="hover:text-[#79D7F2] transition-colors duration-300">Contact Us</Link></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-lg font-semibold text-[#F0F6FF] mb-4">Policies & Info</h3>
             <ul className="space-y-2">
-              <li><Link href="/privacy-policy" className="hover:text-[#f5970c] transition-colors duration-300">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-[#f5970c] transition-colors duration-300">Terms of Service</Link></li>
-              <li><Link href="/about" className="hover:text-[#f5970c] transition-colors duration-300">About Us</Link></li>
-              <li><Link href="/frequently-asked-questions" className="hover:text-[#f5970c] transition-colors duration-300">FAQs</Link></li>
-              <li><Link href="/return-policy" className="hover:text-[#f5970c] transition-colors duration-300">Refund & Return Policy</Link></li>
-              <li><Link href="/shipping-policy" className="hover:text-[#f5970c] transition-colors duration-300">Shipping Policy</Link></li>
-              <li><Link href="/local-pickup" className="hover:text-[#f5970c] transition-colors duration-300">Local Pickup Guide</Link></li>
-              <li><Link href="/contact" className="hover:text-[#f5970c] transition-colors duration-300">Contact Us</Link></li>
-              <li><Link href="/cookies" className="hover:text-[#f5970c] transition-colors duration-300">Cookies Policy</Link></li>
+              <li><Link href="/privacy-policy" className="hover:text-[#79D7F2] transition-colors duration-300">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-[#79D7F2] transition-colors duration-300">Terms of Service</Link></li>
+              <li><Link href="/about" className="hover:text-[#79D7F2] transition-colors duration-300">About Us</Link></li>
+              <li><Link href="/frequently-asked-questions" className="hover:text-[#79D7F2] transition-colors duration-300">FAQs</Link></li>
+              <li><Link href="/return-policy" className="hover:text-[#79D7F2] transition-colors duration-300">Refund & Return Policy</Link></li>
+              <li><Link href="/shipping-policy" className="hover:text-[#79D7F2] transition-colors duration-300">Shipping Policy</Link></li>
+              <li><Link href="/local-pickup" className="hover:text-[#79D7F2] transition-colors duration-300">Local Pickup Guide</Link></li>
+              <li><Link href="/contact" className="hover:text-[#79D7F2] transition-colors duration-300">Contact Us</Link></li>
+              <li><Link href="/cookies" className="hover:text-[#79D7F2] transition-colors duration-300">Cookies Policy</Link></li>
             </ul>
           </div>
         </div>
@@ -119,7 +119,7 @@ const Footer = () => {
                 className="h-16 w-auto max-w-full object-contain brightness-110 contrast-110"
               />
             </div>
-            <p className="text-center">© 2025 Takimia. All rights reserved.</p>
+            <p className="text-center">© 2026 Takimia. All rights reserved.</p>
           </div>
         </div>
       </div>

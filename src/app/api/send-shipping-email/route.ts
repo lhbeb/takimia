@@ -208,7 +208,7 @@ export async function POST(request: NextRequest) {
       shippingCountry: shippingData.country,
       shippingCountryCode: shippingData.countryCode,
       checkoutFlow,
-      status: checkoutFlow === 'stripe' || checkoutFlow === 'paypal-direct' || checkoutFlow === 'paypal-api'
+      status: checkoutFlow === 'stripe' || checkoutFlow === 'stripe-hosted' || checkoutFlow === 'paypal-direct' || checkoutFlow === 'paypal-api'
         ? 'pending_payment'
         : 'completed',
       paymentProvider: checkoutFlow,
