@@ -4,7 +4,6 @@ import { Check, Mail, MapPin } from 'lucide-react';
 import KofiCheckout from '@/components/KofiCheckout';
 import PaypalDirectCheckout from '@/components/PaypalDirectCheckout';
 import PaypalInvoiceConfirmation from '@/components/PaypalInvoiceConfirmation';
-import StripeEmbeddedCheckout from '@/components/StripeEmbeddedCheckout';
 import type { Product } from '@/types/product';
 import type { ShippingData } from './types';
 
@@ -116,23 +115,6 @@ export default function CheckoutFlowView({
   onPaypalConfirmationClose,
   onPaypalDirectClose,
 }: CheckoutFlowViewProps) {
-  if (stripeClientSecret) {
-    return (
-      <StripeEmbeddedCheckout
-        clientSecret={stripeClientSecret}
-        shippingData={shippingData}
-        product={{
-          title: product.title,
-          price: product.price,
-          currency: product.currency,
-          images: product.images,
-        }}
-        sellerName={sellerName}
-        onBack={onStripeBack}
-      />
-    );
-  }
-
   if (showKofiCheckout) {
     return (
       <KofiCheckout
