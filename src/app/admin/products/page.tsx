@@ -13,6 +13,7 @@ import {
 import AdminLayout from '@/components/AdminLayout';
 import AdminLoading from '@/components/AdminLoading';
 import { FEATURED_PRODUCT_LIMIT } from '@/config/products';
+import { merchantBrand, sanitizeMerchantCopy } from '@/lib/merchantCopy';
 
 interface Product {
   id: string;
@@ -769,12 +770,12 @@ export default function AdminProductsPage() {
 
         const condition = (p.condition || 'new').toLowerCase().includes('refurbished') ? 'refurbished'
           : (p.condition || 'new').toLowerCase().includes('used') ? 'used' : 'new';
-        const brand = p.brand || 'Takimia';
+        const brand = merchantBrand(p.brand);
 
         return [
           escapeCSV(pSlug),                                // id
-          escapeCSV(p.title || ''),                       // title
-          escapeCSV(p.description || p.title || ''),       // description
+          escapeCSV(sanitizeMerchantCopy(p.title)),        // title
+          escapeCSV(sanitizeMerchantCopy(p.description || p.title)), // description
           escapeCSV(isAvailable),                          // availability (in_stock / out_of_stock)
           '',                                             // availability_date
           '',                                             // expiration_date

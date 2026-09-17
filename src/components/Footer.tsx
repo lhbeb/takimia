@@ -101,6 +101,8 @@ const Footer = () => {
               <li><Link href="/frequently-asked-questions" className="hover:text-[#79D7F2] transition-colors duration-300">FAQs</Link></li>
               <li><Link href="/return-policy" className="hover:text-[#79D7F2] transition-colors duration-300">Refund & Return Policy</Link></li>
               <li><Link href="/shipping-policy" className="hover:text-[#79D7F2] transition-colors duration-300">Shipping Policy</Link></li>
+              <li><Link href="/billing-policy" className="hover:text-[#79D7F2] transition-colors duration-300">Billing & Payment Policy</Link></li>
+              <li><Link href="/warranty-replacement" className="hover:text-[#79D7F2] transition-colors duration-300">Warranty & Replacement</Link></li>
               <li><Link href="/local-pickup" className="hover:text-[#79D7F2] transition-colors duration-300">Local Pickup Guide</Link></li>
               <li><Link href="/contact" className="hover:text-[#79D7F2] transition-colors duration-300">Contact Us</Link></li>
               <li><Link href="/cookies" className="hover:text-[#79D7F2] transition-colors duration-300">Cookies Policy</Link></li>

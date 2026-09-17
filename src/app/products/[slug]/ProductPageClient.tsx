@@ -573,6 +573,9 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
 
             <div className="lg:pr-4">
               <h1 className="text-3xl font-medium text-[#262626] mb-1">{title}</h1>
+              <p className="mb-2 text-xs leading-5 text-gray-500">
+                Takimia is an independent retailer. Manufacturer names identify the product and do not imply manufacturer endorsement or authorization.
+              </p>
               <SellerBadge sellerId={product?.sellerId} size="md" />
               {condition && (
                 <div className="mt-3 w-fit max-w-full">
@@ -777,30 +780,26 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                       </div>
                     ) : (
                       <div className="hidden lg:flex flex-col gap-1.5">
-                        <button
-                          onClick={handleBuyNow}
-                          disabled={isAddingToCart || isBuyingNow}
-                          className="w-full bg-transparent border-2 border-[#2e3868] hover:border-[#1f274a] text-[#2e3868] hover:text-[#1f274a] py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {isBuyingNow ? (
-                            <>
-                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2e3868] mr-2"></div>
-                              Processing...
-                            </>
-                          ) : (
-                            <>
-                              <Zap className="h-5 w-5 mr-2" />
-                              {product.checkoutFlow === 'stripe' ? 'Secure Stripe Checkout' : 'Buy Now'}
-                            </>
-                          )}
-                        </button>
-                        {product.checkoutFlow === 'stripe' && (
-                          <>
-                            <ProductStripeExpressCheckout product={product} onNeedsAddress={handleBuyNow} />
-                            <p className="text-center text-[11px] font-medium text-gray-500">
-                              Wallet checkout continues to delivery address verification; the normal button opens full secure checkout.
-                            </p>
-                          </>
+                        {product.checkoutFlow === 'stripe' || product.checkoutFlow === 'stripe-hosted' ? (
+                          <ProductStripeExpressCheckout product={product} onNeedsAddress={handleBuyNow} />
+                        ) : (
+                          <button
+                            onClick={handleBuyNow}
+                            disabled={isAddingToCart || isBuyingNow}
+                            className="w-full bg-transparent border-2 border-[#2e3868] hover:border-[#1f274a] text-[#2e3868] hover:text-[#1f274a] py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {isBuyingNow ? (
+                              <>
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2e3868] mr-2"></div>
+                                Processing...
+                              </>
+                            ) : (
+                              <>
+                                <Zap className="h-5 w-5 mr-2" />
+                                Buy Now
+                              </>
+                            )}
+                          </button>
                         )}
                       </div>
                     )}
@@ -812,7 +811,7 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                 <ClientOnly><ShippingInfo targetMarket={product?.meta?.targetMarket} /></ClientOnly>
               </div>
               <div className="mt-8 lg:hidden">
-                <h2 className="text-xl font-medium text-[#262626] mb-4">Item Description from the Seller</h2>
+                <h2 className="text-xl font-medium text-[#262626] mb-4">Features and Specs</h2>
                 <div className="rounded-[20px] border border-[#E8EEF8] bg-white px-5 py-5">
                   <p className="whitespace-pre-line text-sm leading-7 text-[#5B6785]">
                     {showFullDescription ? descriptionText : descriptionPreview}
@@ -833,7 +832,7 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
 
           <div className="mt-12 hidden lg:block">
             <section className="rounded-[24px] border border-[#DCE5F5] bg-white px-8 py-8">
-              <h2 className="text-2xl font-semibold text-[#262626]">Item Description from the Seller</h2>
+              <h2 className="text-2xl font-semibold text-[#262626]">Features and Specs</h2>
               <p className="mt-4 whitespace-pre-line text-[15px] leading-8 text-[#5B6785]">
                 {showFullDescription ? descriptionText : descriptionPreview}
               </p>

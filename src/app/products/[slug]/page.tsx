@@ -2,6 +2,7 @@ import { getProductBySlug } from '@/lib/data';
 import { getReviewProduct, isReviewProduct } from '@/lib/reviewProducts';
 import { getSellerById } from '@/lib/supabase/sellers';
 import { formatValidSku, mapConditionToSchema } from '@/lib/conditions';
+import { merchantBrand, sanitizeMerchantCopy } from '@/lib/merchantCopy';
 import { notFound } from 'next/navigation';
 import ProductPageClient from './ProductPageClient';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -21,8 +22,11 @@ export async function generateMetadata(
     if (!product) product = await getProductBySlug(slug);
     if (!product) return { title: 'Product Not Found | Takimia' };
 
-    const title = `${product.title || 'Product'} - ${product.brand || ''} | ${product.category || ''} | Takimia`;
-    const description = (product.description || '').substring(0, 155) + '...';
+    const safeTitle = sanitizeMerchantCopy(product.title) || 'Product';
+    const safeBrand = merchantBrand(product.brand);
+    const safeDescription = sanitizeMerchantCopy(product.description);
+    const title = `${safeTitle} - ${safeBrand} | ${product.category || ''} | Takimia`;
+    const description = safeDescription.substring(0, 155) + '...';
     const canonicalUrl = `${BASE_URL}/products/${product.slug}`;
     const currencyCode = product.currency || 'USD';
     const price = (product.price || 0).toFixed(2);
@@ -30,13 +34,13 @@ export async function generateMetadata(
 
     const imageUrls = (product.images || []).map(img => ({
       url: new URL(img, BASE_URL).toString(),
-      alt: product!.title || 'Product image',
+      alt: safeTitle || 'Product image',
     }));
 
     return {
       title,
       description,
-      keywords: product.meta?.keywords || `${product.title}, ${product.brand}, ${product.category}`,
+      keywords: sanitizeMerchantCopy(product.meta?.keywords) || `${safeTitle}, ${safeBrand}, ${product.category}`,
       alternates: {
         canonical: canonicalUrl,
       },
@@ -60,7 +64,7 @@ export async function generateMetadata(
         'product:price:amount': price,
         'product:price:currency': currencyCode,
         'product:availability': inStock ? 'in stock' : 'out of stock',
-        'product:brand': product.brand || '',
+        'product:brand': safeBrand,
         'product:retailer_item_id': product.slug || '',
       },
     };
@@ -109,7 +113,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       }
     }
 
-    const p = product!;
+    const p = {
+      ...product!,
+      title: sanitizeMerchantCopy(product!.title) || 'Product',
+      description: sanitizeMerchantCopy(product!.description),
+      brand: merchantBrand(product!.brand),
+      meta: product!.meta
+        ? {
+            ...product!.meta,
+            title: sanitizeMerchantCopy(product!.meta.title),
+            description: sanitizeMerchantCopy(product!.meta.description),
+            keywords: sanitizeMerchantCopy(product!.meta.keywords),
+          }
+        : product!.meta,
+    };
     const inStock = p.inStock !== false;
     const hasReviews = (p.reviewCount || 0) > 0 && (p.rating || 0) > 0;
 

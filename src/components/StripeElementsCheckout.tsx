@@ -10,7 +10,7 @@ interface Props { clientSecret: string; isAddressVerified: boolean; onLockedPaym
 let stripePromise: Promise<Stripe | null> | null = null;
 function getStripe() { if (!stripePromise) stripePromise = fetch('/api/config/stripe').then(r => r.json()).then(d => { if (!d.publishableKey) throw new Error('Stripe is not configured'); return loadStripe(d.publishableKey); }); return stripePromise; }
 
-function Form({ isAddressVerified, onLockedPaymentAttempt, shippingData, product, sellerName }: Omit<Props, 'clientSecret'>) {
+function Form({ isAddressVerified, onLockedPaymentAttempt, shippingData, product }: Omit<Props, 'clientSecret'>) {
   const stripe = useStripe(); const elements = useElements(); const [processing,setProcessing]=useState(false); const [error,setError]=useState('');
   const price = new Intl.NumberFormat('en-US',{style:'currency',currency:product.currency||'USD'}).format(product.price);
   const confirm = async () => {
@@ -23,7 +23,6 @@ function Form({ isAddressVerified, onLockedPaymentAttempt, shippingData, product
     if (result.error) { setError(result.error.message || 'Payment could not be completed.'); setProcessing(false); }
   };
   return <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
-    <div className="border-b border-gray-100 px-5 py-4"><div className="text-xs font-bold uppercase tracking-widest text-gray-400">Secure payment</div><div className="mt-1 font-semibold text-[#262626]">{product.title}</div><div className="mt-1 text-xl font-extrabold text-[#2e3868]">{price}</div>{sellerName&&<div className="text-xs text-gray-500">Sold by {sellerName}</div>}</div>
     <div className="space-y-5 p-5">
       <ExpressCheckoutElement options={{ buttonType: { applePay:'buy', googlePay:'buy' }, layout: { maxColumns: 1, maxRows: 1, overflow:'never' } }} onClick={({ resolve }) => { if (!isAddressVerified) onLockedPaymentAttempt(); resolve(); }} onConfirm={confirm} />
       <div className="flex items-center gap-3 text-xs text-gray-400"><span className="h-px flex-1 bg-gray-200"/>or pay with card<span className="h-px flex-1 bg-gray-200"/></div>

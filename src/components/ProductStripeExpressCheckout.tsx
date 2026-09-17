@@ -22,7 +22,7 @@ export default function ProductStripeExpressCheckout({ product, onNeedsAddress }
       .catch(() => active && setError('Express Checkout is unavailable.'));
     return () => { active = false; };
   }, [product]);
-  if (error) return <p className="mt-2 text-center text-xs text-gray-500">{error}</p>;
-  if (!clientSecret) return <div className="mt-3 h-12 animate-pulse rounded-xl bg-gray-100" aria-label="Loading Express Checkout" />;
-  return <div className="mt-3 rounded-xl border border-gray-200 bg-white p-3"><Elements stripe={getStripe()} options={{ clientSecret }}><ExpressCheckoutElement options={{ buttonType: { applePay: 'buy', googlePay: 'buy' }, layout: { maxColumns: 1, maxRows: 1, overflow: 'never' } }} onClick={({ resolve }) => { resolve(); }} onConfirm={onNeedsAddress} /></Elements><p className="mt-2 text-center text-[11px] text-gray-500">Wallet checkout continues to delivery address verification.</p></div>;
+  if (error) return null;
+  if (!clientSecret) return <div className="h-12" aria-hidden="true" />;
+  return <div className="w-full"><Elements stripe={getStripe()} options={{ clientSecret }}><ExpressCheckoutElement options={{ buttonType: { applePay: 'buy', googlePay: 'buy' }, layout: { maxColumns: 1, maxRows: 1, overflow: 'never' } }} onClick={({ reject }) => { onNeedsAddress(); reject(); }} onConfirm={onNeedsAddress} /></Elements></div>;
 }
