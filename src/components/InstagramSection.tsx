@@ -16,7 +16,7 @@ const InstagramSection: React.FC = () => {
                   <div className="w-full h-full bg-white rounded-full overflow-hidden">
                     <Image
                       src="/pdp.png"
-                      alt="Takimia Profile"
+                      alt="takimia.house's profile picture"
                       width={80}
                       height={80}
                       className="object-cover w-full h-full"
@@ -27,20 +27,20 @@ const InstagramSection: React.FC = () => {
                 {/* Profile Details */}
                 <div className="flex-grow">
                   <h3 className="font-bold text-[#262626] text-lg sm:text-xl mb-1">@takimia.house</h3>
-                  <p className="text-gray-600 text-sm sm:text-base mb-2">Takimia</p>
+                      <p className="text-gray-600 text-sm sm:text-base mb-2">Takimia House</p>
 
                   {/* Statistics */}
                   <div className="flex items-center space-x-4 sm:space-x-6 text-sm">
                     <div className="text-center">
-                      <div className="font-bold text-[#262626]">8</div>
+                      <div className="font-bold text-[#262626]">6</div>
                       <div className="text-gray-500 text-xs">posts</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-[#262626]">1,423</div>
+                      <div className="font-bold text-[#262626]">147</div>
                       <div className="text-gray-500 text-xs">followers</div>
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-[#262626]">10</div>
+                      <div className="font-bold text-[#262626]">0</div>
                       <div className="text-gray-500 text-xs">following</div>
                     </div>
                   </div>

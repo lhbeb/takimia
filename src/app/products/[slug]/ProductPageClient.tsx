@@ -8,6 +8,7 @@ import ClientOnly from '@/components/ClientOnly';
 import RecommendedProducts from '@/components/RecommendedProducts';
 import SameDayShipping from '@/components/SameDayShipping';
 import SellerBadge from '@/components/SellerBadge';
+import ProductStripeExpressCheckout from '@/components/ProductStripeExpressCheckout';
 import { addToCart } from '@/utils/cart';
 import { preventScrollOnClick } from '@/utils/scrollUtils';
 import { debugNavigation, debugError, debugLog } from '@/utils/debug';
@@ -498,7 +499,7 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:items-start">
             <div className="relative lg:sticky lg:top-0 lg:self-start">
-              <div onClick={() => handleImageClick(activeImage)} className="cursor-zoom-in relative group aspect-[4/3] w-full">
+              <div onClick={() => handleImageClick(activeImage)} className="cursor-zoom-in relative group aspect-[4/3] w-full bg-white">
                 {images && images.length > 0 && images[activeImage] ? (
                   <>
                     {!imgLoaded && (
@@ -514,7 +515,7 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                       priority
                       quality={PRODUCT_IMAGE_QUALITY}
                       sizes="(max-width: 1024px) 100vw, 50vw"
-                      className={`object-cover rounded-md transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      className={`object-contain rounded-md transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                       onError={(e) => {
                         console.error('Image failed to load:', images[activeImage]);
                         (e.target as HTMLImageElement).src = '/placeholder.png';
@@ -546,7 +547,7 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                           fill
                           quality={90}
                           sizes="80px"
-                          className="object-cover"
+                          className="object-contain bg-white"
                           onError={(e) => {
                             console.error('Thumbnail failed to load:', image);
                             (e.target as HTMLImageElement).src = '/placeholder.png';
@@ -794,9 +795,12 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                           )}
                         </button>
                         {product.checkoutFlow === 'stripe' && (
-                          <p className="text-center text-[11px] font-medium text-gray-500">
-                            Verify delivery first, then pay with card, Link, Apple Pay, or Google Pay when eligible.
-                          </p>
+                          <>
+                            <ProductStripeExpressCheckout product={product} onNeedsAddress={handleBuyNow} />
+                            <p className="text-center text-[11px] font-medium text-gray-500">
+                              Wallet checkout continues to delivery address verification; the normal button opens full secure checkout.
+                            </p>
+                          </>
                         )}
                       </div>
                     )}

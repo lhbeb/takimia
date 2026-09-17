@@ -109,17 +109,16 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-[#F0F6FF]/20 mt-12 pt-8">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="flex items-center justify-center">
-              <Image
-                src="/secure-checkout.png"
-                alt="Secure Checkout"
-                width={400}
-                height={64}
-                className="h-16 w-auto max-w-full object-contain brightness-110 contrast-110"
+          <div className="flex flex-col items-center justify-between gap-5 text-center sm:flex-row sm:text-left">
+            <p>© 2026 Takimia. All rights reserved.</p>
+            <div className="flex items-center justify-center sm:justify-end">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/paymenticons.svg"
+                alt="Accepted payment methods"
+                className="h-8 w-auto max-w-[min(100%,25rem)] object-contain"
               />
             </div>
-            <p className="text-center">© 2026 Takimia. All rights reserved.</p>
           </div>
         </div>
       </div>

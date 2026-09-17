@@ -59,7 +59,17 @@ export async function POST(request: NextRequest) {
                 break;
 
             case 'payment_intent.succeeded':
-                console.log('[Stripe Webhook] Payment succeeded:', (event.data.object as Stripe.PaymentIntent).id);
+                const intent = event.data.object as Stripe.PaymentIntent;
+                console.log('[Stripe Webhook] Payment succeeded:', intent.id);
+                if (intent.metadata?.order_id) {
+                    await updateOrderStripeStatus(intent.metadata.order_id, {
+                        status: 'paid',
+                        stripe_payment_intent_id: intent.id,
+                        stripe_payment_status: 'paid',
+                        paid_at: new Date().toISOString()
+                    });
+                    console.log('[Stripe Webhook] DB updated to PAID for order (Intent):', intent.metadata.order_id);
+                }
                 break;
 
             case 'payment_intent.payment_failed':
@@ -140,7 +150,10 @@ async function handleAsyncPaymentFailed(session: Stripe.Checkout.Session) {
 async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
     console.log('[Stripe Webhook] Payment failed:', paymentIntent.id);
     console.log('[Stripe Webhook] Failure reason:', paymentIntent.last_payment_error?.message);
-    
-    // We typically handle failures via checkout.session.async_payment_failed
-    // but this gives more detail
+    if (paymentIntent.metadata?.order_id) {
+        await updateOrderStripeStatus(paymentIntent.metadata.order_id, {
+            status: 'payment_failed',
+            stripe_payment_status: 'failed'
+        });
+    }
 }

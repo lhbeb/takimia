@@ -72,7 +72,7 @@ export function useCheckoutForm(product?: Product | null) {
 
   const isPaypal = isPaypalCheckoutFlow(product?.checkoutFlow);
   const isKofi = product?.checkoutFlow === 'kofi';
-  const requiresCountry = usesCountryFirstAddress(product?.checkoutFlow);
+  const requiresCountry = usesCountryFirstAddress(product?.checkoutFlow) || product?.checkoutFlow === 'stripe';
   // Ko-fi collects buyer name in Phase 2 (payment processor), so skip it in Phase 1
   const requiresFullName = requiresCountry && !isKofi;
   // Only show the featured countries across all checkout flows (no "All countries" group)
@@ -209,6 +209,13 @@ export function useCheckoutForm(product?: Product | null) {
     shippingData.state
   );
 
+  const focusInvalidField = (fields: string[]) => {
+    if (typeof document === 'undefined') return;
+    const first = fields.map(name => document.querySelector<HTMLElement>(`[name="${name}"]`)).find(Boolean);
+    first?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    first?.focus({ preventScroll: true });
+  };
+
   return {
     shippingData,
     emailError,
@@ -237,6 +244,7 @@ export function useCheckoutForm(product?: Product | null) {
     handleStateFocus,
     handleStateBlur,
     handleStateKeyDown,
+    focusInvalidField,
   };
 }
 
