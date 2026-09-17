@@ -31,7 +31,7 @@ export default async function HomePage() {
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>
-      <Hero />
+      <Hero products={featuredProducts.length >= 4 ? featuredProducts : products} />
 
       <PopularCategories products={products} />
 
