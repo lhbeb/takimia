@@ -35,7 +35,6 @@ const CheckoutPage: React.FC = () => {
   const [paypalConfirmationOrderId, setPaypalConfirmationOrderId] = useState<string | null>(null);
   const [showPaypalDirect, setShowPaypalDirect] = useState(false);
   const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(null);
-  const [stripeIntentId, setStripeIntentId] = useState<string | null>(null);
   const [verifiedAddressSignature, setVerifiedAddressSignature] = useState('');
   const [assignedCheckoutLink, setAssignedCheckoutLink] = useState<string | null>(null);
   const [paypalDirectOrderId, setPaypalDirectOrderId] = useState<string | null>(null);
@@ -116,29 +115,6 @@ const CheckoutPage: React.FC = () => {
       router.push('/');
     }
   }, [router]);
-
-  useEffect(() => {
-    if (cartItem?.product?.checkoutFlow === 'stripe' && !stripeClientSecret && !stripeIntentId) {
-      console.log('💳 [Checkout] Fetching initial Stripe PaymentIntent...');
-      fetch('/api/create-payment-intent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: cartItem.product }),
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.clientSecret && data.intentId) {
-          setStripeClientSecret(data.clientSecret);
-          setStripeIntentId(data.intentId);
-        } else {
-          console.error('❌ [Checkout] Failed to fetch initial Stripe intent:', data);
-        }
-      })
-      .catch(error => {
-        console.error('❌ [Checkout] Error fetching initial Stripe intent:', error);
-      });
-    }
-  }, [cartItem?.product, stripeClientSecret, stripeIntentId]);
 
   useEffect(() => {
     if (isRedirecting) {
@@ -500,19 +476,19 @@ const CheckoutPage: React.FC = () => {
         console.log('🎨 [Checkout] Ko-fi flow: Showing iframe');
         setShowKofiCheckout(true);
       } else if (checkoutFlow === 'stripe') {
-        console.log('💳 [Checkout] Stripe flow: Updating PaymentIntent');
+        console.log('💳 [Checkout] Stripe flow: Creating embedded Checkout Session');
         try {
-          const response = await fetch('/api/create-payment-intent', {
+          const response = await fetch('/api/create-stripe-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ intentId: stripeIntentId, orderId, product, shippingData: form.shippingData }),
+            body: JSON.stringify({ orderId, product, shippingData: form.shippingData }),
           });
           const data = await response.json();
-          if (data.clientSecret) {
+          if (response.ok && data.clientSecret) {
             setStripeClientSecret(data.clientSecret);
             setVerifiedAddressSignature(currentAddressSignature);
           } else {
-            console.error('❌ [Checkout] Stripe session creation failed:', data);
+            console.error('❌ [Checkout] Stripe embedded session creation failed:', data);
             setCheckoutError(data.error || 'Failed to initialize payment. Please try again.');
           }
         } catch (error) {

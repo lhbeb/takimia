@@ -9,7 +9,7 @@ import CheckoutNotifier from '@/components/CheckoutNotifier';
 import CountrySelect from '@/components/CountrySelect';
 import PaypalApiRedirectButton from '@/components/PaypalApiRedirectButton';
 import PaypalRedirectButton from '@/components/PaypalRedirectButton';
-import StripeElementsCheckout from '@/components/StripeElementsCheckout';
+import StripeEmbeddedCheckout from '@/components/StripeEmbeddedCheckout';
 import type { CartItem } from '@/utils/cart';
 import type { CheckoutFormController } from './useCheckoutForm';
 import type { PaypalApiInitializationResult, PaypalPaymentInitializationResult } from './types';
@@ -467,15 +467,11 @@ function StripePaymentPanel({
   isAddressVerified,
   form,
   cartItem,
-  sellerName,
-  onLockedPaymentAttempt,
 }: {
   stripeClientSecret: string | null;
   isAddressVerified: boolean;
   form: CheckoutFormController;
   cartItem: CartItem;
-  sellerName: string | null;
-  onLockedPaymentAttempt: () => void;
 }) {
   const { product } = cartItem;
 
@@ -488,15 +484,20 @@ function StripePaymentPanel({
     );
   }
 
+  if (!isAddressVerified) {
+    return (
+      <div className="w-full rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center text-sm font-semibold text-amber-800 shadow-sm">
+        Delivery details changed. Verify the address again to refresh the secure payment session.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      <StripeElementsCheckout
+      <StripeEmbeddedCheckout
         clientSecret={stripeClientSecret}
-        isAddressVerified={isAddressVerified}
         shippingData={form.shippingData}
         product={{ title: product.title, price: product.price, currency: product.currency, images: product.images }}
-        sellerName={sellerName}
-        onLockedPaymentAttempt={onLockedPaymentAttempt}
       />
     </div>
   );
@@ -661,8 +662,6 @@ export default function CheckoutShippingStep({
                     isAddressVerified={isAddressVerified}
                     form={form}
                     cartItem={cartItem}
-                    sellerName={sellerName}
-                    onLockedPaymentAttempt={onLockedPaymentAttempt}
                   />
                 ) : (
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -779,8 +778,6 @@ export default function CheckoutShippingStep({
                     isAddressVerified={isAddressVerified}
                     form={form}
                     cartItem={cartItem}
-                    sellerName={sellerName}
-                    onLockedPaymentAttempt={onLockedPaymentAttempt}
                   />
                 )}
 
