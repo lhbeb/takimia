@@ -11,7 +11,6 @@ interface CheckoutFlowViewProps {
   product: Product;
   shippingData: ShippingData;
   sellerName: string | null;
-  stripeClientSecret: string | null;
   showKofiCheckout: boolean;
   assignedCheckoutLink: string | null;
   showPaypalConfirmation: boolean;
@@ -22,7 +21,6 @@ interface CheckoutFlowViewProps {
   showPaypalDirect: boolean;
   paypalDirectEmail: string;
   paypalDirectOrderId: string | null;
-  onStripeBack: () => void;
   onKofiClose: () => void;
   onPaypalConfirmationClose: () => void;
   onPaypalDirectClose: () => void;
@@ -99,7 +97,6 @@ export default function CheckoutFlowView({
   product,
   shippingData,
   sellerName,
-  stripeClientSecret,
   showKofiCheckout,
   assignedCheckoutLink,
   showPaypalConfirmation,
@@ -110,7 +107,6 @@ export default function CheckoutFlowView({
   showPaypalDirect,
   paypalDirectEmail,
   paypalDirectOrderId,
-  onStripeBack,
   onKofiClose,
   onPaypalConfirmationClose,
   onPaypalDirectClose,

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { FormEventHandler, MouseEvent, ReactNode } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, CheckCircle2, ChevronDown, CreditCard, Globe2, LockKeyhole, Mail, ShieldCheck, Store, Trash, User } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ChevronDown, Mail, Store, Trash, User } from 'lucide-react';
 import CheckoutNotifier from '@/components/CheckoutNotifier';
 import CountrySelect from '@/components/CountrySelect';
 import PaypalApiRedirectButton from '@/components/PaypalApiRedirectButton';

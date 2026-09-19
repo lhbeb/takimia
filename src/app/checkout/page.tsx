@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -19,8 +19,8 @@ import type { CartItem } from '@/utils/cart';
 import { debugError, debugLog } from '@/utils/debug';
 import { preventScrollOnClick } from '@/utils/scrollUtils';
 import { trackPixelEvent } from '@/lib/pixel';
-import { setPendingOrder } from '@/lib/pendingOrder';
 import { usesCountryFirstAddress } from '@/lib/shipping';
+import { setPendingOrder } from '@/lib/pendingOrder';
 
 const REDIRECT_DELAY_MS = 4000;
 
@@ -40,6 +40,7 @@ const CheckoutPage: React.FC = () => {
   const [paypalDirectOrderId, setPaypalDirectOrderId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState('');
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const submittingRef = useRef(false);
   const [sellerName, setSellerName] = useState<string | null>(null);
   const [paypalDirectEmail, setPaypalDirectEmail] = useState('');
 
@@ -51,7 +52,10 @@ const CheckoutPage: React.FC = () => {
     try {
       const searchParams = new URLSearchParams(window.location.search);
       if (searchParams.get('payment') === 'cancelled') {
-        setCheckoutError('Your PayPal payment was not completed. Your item is still here, so you can try again.');
+        const provider = searchParams.get('provider');
+        setCheckoutError(provider === 'stripe-hosted'
+          ? 'Your Stripe payment was not completed. Your item is still here, so you can try again.'
+          : 'Your PayPal payment was not completed. Your item is still here, so you can try again.');
         window.history.replaceState({}, '', window.location.pathname);
       } else if (searchParams.get('payment') === 'failed') {
         setCheckoutError('PayPal could not complete that payment. Please confirm your delivery details and try again.');
@@ -135,12 +139,12 @@ const CheckoutPage: React.FC = () => {
   ].join('|');
 
   useEffect(() => {
-    if (!verifiedAddressSignature) return; // Allow client secret to be present without verified address
+    if (!verifiedAddressSignature) return;
     if (currentAddressSignature === verifiedAddressSignature) return;
 
     setVerifiedAddressSignature('');
     setCheckoutError('Delivery details changed. Please verify the address again before payment.');
-  }, [currentAddressSignature, stripeClientSecret, verifiedAddressSignature]);
+  }, [currentAddressSignature, verifiedAddressSignature]);
 
   const sendShippingEmail = async (
     shippingData: ShippingData,
@@ -157,7 +161,7 @@ const CheckoutPage: React.FC = () => {
       const controller = new AbortController();
       timeoutId = setTimeout(() => controller.abort(), 30000);
 
-      const requestShippingData = usesCountryFirstAddress(product.checkoutFlow)
+      const requestShippingData = product.checkoutFlow === 'stripe' || usesCountryFirstAddress(product.checkoutFlow)
         ? shippingData
         : {
             streetAddress: shippingData.streetAddress,
@@ -358,9 +362,8 @@ const CheckoutPage: React.FC = () => {
 
   const handleContinueToCheckout = async (event: FormEvent) => {
     event.preventDefault();
+    if (submittingRef.current) return;
     console.log('🚀 [Checkout] Form submitted');
-
-    if (isSendingEmail || isRedirecting || (stripeClientSecret && verifiedAddressSignature)) return;
 
     if (!cartItem?.product) {
       console.error('❌ [Checkout] No cart item or product found!', { cartItem });
@@ -386,8 +389,6 @@ const CheckoutPage: React.FC = () => {
     if (!form.shippingData.email) {
       console.error('❌ [Checkout] Email is required');
       form.setEmailError('Email address is required');
-      setCheckoutError('Address verification is required before payment. Enter a valid email address and complete the delivery address.');
-      form.focusInvalidField(['email']);
       return;
     }
 
@@ -395,22 +396,18 @@ const CheckoutPage: React.FC = () => {
     if (!emailRegex.test(form.shippingData.email)) {
       console.error('❌ [Checkout] Invalid email format');
       form.setEmailError('Please enter a valid email address (e.g., example@email.com)');
-      setCheckoutError('Address verification could not continue because the email address is invalid.');
-      form.focusInvalidField(['email']);
       return;
     }
 
     if (form.requiresCountry && (!form.shippingData.countryCode || !form.shippingData.country)) {
       console.error('❌ [Checkout] Delivery country is required');
-      setCheckoutError('Please select a delivery country before verifying your address.');
-      form.focusInvalidField(['countryCode']);
+      alert('Please select a delivery country');
       return;
     }
 
     if (!form.isPostalCodeValid) {
       console.error('❌ [Checkout] Invalid zip code');
-      setCheckoutError(`Address verification failed: ${form.addressConfig.zipTitle}`);
-      form.focusInvalidField(['zipCode']);
+      alert(form.addressConfig.zipTitle);
       return;
     }
 
@@ -418,23 +415,17 @@ const CheckoutPage: React.FC = () => {
     if (form.requiresFullName) {
       requiredFields.push('fullName');
     }
-    const missingFields = requiredFields.filter(field => !form.shippingData[field]);
+    const missingFields = requiredFields.filter(field => !form.shippingData[field]?.trim());
 
     if (missingFields.length > 0) {
       console.error('❌ [Checkout] Missing required fields:', missingFields);
-      setCheckoutError(`Address verification failed. Please complete: ${missingFields.join(', ')}.`);
-      form.focusInvalidField(missingFields as string[]);
+      alert('Please fill in all required fields');
       return;
     }
 
     console.log('✅ [Checkout] Validation passed');
-    console.log('📦 [Checkout] Product:', {
-      slug: product.slug,
-      title: product.title,
-      price: product.price,
-    });
-    console.log('👤 [Checkout] Shipping data:', { email: form.shippingData.email });
 
+    submittingRef.current = true;
     setIsSendingEmail(true);
     setCheckoutError('');
     setAssignedCheckoutLink(null);
@@ -445,12 +436,6 @@ const CheckoutPage: React.FC = () => {
       const orderId = orderResult?.orderId || null;
       const checkoutLink = orderResult?.checkoutLink || product.checkoutLink;
       setAssignedCheckoutLink(checkoutLink || null);
-
-      // Remember the saved order so the /thankyou page can fire a Purchase event
-      // from the real order data (with eventID = orderId) instead of leftover cart state.
-      if (orderId) {
-        setPendingOrder(orderId, product);
-      }
       console.log('📧 [Checkout] sendShippingEmail returned:', orderResult);
 
       if (!orderId) {
@@ -460,14 +445,9 @@ const CheckoutPage: React.FC = () => {
         return;
       }
 
+      setPendingOrder(orderId, product);
+
       console.log('✅ [Checkout] Order saved successfully');
-      setIsSendingEmail(false);
-      console.log('🔍 [Checkout] Product data:', {
-        slug: product.slug,
-        title: product.title,
-        checkoutFlow: product.checkoutFlow,
-        checkoutLink: product.checkoutLink,
-      });
 
       const checkoutFlow = product.checkoutFlow || 'buymeacoffee';
       console.log('🔍 [Checkout] Detected checkout flow:', checkoutFlow);
@@ -484,6 +464,7 @@ const CheckoutPage: React.FC = () => {
             body: JSON.stringify({ orderId, product, shippingData: form.shippingData }),
           });
           const data = await response.json();
+
           if (response.ok && data.clientSecret) {
             setStripeClientSecret(data.clientSecret);
             setVerifiedAddressSignature(currentAddressSignature);
@@ -495,22 +476,28 @@ const CheckoutPage: React.FC = () => {
           console.error('❌ [Checkout] Failed connecting to Stripe:', error);
           setCheckoutError('Could not connect to payment provider. Please check your connection and try again.');
         }
-      } else if ((checkoutFlow as string) === 'stripe-hosted') {
+      } else if (checkoutFlow === 'stripe-hosted') {
         console.log('💳 [Checkout] Stripe Hosted flow: Creating Hosted Checkout Session');
         try {
           setIsRedirecting(true);
+          window.scrollTo({ top: 0 });
+
           const response = await fetch('/api/create-stripe-hosted-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ orderId, product, shippingData: form.shippingData }),
           });
           const data = await response.json();
-          if (response.ok && data.url) window.location.assign(data.url);
-          else {
+
+          if (response.ok && data.url) {
+            window.location.assign(data.url);
+          } else {
+            console.error('❌ [Checkout] Stripe hosted session creation failed:', data);
             setIsRedirecting(false);
             setCheckoutError(data.error || 'Failed to initialize payment. Please try again.');
           }
-        } catch {
+        } catch (error) {
+          console.error('❌ [Checkout] Failed connecting to Stripe Hosted Checkout:', error);
           setIsRedirecting(false);
           setCheckoutError('Could not connect to payment provider. Please check your connection and try again.');
         }
@@ -524,8 +511,6 @@ const CheckoutPage: React.FC = () => {
         setPaypalDirectOrderId(orderId);
         setShowPaypalDirect(true);
       } else if (checkoutFlow === 'paypal-api') {
-        // Keep form submission/Enter-key behavior accessible in addition to the
-        // dedicated PayPal button's click handler.
         setIsSendingEmail(true);
         const response = await fetch('/api/paypal-api/create-order', {
           method: 'POST',
@@ -557,6 +542,8 @@ const CheckoutPage: React.FC = () => {
         console.error('❌ [Checkout] Error stack:', error.stack);
       }
       alert('An error occurred during checkout. Please try again.');
+    } finally {
+      submittingRef.current = false;
       setIsSendingEmail(false);
     }
   };
@@ -569,13 +556,6 @@ const CheckoutPage: React.FC = () => {
       }
       router.push('/');
     }, true);
-  };
-
-  const handleLockedPaymentAttempt = () => {
-    setCheckoutError('Payment is locked until your delivery address is verified. Complete the required fields, then click Verify Address.');
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
   };
 
   if (!cartItem) {
@@ -600,13 +580,12 @@ const CheckoutPage: React.FC = () => {
     showPaypalDirect
   );
 
-  if (hasActiveCheckoutFlow && !stripeClientSecret) {
+  if (hasActiveCheckoutFlow) {
     return (
       <CheckoutFlowView
         product={cartItem.product}
         shippingData={form.shippingData}
         sellerName={sellerName}
-        stripeClientSecret={stripeClientSecret}
         showKofiCheckout={showKofiCheckout}
         assignedCheckoutLink={assignedCheckoutLink}
         showPaypalConfirmation={showPaypalConfirmation}
@@ -617,10 +596,6 @@ const CheckoutPage: React.FC = () => {
         showPaypalDirect={showPaypalDirect}
         paypalDirectEmail={paypalDirectEmail}
         paypalDirectOrderId={paypalDirectOrderId}
-        onStripeBack={() => {
-          setStripeClientSecret(null);
-          setCheckoutError('');
-        }}
         onKofiClose={() => {
           setShowKofiCheckout(false);
         }}
@@ -649,7 +624,10 @@ const CheckoutPage: React.FC = () => {
       stripeClientSecret={stripeClientSecret}
       isAddressVerified={Boolean(verifiedAddressSignature && currentAddressSignature === verifiedAddressSignature)}
       onSubmit={handleContinueToCheckout}
-      onLockedPaymentAttempt={handleLockedPaymentAttempt}
+      onLockedPaymentAttempt={() => {
+        setCheckoutError('Payment is locked until your delivery address is verified. Complete the required fields, then click Verify Address.');
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      }}
       onPaypalBeforePayment={handlePaypalBeforePayment}
       onPaypalApiBeforePayment={handlePaypalApiBeforePayment}
       onClearCart={handleClearCart}

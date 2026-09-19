@@ -204,7 +204,7 @@ export default function StripeEmbeddedCheckout({
             <div ref={frameContainerRef} className="relative min-h-[420px] w-full">
               {isLoading && (
                 <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl bg-white">
-                  <div className="mb-3 h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-[#0b2a17]" />
+                  <div className="mb-3 h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-[#2e3868]" />
                   <span className="text-sm font-medium text-gray-600">Loading payment options...</span>
                 </div>
               )}
@@ -241,7 +241,7 @@ export default function StripeEmbeddedCheckout({
                   <button
                     type="button"
                     onClick={onBack}
-                    className="text-xs font-semibold text-[#0b2a17] hover:underline"
+                    className="text-xs font-semibold text-[#2e3868] hover:underline"
                   >
                     Edit
                   </button>
@@ -254,7 +254,7 @@ export default function StripeEmbeddedCheckout({
 
             <div className="flex items-center justify-between px-1 text-xs text-gray-600">
               <span>Shipping</span>
-              <span className="font-semibold text-[#0b2a17]">Free</span>
+              <span className="font-semibold text-[#2e3868]">Free</span>
             </div>
           </div>
         </div>
