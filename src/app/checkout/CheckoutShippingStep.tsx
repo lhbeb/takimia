@@ -33,12 +33,16 @@ interface CheckoutShippingStepProps {
 }
 
 const PAYMENT_LOGOS = [
-  { src: '/payment-logos/visa.svg', alt: 'Visa', width: 46, height: 30 },
-  { src: '/payment-logos/mastercard.svg', alt: 'Mastercard', width: 46, height: 30 },
+  { src: '/payment-logos/visa.svg',             alt: 'Visa',             width: 46, height: 30 },
+  { src: '/payment-logos/mastercard.svg',       alt: 'Mastercard',       width: 46, height: 30 },
   { src: '/payment-logos/american-express.svg', alt: 'American Express', width: 46, height: 30 },
-  { src: '/payment-logos/discover.svg', alt: 'Discover', width: 46, height: 30 },
-  { src: '/payment-logos/apple-pay.svg', alt: 'Apple Pay', width: 54, height: 30 },
-  { src: '/payment-logos/google-pay.svg', alt: 'Google Pay', width: 58, height: 30 },
+  { src: '/payment-logos/discover.svg',         alt: 'Discover',         width: 46, height: 30 },
+  { src: '/payment-logos/maestro.svg',          alt: 'Maestro',          width: 46, height: 30 },
+  { src: '/payment-logos/jcb.svg',              alt: 'JCB',              width: 46, height: 30 },
+  { src: '/payment-logos/unionpay.svg',         alt: 'UnionPay',         width: 46, height: 30 },
+  { src: '/payment-logos/diners.svg',           alt: 'Diners Club',      width: 46, height: 30 },
+  { src: '/payment-logos/apple-pay.svg',        alt: 'Apple Pay',        width: 54, height: 30 },
+  { src: '/payment-logos/google-pay.svg',       alt: 'Google Pay',       width: 58, height: 30 },
 ];
 
 interface MobileCheckoutCTAProps {
