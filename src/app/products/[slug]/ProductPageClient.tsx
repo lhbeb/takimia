@@ -549,9 +549,6 @@ export default function ProductPageClient({
 
             <div className="lg:pr-4">
               <h1 className="text-3xl font-medium text-[#262626] mb-1">{title}</h1>
-              <p className="mb-2 text-xs leading-5 text-gray-500">
-                Takimia is an independent retailer. Manufacturer names identify the product and do not imply manufacturer endorsement or authorization.
-              </p>
               <SellerBadge sellerId={product?.sellerId} size="md" />
               {condition && (
                 <div className="mt-3 w-fit max-w-full">
