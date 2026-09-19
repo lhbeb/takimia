@@ -41,14 +41,14 @@ export default function SellerBadge({ sellerId, size = 'sm' }: SellerBadgeProps)
   };
 
   const isTakimia = displaySeller.username === 'takimia';
-  const href = isTakimia ? '/' : `/sellers/${displaySeller.username}`;
+  const href = `/sellers/${displaySeller.username}`;
   const hasAvatar = displaySeller.avatarUrl && displaySeller.avatarUrl !== fallbackAvatarUrl;
 
   /* ── sm (product cards) ─────────────────────────────────────────────────── */
   if (size === 'sm') {
     return (
       <Link
-        href={href}
+        href={`/sellers/${displaySeller.username}`}
         onClick={(e) => e.stopPropagation()}
         className="inline-flex items-center gap-1.5 mt-2 group w-fit"
       >
