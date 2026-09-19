@@ -434,6 +434,19 @@ function AddressVerifiedNotice({ mobile = false }: { mobile?: boolean }) {
 }
 
 function SecureCheckoutInfo({ mobile = false }: { mobile?: boolean }) {
+  const paymentLogos = [
+    { src: '/payment-logos/visa.svg',             alt: 'Visa' },
+    { src: '/payment-logos/mastercard.svg',       alt: 'Mastercard' },
+    { src: '/payment-logos/american-express.svg', alt: 'American Express' },
+    { src: '/payment-logos/discover.svg',         alt: 'Discover' },
+    { src: '/payment-logos/maestro.svg',          alt: 'Maestro' },
+    { src: '/payment-logos/jcb.svg',              alt: 'JCB' },
+    { src: '/payment-logos/unionpay.svg',         alt: 'UnionPay' },
+    { src: '/payment-logos/diners.svg',           alt: 'Diners Club' },
+    { src: '/payment-logos/apple-pay.svg',        alt: 'Apple Pay' },
+    { src: '/payment-logos/google-pay.svg',       alt: 'Google Pay' },
+  ];
+
   return (
     <div className={`${mobile ? 'lg:hidden mt-4 mb-4 space-y-2' : 'hidden lg:block mt-8 space-y-4'} flex flex-col items-center justify-center text-center w-full`}>
       <div className="text-sm text-gray-600">
@@ -442,17 +455,21 @@ function SecureCheckoutInfo({ mobile = false }: { mobile?: boolean }) {
       <p className="text-xs text-gray-500 max-w-sm text-center mx-auto">
         Shop with confidence - Your payment information is protected by industry-leading encryption
       </p>
-      <div className="flex items-center justify-center">
-        <Image
-          src="/secure-checkout.png"
-          alt="Secure Checkout"
-          width={192}
-          height={192}
-          className="h-12 w-auto"
-          quality={100}
-          priority
-          style={{ imageRendering: 'crisp-edges' }}
-        />
+      <div className="flex flex-wrap items-center justify-center gap-1.5">
+        {paymentLogos.map((logo) => (
+          <span
+            key={logo.src}
+            className="flex h-8 min-w-[3rem] items-center justify-center rounded-md border border-gray-200 bg-white px-1.5 shadow-sm"
+          >
+            <Image
+              src={logo.src}
+              alt={logo.alt}
+              width={46}
+              height={28}
+              className="max-h-5 w-auto object-contain"
+            />
+          </span>
+        ))}
       </div>
       <div className={`flex flex-wrap items-center justify-center text-xs text-gray-500 mt-2 ${mobile ? 'gap-2 px-4' : 'gap-3'}`}>
         <Link href="/terms" className="hover:text-[#2e3868] hover:underline transition-colors">
