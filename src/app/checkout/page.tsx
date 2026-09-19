@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CheckoutFlowView from './CheckoutFlowView';
 import CheckoutShippingStep from './CheckoutShippingStep';
-import StripeEmbeddedCheckout from '@/components/StripeEmbeddedCheckout';
 import { useCheckoutForm } from './useCheckoutForm';
 import type {
   PaypalApiInitializationResult,
@@ -35,8 +34,9 @@ const CheckoutPage: React.FC = () => {
   const [paypalConfirmationVariant, setPaypalConfirmationVariant] = useState<'invoice' | 'unclaimed'>('invoice');
   const [paypalConfirmationOrderId, setPaypalConfirmationOrderId] = useState<string | null>(null);
   const [showPaypalDirect, setShowPaypalDirect] = useState(false);
-  const [stripeClientSecret, setStripeClientSecret] = useState<string | null>(null);
-  const [verifiedAddressSignature, setVerifiedAddressSignature] = useState('');
+  const [stripeElementsClientSecret, setStripeElementsClientSecret] = useState<string | null>(null);
+  const [stripePaymentIntentId, setStripePaymentIntentId] = useState<string | null>(null);
+  const [isStripeAddressVerified, setIsStripeAddressVerified] = useState(false);
   const [assignedCheckoutLink, setAssignedCheckoutLink] = useState<string | null>(null);
   const [paypalDirectOrderId, setPaypalDirectOrderId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState('');
@@ -127,25 +127,64 @@ const CheckoutPage: React.FC = () => {
     }
   }, [isRedirecting]);
 
-  const currentAddressSignature = [
-    form.shippingData.fullName || '',
-    form.shippingData.countryCode || '',
-    form.shippingData.country || '',
-    form.shippingData.streetAddress || '',
-    form.shippingData.addressLine2 || '',
-    form.shippingData.city || '',
-    form.shippingData.state || '',
-    form.shippingData.zipCode || '',
-    form.shippingData.email || '',
-  ].join('|');
+  // Phase 1: initialize PaymentIntent on mount for stripe flow
+  useEffect(() => {
+    const product = cartItem?.product;
+    if (!product || product.checkoutFlow !== 'stripe') return;
+
+    let cancelled = false;
+
+    const initializeStripeIntent = async () => {
+      try {
+        const response = await fetch('/api/create-payment-intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productSlug: product.slug }),
+        });
+        const data = await response.json();
+
+        if (cancelled) return;
+
+        if (!response.ok || !data.clientSecret || !data.paymentIntentId) {
+          setCheckoutError(data.error || 'Card payment is temporarily unavailable. Please try again.');
+          return;
+        }
+
+        setStripeElementsClientSecret(data.clientSecret);
+        setStripePaymentIntentId(data.paymentIntentId);
+      } catch (error) {
+        if (!cancelled) {
+          console.error('Failed to initialize Stripe PaymentIntent:', error);
+          setCheckoutError('Card payment is temporarily unavailable. Please try again.');
+        }
+      }
+    };
+
+    initializeStripeIntent();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cartItem?.product]);
+
+  // Reset address verification whenever any address field changes
+  const stripeAddressSignature = JSON.stringify({
+    fullName: form.shippingData.fullName || '',
+    countryCode: form.shippingData.countryCode || '',
+    country: form.shippingData.country || '',
+    streetAddress: form.shippingData.streetAddress || '',
+    addressLine2: form.shippingData.addressLine2 || '',
+    city: form.shippingData.city || '',
+    state: form.shippingData.state || '',
+    zipCode: form.shippingData.zipCode || '',
+    email: form.shippingData.email || '',
+  });
 
   useEffect(() => {
-    if (!verifiedAddressSignature) return;
-    if (currentAddressSignature === verifiedAddressSignature) return;
-
-    setVerifiedAddressSignature('');
-    setCheckoutError('Delivery details changed. Please verify the address again before payment.');
-  }, [currentAddressSignature, verifiedAddressSignature]);
+    if (cartItem?.product?.checkoutFlow === 'stripe') {
+      setIsStripeAddressVerified(false);
+    }
+  }, [stripeAddressSignature, cartItem?.product?.checkoutFlow]);
 
   const sendShippingEmail = async (
     shippingData: ShippingData,
@@ -425,6 +464,12 @@ const CheckoutPage: React.FC = () => {
     }
 
     console.log('✅ [Checkout] Validation passed');
+    console.log('📦 [Checkout] Product:', {
+      slug: product.slug,
+      title: product.title,
+      price: product.price,
+    });
+    console.log('👤 [Checkout] Shipping data:', { email: form.shippingData.email });
 
     submittingRef.current = true;
     setIsSendingEmail(true);
@@ -449,6 +494,12 @@ const CheckoutPage: React.FC = () => {
       setPendingOrder(orderId, product);
 
       console.log('✅ [Checkout] Order saved successfully');
+      console.log('🔍 [Checkout] Product data:', {
+        slug: product.slug,
+        title: product.title,
+        checkoutFlow: product.checkoutFlow,
+        checkoutLink: product.checkoutLink,
+      });
 
       const checkoutFlow = product.checkoutFlow || 'buymeacoffee';
       console.log('🔍 [Checkout] Detected checkout flow:', checkoutFlow);
@@ -457,25 +508,37 @@ const CheckoutPage: React.FC = () => {
         console.log('🎨 [Checkout] Ko-fi flow: Showing iframe');
         setShowKofiCheckout(true);
       } else if (checkoutFlow === 'stripe') {
-        console.log('💳 [Checkout] Stripe flow: Creating embedded Checkout Session');
+        // Phase 2: link the PaymentIntent to the verified order + shipping
+        console.log('💳 [Checkout] Stripe flow: Linking PaymentIntent to verified order');
         try {
-          const response = await fetch('/api/create-stripe-checkout', {
+          if (!stripePaymentIntentId) {
+            throw new Error('Stripe payment is still loading. Please try again in a moment.');
+          }
+
+          const response = await fetch('/api/create-payment-intent', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ orderId, product, shippingData: form.shippingData }),
+            body: JSON.stringify({
+              orderId,
+              paymentIntentId: stripePaymentIntentId,
+              productSlug: product.slug,
+              shippingData: form.shippingData,
+            }),
           });
           const data = await response.json();
 
-          if (response.ok && data.clientSecret) {
-            setStripeClientSecret(data.clientSecret);
-            setVerifiedAddressSignature(currentAddressSignature);
+          if (response.ok && data.clientSecret && data.paymentIntentId) {
+            setStripeElementsClientSecret(data.clientSecret);
+            setStripePaymentIntentId(data.paymentIntentId);
+            setIsStripeAddressVerified(true);
+            setCheckoutError('');
           } else {
-            console.error('❌ [Checkout] Stripe embedded session creation failed:', data);
+            console.error('❌ [Checkout] Stripe PaymentIntent update failed:', data);
             setCheckoutError(data.error || 'Failed to initialize payment. Please try again.');
           }
         } catch (error) {
           console.error('❌ [Checkout] Failed connecting to Stripe:', error);
-          setCheckoutError('Could not connect to payment provider. Please check your connection and try again.');
+          setCheckoutError(error instanceof Error ? error.message : 'Could not connect to payment provider. Please check your connection and try again.');
         }
       } else if (checkoutFlow === 'stripe-hosted') {
         console.log('💳 [Checkout] Stripe Hosted flow: Creating Hosted Checkout Session');
@@ -574,31 +637,6 @@ const CheckoutPage: React.FC = () => {
     );
   }
 
-  const isAddressVerified = Boolean(verifiedAddressSignature && currentAddressSignature === verifiedAddressSignature);
-
-  // When stripe embedded session is ready and address is verified,
-  // render the full-page embedded checkout (replaces the whole layout).
-  if (stripeClientSecret && isAddressVerified) {
-    return (
-      <StripeEmbeddedCheckout
-        clientSecret={stripeClientSecret}
-        shippingData={form.shippingData}
-        product={{
-          title: cartItem.product.title,
-          price: cartItem.product.price,
-          currency: cartItem.product.currency,
-          images: cartItem.product.images,
-        }}
-        sellerName={sellerName}
-        onBack={() => {
-          setStripeClientSecret(null);
-          setVerifiedAddressSignature('');
-          setCheckoutError('');
-        }}
-      />
-    );
-  }
-
   const hasActiveCheckoutFlow = Boolean(
     showKofiCheckout ||
     showPaypalConfirmation ||
@@ -608,7 +646,8 @@ const CheckoutPage: React.FC = () => {
 
   if (hasActiveCheckoutFlow) {
     return (
-      <CheckoutFlowView        product={cartItem.product}
+      <CheckoutFlowView
+        product={cartItem.product}
         shippingData={form.shippingData}
         sellerName={sellerName}
         showKofiCheckout={showKofiCheckout}
@@ -646,17 +685,18 @@ const CheckoutPage: React.FC = () => {
       isSendingEmail={isSendingEmail}
       isRedirecting={isRedirecting}
       checkoutError={checkoutError}
-      stripeClientSecret={stripeClientSecret}
-      isAddressVerified={isAddressVerified}
       onSubmit={handleContinueToCheckout}
-      onLockedPaymentAttempt={() => {
-        setCheckoutError('Payment is locked until your delivery address is verified. Complete the required fields, then click Verify Address.');
-        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
-      }}
       onPaypalBeforePayment={handlePaypalBeforePayment}
       onPaypalApiBeforePayment={handlePaypalApiBeforePayment}
       onClearCart={handleClearCart}
       onDismissCheckoutError={() => setCheckoutError('')}
+      stripeClientSecret={stripeElementsClientSecret}
+      isStripeAddressVerified={isStripeAddressVerified}
+      onLockedStripePaymentAttempt={() => {
+        setCheckoutError('Verify your delivery address before paying.');
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      }}
+      onStripePaymentError={setCheckoutError}
     />
   );
 };
