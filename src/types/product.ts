@@ -12,6 +12,7 @@ export interface Review {
   images?: string[]; // Array of review/unboxing images
   productTitle?: string; // Product this review belongs to
   productSlug?: string; // Product slug for linking
+  verified?: boolean; // Whether the review is from a verified purchase
 }
 
 export interface Product {

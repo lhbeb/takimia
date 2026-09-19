@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Star, CheckCircle2, X, Send, ThumbsUp, ZoomIn, Upload } from 'lucide-react';
+import { Star, X, Send, ThumbsUp, ZoomIn, Upload } from 'lucide-react';
 import type { Review } from '@/types/product';
 
 interface HomeReviewsProps {
@@ -362,12 +362,6 @@ const HomeReviews: React.FC<HomeReviewsProps> = ({
                         <div className="min-w-0 flex-1">
                           <h3 className="font-medium text-[#262626] flex items-center gap-2 flex-wrap">
                             {review.author}
-                              {review.verified && (
-                              <span className="flex items-center text-[#2e3868] text-xs whitespace-nowrap">
-                                <CheckCircle2 className="h-3.5 w-3.5 mr-1" />
-                                Verified
-                              </span>
-                            )}
                           </h3>
                           <div className="text-xs text-gray-500 mt-0.5">
                             {review.location && `${review.location} • `}
