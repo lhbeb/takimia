@@ -435,7 +435,7 @@ function SecureCheckoutInfo({ mobile = false }: { mobile?: boolean }) {
       <div className="text-sm text-gray-600">
         <span className="font-medium text-[#2e3868]">Secure Checkout</span> - SSL Encrypted
       </div>
-      <p className="text-xs text-gray-500 max-w-sm">
+      <p className="text-xs text-gray-500 max-w-sm text-center mx-auto">
         Shop with confidence - Your payment information is protected by industry-leading encryption
       </p>
       <div className="flex items-center justify-center">
