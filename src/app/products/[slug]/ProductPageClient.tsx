@@ -13,7 +13,7 @@ import { addToCart } from '@/utils/cart';
 import { preventScrollOnClick } from '@/utils/scrollUtils';
 import { debugNavigation, debugError, debugLog } from '@/utils/debug';
 import { trackPixelEvent } from '@/lib/pixel';
- import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, ShoppingCart, Zap, ZoomIn, Info, Ruler } from 'lucide-react';
+ import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, ShoppingCart, Zap, ZoomIn, Info, Ruler, CreditCard } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef, type CSSProperties } from 'react';
 import type { Product, Review } from '@/types/product';
 import Image from 'next/image';
@@ -30,6 +30,87 @@ interface ProductPageClientProps {
 
 const PRODUCT_IMAGE_QUALITY = 95;
 const COLLAPSED_FAQ_COUNT = 2;
+
+type StripeWalletButton = 'link' | 'gpay';
+
+function StripeProductWalletCtas({
+  isDisabled,
+  isLinkLoading,
+  isGpayLoading,
+  onClick,
+  placement = 'desktop',
+}: {
+  isDisabled: boolean;
+  isLinkLoading: boolean;
+  isGpayLoading: boolean;
+  onClick: (wallet: StripeWalletButton) => void;
+  placement?: 'desktop' | 'mobile';
+}) {
+  return (
+    <div className={`${placement === 'mobile' ? 'mt-6 flex lg:hidden' : 'hidden lg:flex'} flex-col gap-2`}>
+      <div className="flex items-center gap-2 text-sm font-semibold text-[#2e3868]">
+        <CreditCard className="h-4 w-4" strokeWidth={1.8} />
+        <span>Express checkout</span>
+      </div>
+      <button
+        type="button"
+        onClick={() => onClick('link')}
+        disabled={isDisabled}
+        className="wallet-lazy-button wallet-link-button flex h-11 w-full items-center justify-center rounded-lg bg-[#00d66f] px-4 text-base font-medium text-black transition hover:brightness-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+        aria-label="Pay securely with Link"
+      >
+        {isLinkLoading ? (
+          <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-black" />
+        ) : (
+          <span className="wallet-link-content inline-flex items-center justify-center">
+            <span className="wallet-link-text overflow-hidden whitespace-nowrap">Pay securely with</span>
+            <Image
+              src="/nextpaylogo.svg"
+              alt="Link"
+              width={72}
+              height={24}
+              className="wallet-link-logo ml-2 h-5 w-auto object-contain"
+            />
+          </span>
+        )}
+      </button>
+      <button
+        type="button"
+        onClick={() => onClick('gpay')}
+        disabled={isDisabled}
+        className="wallet-lazy-button wallet-gpay-button flex h-11 w-full items-center justify-center rounded-lg bg-black px-4 text-white transition hover:bg-gray-900 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+        aria-label="Pay with Google Pay"
+      >
+        {isGpayLoading ? (
+          <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white" />
+        ) : (
+          <span className="inline-flex items-center justify-center gap-3">
+            <Image
+              src="/gpaylogo.svg"
+              alt="Google Pay"
+              width={58}
+              height={23}
+              className="wallet-gpay-mark h-5 w-auto object-contain"
+            />
+            <span className="wallet-gpay-divider h-6 w-px bg-white/45" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1.5" aria-hidden="true">
+              <span className="wallet-gpay-card wallet-gpay-card-1 flex h-6 w-9 items-center justify-center rounded border border-white/20 bg-white">
+                <span className="h-3.5 w-5 rounded-sm bg-[linear-gradient(90deg,#ea4335_0_24%,#fbbc04_24%_48%,#34a853_48%_72%,#4285f4_72%_100%)]" />
+              </span>
+              <span className="wallet-gpay-card wallet-gpay-card-2 flex h-6 w-9 items-center justify-center rounded border border-white/20 bg-[#171717]">
+                <span className="h-3 w-4 rounded-sm bg-[#2f2f2f]" />
+                <span className="-ml-1 h-3 w-4 rounded-sm bg-[#f15a24]" />
+              </span>
+              <span className="wallet-gpay-card wallet-gpay-card-3 flex h-6 w-8 items-center justify-center rounded border border-white/45 text-lg font-light leading-none text-white">
+                +
+              </span>
+            </span>
+          </span>
+        )}
+      </button>
+    </div>
+  );
+}
 
 export default function ProductPageClient({
   product: initialProduct,
@@ -48,6 +129,7 @@ export default function ProductPageClient({
   const [showZoom, setShowZoom] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
+  const [activeStripeWallet, setActiveStripeWallet] = useState<StripeWalletButton | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
@@ -287,7 +369,7 @@ export default function ProductPageClient({
     }
   };
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = async (wallet?: StripeWalletButton) => {
     if (!product) {
       console.error('Cannot proceed to checkout: product is null');
       return;
@@ -308,9 +390,11 @@ export default function ProductPageClient({
         sizeSelectorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       setIsBuyingNow(false);
+      setActiveStripeWallet(null);
       return;
     }
 
+    setActiveStripeWallet(wallet ?? null);
     setIsBuyingNow(true);
 
     // Use a small delay to ensure the UI updates
@@ -355,6 +439,7 @@ export default function ProductPageClient({
     } catch (error) {
       console.error('Error in buy now:', error);
       setIsBuyingNow(false);
+      setActiveStripeWallet(null);
       alert('Failed to proceed to checkout. Please try again.');
     }
   };
@@ -669,6 +754,16 @@ export default function ProductPageClient({
                 </div>
               )}
 
+              {product.checkoutFlow === 'stripe' && product.inStock !== false && (
+                <StripeProductWalletCtas
+                  placement="mobile"
+                  isDisabled={isAddingToCart || isBuyingNow}
+                  isLinkLoading={isBuyingNow && activeStripeWallet === 'link'}
+                  isGpayLoading={isBuyingNow && activeStripeWallet === 'gpay'}
+                  onClick={handleBuyNow}
+                />
+              )}
+
               {/* Mobile Sticky Buttons */}
               <div className="lg:mt-8 lg:space-y-3 fixed bottom-0 left-0 right-0 z-50 lg:relative lg:z-auto bg-white border-t border-gray-200 lg:border-0 lg:bg-transparent px-4 py-3 lg:px-0 lg:py-0 shadow-lg lg:shadow-none lg:space-y-3 space-y-2">
                 {product && product.inStock === false ? (
@@ -699,10 +794,17 @@ export default function ProductPageClient({
                         {isAddingToCart ? <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#F0F6FF] mr-2"></div>Adding to Cart...</> : <><ShoppingCart className="h-5 w-5 mr-2" />Add to Cart</>}
                       </button>
                     </div>
-                    {(product.checkoutFlow === 'paypal-invoice' || product.checkoutFlow === 'paypal-unclaimed' || product.checkoutFlow === 'paypal-direct' || product.checkoutFlow === 'paypal-api') ? (
+                    {product.checkoutFlow === 'stripe' ? (
+                      <StripeProductWalletCtas
+                        isDisabled={isAddingToCart || isBuyingNow}
+                        isLinkLoading={isBuyingNow && activeStripeWallet === 'link'}
+                        isGpayLoading={isBuyingNow && activeStripeWallet === 'gpay'}
+                        onClick={handleBuyNow}
+                      />
+                    ) : (product.checkoutFlow === 'paypal-invoice' || product.checkoutFlow === 'paypal-unclaimed' || product.checkoutFlow === 'paypal-direct' || product.checkoutFlow === 'paypal-api') ? (
                       <div className="hidden lg:flex flex-col gap-1.5">
                         <button
-                          onClick={handleBuyNow}
+                          onClick={() => handleBuyNow()}
                           disabled={isAddingToCart || isBuyingNow}
                           className="w-full py-4 px-6 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:brightness-95 active:scale-[0.98]"
                           style={{ backgroundColor: '#EFC154' }}
@@ -732,27 +834,23 @@ export default function ProductPageClient({
                       </div>
                     ) : (
                       <div className="hidden lg:flex flex-col gap-1.5">
-                        {product.checkoutFlow === 'stripe' || product.checkoutFlow === 'stripe-hosted' ? (
-                          <ProductStripeExpressCheckout product={product} onNeedsAddress={handleBuyNow} />
-                        ) : (
-                          <button
-                            onClick={handleBuyNow}
-                            disabled={isAddingToCart || isBuyingNow}
-                            className="w-full bg-transparent border-2 border-[#2e3868] hover:border-[#1f274a] text-[#2e3868] hover:text-[#1f274a] py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {isBuyingNow ? (
-                              <>
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2e3868] mr-2"></div>
-                                Processing...
-                              </>
-                            ) : (
-                              <>
-                                <Zap className="h-5 w-5 mr-2" />
-                                Buy Now
-                              </>
-                            )}
-                          </button>
-                        )}
+                        <button
+                          onClick={() => handleBuyNow()}
+                          disabled={isAddingToCart || isBuyingNow}
+                          className="w-full bg-transparent border-2 border-[#2e3868] hover:border-[#1f274a] text-[#2e3868] hover:text-[#1f274a] py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isBuyingNow ? (
+                            <>
+                              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2e3868] mr-2"></div>
+                              Processing...
+                            </>
+                          ) : (
+                            <>
+                              <Zap className="h-5 w-5 mr-2" />
+                              Buy Now
+                            </>
+                          )}
+                        </button>
                       </div>
                     )}
                   </>
