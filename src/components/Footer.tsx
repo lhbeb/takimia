@@ -46,7 +46,7 @@ const Footer = () => {
               </div>
               <div className="pt-2 flex gap-3">
                 <a
-                  href="https://www.instagram.com/takimia.house"
+                  href="https://www.instagram.com/takimia.house/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={socialIconClass}
@@ -55,7 +55,7 @@ const Footer = () => {
                   <Instagram className="h-5 w-5" />
                 </a>
                 <a
-                  href="https://www.pinterest.com/takimia_officiel"
+                  href="https://www.pinterest.com/takimiahouse"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={socialIconClass}
@@ -66,7 +66,7 @@ const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.tiktok.com/@takimia.llc"
+                  href="https://www.tiktok.com/@takimia_house"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={socialIconClass}

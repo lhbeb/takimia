@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import LegalPageSchema from '@/components/LegalPageSchema';
 import { Clock3, MapPin, PackageCheck, ShieldCheck } from 'lucide-react';
 
 const pickupSteps = [
@@ -22,6 +23,11 @@ const pickupSteps = [
 export default function LocalPickupPage() {
   return (
     <div className="min-h-screen bg-[#F0F6FF] py-10 sm:py-14">
+      <LegalPageSchema
+        name="Local Pickup Guide | Takimia"
+        description="Takimia local pickup guide for eligible coffee machines, espresso makers, and barista accessories in Gilbert, Arizona."
+        path="/local-pickup"
+      />
       <div className="container mx-auto px-4">
         <div className="overflow-hidden rounded-[32px] border border-[#D6E3FF] bg-white shadow-[0_24px_80px_rgba(0,48,153,0.10)]">
           <section className="bg-gradient-to-br from-[#2e3868] via-[#2e3868] to-[#2e3868] px-6 py-10 text-[#F0F6FF] sm:px-10 sm:py-12">

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import LegalPageSchema from '@/components/LegalPageSchema';
 
 export const metadata: Metadata = {
   title: 'Billing & Payment Policy | Takimia',
@@ -8,6 +9,11 @@ export const metadata: Metadata = {
 export default function BillingPolicyPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-12">
+      <LegalPageSchema
+        name="Billing & Payment Policy | Takimia"
+        description="Takimia billing, payment, authorization, cancellation, and refund information."
+        path="/billing-policy"
+      />
       <article className="mx-auto max-w-4xl space-y-8 px-4 text-gray-700">
         <header>
           <h1 className="text-4xl font-bold text-[#262626]">Billing & Payment Policy</h1>

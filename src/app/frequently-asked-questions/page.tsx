@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, HelpCircle, Plus } from 'lucide-react';
 import { STORE_FAQS } from '@/lib/storeFaqs';
+import LegalPageSchema from '@/components/LegalPageSchema';
 
 export const metadata: Metadata = {
   title: 'Frequently Asked Questions | Takimia',
@@ -28,6 +29,11 @@ export default function FrequentlyAskedQuestionsPage() {
 
   return (
     <main className="min-h-screen bg-[#f3f4f6]">
+      <LegalPageSchema
+        name="Frequently Asked Questions | Takimia"
+        description="Answers about Takimia coffee machines, espresso makers, ordering, shipping, returns, tracking, local pickup, and customer support."
+        path="/frequently-asked-questions"
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

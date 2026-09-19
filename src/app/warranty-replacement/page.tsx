@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import LegalPageSchema from '@/components/LegalPageSchema';
 
 export const metadata: Metadata = {
   title: 'Warranty & Replacement Policy | Takimia',
@@ -8,6 +9,11 @@ export const metadata: Metadata = {
 export default function WarrantyReplacementPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-12">
+      <LegalPageSchema
+        name="Warranty & Replacement Policy | Takimia"
+        description="Takimia warranty support, defective-product replacement, and customer service information."
+        path="/warranty-replacement"
+      />
       <article className="mx-auto max-w-4xl space-y-8 px-4 text-gray-700">
         <header>
           <h1 className="text-4xl font-bold text-[#262626]">Warranty & Replacement Policy</h1>

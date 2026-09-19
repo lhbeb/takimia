@@ -40,7 +40,6 @@ export default function ReturnPolicyPage() {
       'returnLabelSource': 'https://schema.org/ReturnLabelDownloadAndPrint',
       'restockingFee': 0,
       'refundType': 'https://schema.org/FullRefund',
-      'itemCondition': 'https://schema.org/NewCondition',
     },
   };
 

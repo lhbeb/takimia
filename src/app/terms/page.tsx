@@ -1,4 +1,5 @@
 import React from 'react';
+import LegalPageSchema from '@/components/LegalPageSchema';
 
 const TermsPage = () => {
   const currentDate = new Date().toLocaleDateString('en-US', { 
@@ -9,13 +10,18 @@ const TermsPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 py-12">
+      <LegalPageSchema
+        name="Terms of Service | Takimia"
+        description="Takimia terms of service for its ecommerce store, products, payments, shipping, returns, and customer support."
+        path="/terms"
+      />
       <div className="container mx-auto px-4 max-w-4xl">
         <h1 className="text-4xl font-bold text-[#262626] mb-2">Takimia Terms of Service</h1>
         <p className="text-gray-600 mb-8">Last Updated: {currentDate}</p>
         
         <div className="prose max-w-none text-gray-700 space-y-8">
           <p className="text-lg leading-relaxed">
-            Welcome to Takimia. By accessing or using our website, marketplace, or services, you agree to be bound by these Terms of Service. Please read them carefully. If you do not agree, please discontinue using the site.
+            Welcome to Takimia. We manufacture some of the products we offer and also retail products sourced through vetted suppliers and wholesale channels. By accessing or using our website or services, you agree to be bound by these Terms of Service. Please read them carefully. If you do not agree, please discontinue using the site.
           </p>
 
           {/* Section 1: Overview */}
@@ -25,7 +31,7 @@ const TermsPage = () => {
               <li>Takimia operates as an online retailer for coffee machines, espresso makers, and related equipment.</li>
               <li>We source inventory through vetted wholesale, liquidation, surplus, and supplier channels.</li>
               <li>Every product listing is reviewed by our team before it is published.</li>
-              <li>All purchases made through Takimia are processed under these Terms.</li>
+              <li>Takimia is the seller and primary point of contact for purchases made through our website. All purchases are processed under these Terms.</li>
             </ul>
           </div>
 
@@ -156,7 +162,7 @@ const TermsPage = () => {
               <li>We work quickly to resolve any concerns, disputes, or issues.</li>
             </ul>
             <p className="mt-4">
-              Marketplace seller products also fall under this guarantee unless specifically stated otherwise.
+              Products manufactured by Takimia and products retailed from our approved suppliers follow this same return process unless a product page clearly states otherwise.
             </p>
           </div>
 

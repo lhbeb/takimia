@@ -40,6 +40,7 @@ function isFeedEligible(product: Product): boolean {
     product.meta?.gmc_enabled !== false &&
     product.meta?.published !== false &&
     product.published !== false &&
+    product.currency?.toUpperCase() === 'USD' &&
     Boolean(product.slug && product.title && product.images?.[0]) &&
     Number.isFinite(Number(product.price)) &&
     Number(product.price) > 0
@@ -98,10 +99,7 @@ export async function GET(request: NextRequest) {
 
     const itemsXml = products
       .filter(isFeedEligible)
-      .filter((product) => {
-        if (!currency) return true;
-        return (product.currency || 'USD').toUpperCase() === currency;
-      })
+      .filter((product) => product.currency?.toUpperCase() === 'USD')
       .map((product) => {
         const sku = escapeXml(formatValidSku(product));
         const title = escapeXml(product.title || 'Product');

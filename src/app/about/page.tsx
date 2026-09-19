@@ -25,7 +25,7 @@ import {
 export const metadata: Metadata = {
   title: 'About Us | Takimia',
   description:
-    'Learn about Takimia, your trusted source for premium coffee machines, espresso makers, precision grinders, and barista gear. Serving coffee enthusiasts across the United States and UK with fair prices and quality service.',
+    'Learn about Takimia, a manufacturer and retailer of coffee machines, espresso makers, precision grinders, and barista gear. Serving coffee enthusiasts across the United States with fair prices and quality service.',
 };
 
 export default function AboutPage() {
@@ -38,7 +38,7 @@ export default function AboutPage() {
         'url': 'https://takimia.com/about',
         'name': 'About Takimia',
         'description':
-          'Takimia is an ecommerce retailer serving customers across the United States with premium coffee machines and barista essentials.',
+          'Takimia manufactures some products and retails coffee machines, espresso makers, precision grinders, and barista essentials to customers across the United States.',
         'mainEntity': {
           '@id': 'https://takimia.com/#organization',
         },
@@ -49,7 +49,7 @@ export default function AboutPage() {
         'name': 'Takimia',
         'url': 'https://takimia.com',
         'description':
-          'Ecommerce store serving the United States with premium coffee machines, espresso makers, precision grinders, and barista essentials.',
+          'Manufacturer and ecommerce retailer serving the United States with coffee machines, espresso makers, precision grinders, and barista essentials.',
         'email': 'contact@takimia.com',
         'telephone': ['+17863025205'],
         'address': {
@@ -87,7 +87,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h1 className="text-5xl font-bold mb-6">About Takimia</h1>
           <p className="text-xl text-[#F0F6FF]/85 leading-relaxed max-w-3xl mx-auto">
-            Welcome to Takimia, your trusted source for premium coffee machines, espresso makers, and specialty barista equipment. Based in the United States, we help coffee lovers discover commercial-grade performance, rich extractions, and durable appliances at fair and transparent prices.
+            Welcome to Takimia, a manufacturer and retailer of coffee machines, espresso makers, and specialty barista equipment. We make some of the products we offer and retail additional products sourced through vetted suppliers and wholesale channels. Based in the United States, we help coffee lovers find dependable equipment at fair and transparent prices.
           </p>
         </div>
       </div>
