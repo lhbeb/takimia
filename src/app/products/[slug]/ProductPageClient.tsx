@@ -15,7 +15,7 @@ import { debugNavigation, debugError, debugLog } from '@/utils/debug';
 import { trackPixelEvent } from '@/lib/pixel';
  import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, X, ShoppingCart, Zap, ZoomIn, Info, Ruler } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef, type CSSProperties } from 'react';
-import type { Product } from '@/types/product';
+import type { Product, Review } from '@/types/product';
 import Image from 'next/image';
 import { getConditionDisplayLabel, getConditionTooltip } from '@/lib/conditions';
 import { getMarket, formatMarketPrice } from '@/lib/markets';
@@ -23,12 +23,20 @@ import { STORE_FAQS } from '@/lib/storeFaqs';
 
 interface ProductPageClientProps {
   product: Product | null;
+  sellerReviews?: Review[];
+  sellerName?: string;
+  sellerUsername?: string;
 }
 
 const PRODUCT_IMAGE_QUALITY = 95;
 const COLLAPSED_FAQ_COUNT = 2;
 
-export default function ProductPageClient({ product: initialProduct }: ProductPageClientProps) {
+export default function ProductPageClient({
+  product: initialProduct,
+  sellerReviews = [],
+  sellerName,
+  sellerUsername,
+}: ProductPageClientProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(initialProduct);
@@ -877,8 +885,19 @@ export default function ProductPageClient({ product: initialProduct }: ProductPa
                 reviews={reviews}
                 averageRating={product.rating}
                 totalReviews={product.reviewCount}
-                sellerName={(product.meta as any)?._sellerName}
-                sellerUsername={(product.meta as any)?._sellerUsername}
+                sectionTitle="Reviews for this listing"
+              />
+            </div>
+          )}
+          {sellerReviews.length > 0 && (
+            <div className={reviews && reviews.length > 0 ? "mt-10" : "mt-16"}>
+              <ProductReviews
+                reviews={sellerReviews}
+                averageRating={sellerReviews.reduce((sum, review) => sum + review.rating, 0) / sellerReviews.length}
+                totalReviews={sellerReviews.length}
+                sectionTitle={sellerName ? `More reviews from ${sellerName}` : 'More reviews from this seller'}
+                sellerName={sellerName}
+                sellerUsername={sellerUsername}
               />
             </div>
           )}

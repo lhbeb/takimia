@@ -219,14 +219,14 @@ export default function ReturnPolicyPage() {
             </ul>
           </div>
 
-          {/* 7. Marketplace Sellers */}
+          {/* 7. Takimia Products and Retail Inventory */}
           <div className="space-y-4 pt-4 border-t border-gray-100">
             <div className="flex items-center gap-3">
               <FileText className="w-6 h-6 text-[#2e3868]" />
-              <h2 className="text-2xl font-bold text-[#2e3868]">7. Marketplace Seller Items</h2>
+              <h2 className="text-2xl font-bold text-[#2e3868]">7. Takimia Products and Retail Inventory</h2>
             </div>
             <p>
-              Products from our verified marketplace partners follow the exact same 30-day return policy. All returns are shipped to our central warehouse for inspection, so the experience is consistent regardless of the seller.
+              Takimia sells products it makes as well as products sourced through its retail, wholesale, and liquidation channels. Takimia is responsible for the sale, fulfillment, returns, and refunds for orders placed on this website. The same 30-day return policy applies to eligible Takimia products and retail inventory.
             </p>
           </div>
 

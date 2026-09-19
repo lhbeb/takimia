@@ -2,7 +2,7 @@ import 'server-only';
 import { supabaseAdmin } from './server';
 import type { Seller } from '@/types/seller';
 import type { Review } from '@/types/product';
-import { transformProduct } from './products';
+import { filterPublicReviews, transformProduct } from './products';
 
 // Transform Supabase row to Seller type
 function transformSeller(row: any): Seller {
@@ -16,7 +16,7 @@ function transformSeller(row: any): Seller {
     memberSince: row.member_since || '',
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    nativeReviews: row.reviews || [],
+    nativeReviews: filterPublicReviews(row.reviews),
   };
 }
 
@@ -42,7 +42,7 @@ async function getSellerReviews(sellerId: string): Promise<{
     // Collect all reviews from all products
     const allReviews: Review[] = [];
     for (const product of data) {
-      const productReviews: Review[] = Array.isArray(product.reviews) ? product.reviews : [];
+      const productReviews = filterPublicReviews(product.reviews);
       allReviews.push(...productReviews);
     }
 
@@ -115,9 +115,7 @@ export async function getHomeReviewsFeed(limit: number = 6): Promise<{
     const productRows = productsResult.data || [];
 
     const nativeSellerReviews = sellerRows
-      .flatMap((seller) =>
-        Array.isArray(seller.reviews) ? (seller.reviews as Review[]) : [],
-      )
+      .flatMap((seller) => filterPublicReviews(seller.reviews))
       .filter(shouldIncludeNativeSellerReview);
 
     const publishedProductReviews = productRows
@@ -289,7 +287,7 @@ export async function getOtherSellerReviews(sellerId: string, currentProductSlug
       .single(),
     supabaseAdmin
       .from('products')
-      .select('slug, reviews, meta')
+      .select('slug, reviews')
       .eq('seller_id', sellerId)
       .neq('slug', currentProductSlug),
   ]);
@@ -299,14 +297,12 @@ export async function getOtherSellerReviews(sellerId: string, currentProductSlug
   if (!sellerRow) return { seller: { name: '', username: '' }, reviews: [] };
 
   const candidates: Review[] = [
-    ...(Array.isArray(sellerRow.reviews) ? sellerRow.reviews : []),
+    ...filterPublicReviews(sellerRow.reviews),
     ...(productRows || []).flatMap((product) => (
-      Array.isArray(product.reviews)
-        ? product.reviews.map((review: Review) => ({
+      filterPublicReviews(product.reviews).map((review: Review) => ({
             ...review,
             productSlug: review.productSlug || product.slug,
           }))
-        : []
     )),
   ];
 

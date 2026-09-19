@@ -18,13 +18,13 @@ const LEGAL_PAGE_PATHS = new Set([
 const socialLinks = [
   {
     name: 'Instagram',
-    href: 'https://www.instagram.com/takimia.house',
+    href: 'https://www.instagram.com/takimia.house/',
     className: 'bg-[#C94775] text-white hover:bg-[#B73C68]',
     icon: <Instagram className="h-4 w-4" aria-hidden="true" />,
   },
   {
     name: 'Pinterest',
-    href: 'https://www.pinterest.com/takimia_officiel',
+    href: 'https://www.pinterest.com/takimiahouse',
     className: 'bg-[#D8222F] text-white hover:bg-[#C51D29]',
     icon: (
       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -34,7 +34,7 @@ const socialLinks = [
   },
   {
     name: 'TikTok',
-    href: 'https://www.tiktok.com/@takimia.llc',
+    href: 'https://www.tiktok.com/@takimia_house',
     className: 'bg-black text-white hover:bg-[#111827]',
     icon: (
       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

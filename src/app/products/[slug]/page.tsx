@@ -6,6 +6,7 @@ import { merchantBrand, sanitizeMerchantCopy } from '@/lib/merchantCopy';
 import { notFound } from 'next/navigation';
 import ProductPageClient from './ProductPageClient';
 import type { Metadata, ResolvingMetadata } from 'next';
+import type { Review } from '@/types/product';
 
 // Hardcoded base URL (no environment variable needed)
 const BASE_URL = 'https://takimia.com';
@@ -92,7 +93,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     // ── Review context ─────────────────────────────────────────────────────
     // Keep listing reviews primary, then load additional reviews from the
     // assigned seller without including this listing a second time.
-    let sellerReviewData: { reviews: any[]; seller: { name: string; username: string } } | null = null;
+    let sellerReviewData: { reviews: Review[]; seller: { name: string; username: string } } | null = null;
     if (product.sellerId) {
       try {
         sellerReviewData = await getOtherSellerReviews(product.sellerId, product.slug);

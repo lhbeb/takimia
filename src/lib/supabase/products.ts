@@ -4,6 +4,19 @@ import type { Product } from '@/types/product';
 import { FEATURED_PRODUCT_LIMIT } from '@/config/products';
 import type { Review } from '@/types/product';
 
+const BLOCKED_REVIEW_ID = '65ad323d-1f6d-48c7-935c-797f57429ef4';
+const BLOCKED_REVIEW_SOURCE = 'takimia-seed-review';
+
+export function filterPublicReviews(value: unknown): Review[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.filter((review): review is Review => {
+    if (!review || typeof review !== 'object') return false;
+    const candidate = review as Review & { source?: string };
+    return candidate.id !== BLOCKED_REVIEW_ID && candidate.source !== BLOCKED_REVIEW_SOURCE;
+  });
+}
+
 // Transform Supabase row to Product type
 export function transformProduct(row: any): Product {
   const meta = row.meta || {};
@@ -26,7 +39,7 @@ export function transformProduct(row: any): Product {
     currency: row.currency || 'USD',
     checkoutLink: row.checkout_link,
     checkoutFlow: row.checkout_flow || 'buymeacoffee', // Default to buymeacoffee for backward compatibility
-    reviews: row.reviews || [],
+    reviews: filterPublicReviews(row.reviews),
     meta: meta,
     published: published, // Default to true unless explicitly set to false
     isFeatured: Boolean(row.is_featured),

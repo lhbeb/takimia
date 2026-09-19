@@ -184,7 +184,7 @@ export default function SellerPageClient({ seller }: Props) {
                   <div className="h-px bg-gray-100 w-full" />
                   <div>
                     <h3 className="text-sm font-semibold text-[#262626] mb-1">Returns</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">Returns accepted within 14 days of delivery. The item must be returned in the same condition it was received. Buyer pays return shipping.</p>
+                    <p className="text-sm text-gray-600 leading-relaxed">Returns are accepted within 30 days of delivery for defective and non-defective items. Return by mail with a free return shipping label and no restocking fee. Refunds are issued within 5 business days after inspection.</p>
                   </div>
                   <div className="h-px bg-gray-100 w-full" />
                   <div>

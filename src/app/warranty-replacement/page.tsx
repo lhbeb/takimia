@@ -21,8 +21,8 @@ export default function WarrantyReplacementPage() {
         </header>
         <section className="space-y-4 rounded-2xl bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-2xl font-bold text-[#262626]">Product-specific warranty</h2>
-          <p>Any manufacturer warranty or seller warranty that applies to a product is identified on the product page or in the order documentation. Takimia does not claim to be an authorized manufacturer or service center unless that relationship is expressly stated and documented.</p>
-          <p>Warranty coverage may differ by product condition, seller, and manufacturer. Customers should contact Takimia before sending an item back so the correct process can be confirmed.</p>
+          <p>Any Takimia warranty or applicable manufacturer warranty is identified on the product page or in the order documentation. Takimia provides support for products sold through this website and will explain the applicable warranty or remedy for the item purchased.</p>
+          <p>Warranty coverage may differ by product condition and the manufacturer’s documented terms. Customers should contact Takimia before sending an item back so the correct process can be confirmed.</p>
         </section>
         <section className="space-y-4 rounded-2xl bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-2xl font-bold text-[#262626]">Defective, damaged, or incorrect items</h2>

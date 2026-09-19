@@ -11,7 +11,8 @@ interface ProductReviewsProps {
   reviews: Review[];
   averageRating: number;
   totalReviews: number;
-  /** If reviews were inherited from the seller, pass their name and username */
+  sectionTitle?: string;
+  /** Optional seller identity for the secondary seller-review section */
   sellerName?: string;
   sellerUsername?: string;
 }
@@ -20,6 +21,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
   reviews = [],
   averageRating = 0,
   totalReviews = 0,
+  sectionTitle,
   sellerName,
   sellerUsername,
 }) => {
@@ -131,7 +133,23 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             {/* Rating Summary */}
             <div>
               <h2 className="text-2xl font-bold text-[#262626] mb-2">
-                {sellerName && sellerUsername ? (
+                {sectionTitle ? (
+                  <>
+                    {sectionTitle}
+                    {sellerName && sellerUsername && (
+                      <>
+                        {' '}
+                        <Link
+                          href={`/sellers/${sellerUsername}`}
+                          className="text-[#2e3868] hover:underline inline-flex items-center gap-1"
+                        >
+                          {sellerName}
+                          <ExternalLink className="h-4 w-4" />
+                        </Link>
+                      </>
+                    )}
+                  </>
+                ) : sellerName && sellerUsername ? (
                   <>
                     Reviews from{' '}
                     <Link
@@ -274,9 +292,10 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                             <Image
                               src={image}
                               alt={`Review image ${imgIndex + 1} by ${review.author}`}
-                              width={80}
-                              height={80}
-                              className="w-20 h-20 object-cover group-hover:scale-105 transition-transform duration-200"
+                              width={320}
+                              height={320}
+                              sizes="(max-width: 640px) 160px, 192px"
+                              className="h-40 w-40 object-cover group-hover:scale-105 transition-transform duration-200 sm:h-48 sm:w-48"
                             />
                             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 flex items-center justify-center">
                               <ZoomIn className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />

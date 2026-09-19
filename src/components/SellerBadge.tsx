@@ -40,7 +40,7 @@ export default function SellerBadge({ sellerId, size = 'sm' }: SellerBadgeProps)
     avatarUrl: fallbackAvatarUrl,
   };
 
-  const isTakimia = displaySeller.username === 'takimia' || displaySeller.username === 'cokaro';
+  const isTakimia = displaySeller.username === 'takimia';
   const href = isTakimia ? '/' : `/sellers/${displaySeller.username}`;
   const hasAvatar = displaySeller.avatarUrl && displaySeller.avatarUrl !== fallbackAvatarUrl;
 

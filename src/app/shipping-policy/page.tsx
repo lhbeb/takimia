@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Clock, Mail, MapPin, PackageCheck, ShieldCheck, Truck } from 'lucide-react';
+import { Clock, Mail, MapPin, PackageCheck, Phone, ShieldCheck, Truck } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Shipping Policy | Takimia',
@@ -44,7 +44,7 @@ const policySections = [
     title: 'Package Protection & Safety',
     items: [
       '100% full shipping insurance on all packages',
-      'Signature confirmation for high-value orders over $500 / £400',
+      'Signature confirmation for high-value orders over $500',
       'Weather-resistant outer mailers',
       'Protective bubble/foam layering for fragile items',
     ],
@@ -184,7 +184,7 @@ export default function ShippingPolicyPage() {
             If you have questions about your delivery or need assistance tracking a package, reach out to our support team:
           </p>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center gap-3 rounded-xl bg-[#F5F7FB] p-4">
               <MapPin className="h-5 w-5 text-[#2e3868]" />
               <span className="text-sm font-medium text-[#262626]">United States Nationwide</span>
@@ -192,6 +192,12 @@ export default function ShippingPolicyPage() {
             <div className="flex items-center gap-3 rounded-xl bg-[#F5F7FB] p-4">
               <Mail className="h-5 w-5 text-[#2e3868]" />
               <span className="text-sm font-medium text-[#262626]">contact@takimia.com</span>
+            </div>
+            <div className="flex items-center gap-3 rounded-xl bg-[#F5F7FB] p-4">
+              <Phone className="h-5 w-5 text-[#2e3868]" />
+              <a href="tel:+17863025205" className="text-sm font-medium text-[#262626] hover:underline">
+                +1 (786) 302-5205
+              </a>
             </div>
             <div className="flex items-center gap-3 rounded-xl bg-[#F5F7FB] p-4">
               <Clock className="h-5 w-5 text-[#2e3868]" />

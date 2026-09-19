@@ -8,7 +8,6 @@ export interface CartItem {
 }
 
 export const CART_STORAGE_KEY = 'takimia_cart';
-const LEGACY_CART_STORAGE_KEY = 'Cokaro_cart';
 
 export function addToCart(product: Product): void {
   debugCart('addToCart called', { product: product ? { id: product.id, slug: product.slug, title: product.title } : null });
@@ -103,7 +102,7 @@ export function addToCart(product: Product): void {
 
 export function getCartItem(): CartItem | null {
   try {
-    const stored = localStorage.getItem(CART_STORAGE_KEY) || localStorage.getItem(LEGACY_CART_STORAGE_KEY);
+    const stored = localStorage.getItem(CART_STORAGE_KEY);
     return stored ? JSON.parse(stored) : null;
   } catch (error) {
     console.error('Error reading cart from localStorage:', error);
@@ -113,7 +112,6 @@ export function getCartItem(): CartItem | null {
 
 export function clearCart(): void {
   localStorage.removeItem(CART_STORAGE_KEY);
-  localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
   window.dispatchEvent(new CustomEvent('cartUpdated'));
 }
 
