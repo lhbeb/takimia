@@ -128,14 +128,14 @@ const Footer = () => {
               ].map((logo) => (
                 <span
                   key={logo.src}
-                  className="flex h-7 min-w-[2.75rem] items-center justify-center rounded-md bg-white px-1.5"
+                  className="flex h-9 min-w-[3.5rem] items-center justify-center rounded-md bg-white px-2"
                 >
                   <Image
                     src={logo.src}
                     alt={logo.alt}
-                    width={40}
-                    height={26}
-                    className="max-h-4 w-auto object-contain"
+                    width={52}
+                    height={32}
+                    className="max-h-6 w-auto object-contain"
                   />
                 </span>
               ))}
