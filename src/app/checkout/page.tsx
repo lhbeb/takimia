@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import CheckoutFlowView from './CheckoutFlowView';
 import CheckoutShippingStep from './CheckoutShippingStep';
+import StripeEmbeddedCheckout from '@/components/StripeEmbeddedCheckout';
 import { useCheckoutForm } from './useCheckoutForm';
 import type {
   PaypalApiInitializationResult,
@@ -573,6 +574,31 @@ const CheckoutPage: React.FC = () => {
     );
   }
 
+  const isAddressVerified = Boolean(verifiedAddressSignature && currentAddressSignature === verifiedAddressSignature);
+
+  // When stripe embedded session is ready and address is verified,
+  // render the full-page embedded checkout (replaces the whole layout).
+  if (stripeClientSecret && isAddressVerified) {
+    return (
+      <StripeEmbeddedCheckout
+        clientSecret={stripeClientSecret}
+        shippingData={form.shippingData}
+        product={{
+          title: cartItem.product.title,
+          price: cartItem.product.price,
+          currency: cartItem.product.currency,
+          images: cartItem.product.images,
+        }}
+        sellerName={sellerName}
+        onBack={() => {
+          setStripeClientSecret(null);
+          setVerifiedAddressSignature('');
+          setCheckoutError('');
+        }}
+      />
+    );
+  }
+
   const hasActiveCheckoutFlow = Boolean(
     showKofiCheckout ||
     showPaypalConfirmation ||
@@ -582,8 +608,7 @@ const CheckoutPage: React.FC = () => {
 
   if (hasActiveCheckoutFlow) {
     return (
-      <CheckoutFlowView
-        product={cartItem.product}
+      <CheckoutFlowView        product={cartItem.product}
         shippingData={form.shippingData}
         sellerName={sellerName}
         showKofiCheckout={showKofiCheckout}
@@ -622,7 +647,7 @@ const CheckoutPage: React.FC = () => {
       isRedirecting={isRedirecting}
       checkoutError={checkoutError}
       stripeClientSecret={stripeClientSecret}
-      isAddressVerified={Boolean(verifiedAddressSignature && currentAddressSignature === verifiedAddressSignature)}
+      isAddressVerified={isAddressVerified}
       onSubmit={handleContinueToCheckout}
       onLockedPaymentAttempt={() => {
         setCheckoutError('Payment is locked until your delivery address is verified. Complete the required fields, then click Verify Address.');

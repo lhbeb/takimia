@@ -9,7 +9,6 @@ import CheckoutNotifier from '@/components/CheckoutNotifier';
 import CountrySelect from '@/components/CountrySelect';
 import PaypalApiRedirectButton from '@/components/PaypalApiRedirectButton';
 import PaypalRedirectButton from '@/components/PaypalRedirectButton';
-import StripeEmbeddedCheckout from '@/components/StripeEmbeddedCheckout';
 import type { CartItem } from '@/utils/cart';
 import type { CheckoutFormController } from './useCheckoutForm';
 import type { PaypalApiInitializationResult, PaypalPaymentInitializationResult } from './types';
@@ -462,47 +461,6 @@ function AddressVerifiedNotice({ form }: { form: CheckoutFormController }) {
   );
 }
 
-function StripePaymentPanel({
-  stripeClientSecret,
-  isAddressVerified,
-  form,
-  cartItem,
-}: {
-  stripeClientSecret: string | null;
-  isAddressVerified: boolean;
-  form: CheckoutFormController;
-  cartItem: CartItem;
-}) {
-  const { product } = cartItem;
-
-  if (!stripeClientSecret) {
-    return (
-      <div className="w-full rounded-2xl border border-dashed border-[#2e3868]/25 bg-white p-6 text-center shadow-sm">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2e3868] mx-auto mb-4"></div>
-        <h3 className="text-sm font-bold text-[#262626]">Loading secure payment...</h3>
-      </div>
-    );
-  }
-
-  if (!isAddressVerified) {
-    return (
-      <div className="w-full rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center text-sm font-semibold text-amber-800 shadow-sm">
-        Delivery details changed. Verify the address again to refresh the secure payment session.
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      <StripeEmbeddedCheckout
-        clientSecret={stripeClientSecret}
-        shippingData={form.shippingData}
-        product={{ title: product.title, price: product.price, currency: product.currency, images: product.images }}
-      />
-    </div>
-  );
-}
-
 function formatPrice(cartItem: CartItem, amount: number) {
   const { product } = cartItem;
   const currency = product.currency || 'USD';
@@ -656,14 +614,6 @@ export default function CheckoutShippingStep({
               </div>
 
               <div className="w-96 flex-shrink-0">
-                {product.checkoutFlow === 'stripe' ? (
-                  <StripePaymentPanel
-                    stripeClientSecret={stripeClientSecret}
-                    isAddressVerified={isAddressVerified}
-                    form={form}
-                    cartItem={cartItem}
-                  />
-                ) : (
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
                   {/* Header */}
@@ -743,7 +693,6 @@ export default function CheckoutShippingStep({
                   </div>
 
                 </div>
-                )}
               </div>
             </div>
           </div>
@@ -770,15 +719,6 @@ export default function CheckoutShippingStep({
                       </button>
                     </div>
                   </div>
-                )}
-
-                {product.checkoutFlow === 'stripe' && (
-                  <StripePaymentPanel
-                    stripeClientSecret={stripeClientSecret}
-                    isAddressVerified={isAddressVerified}
-                    form={form}
-                    cartItem={cartItem}
-                  />
                 )}
 
                 {product.checkoutFlow !== 'paypal-direct' && product.checkoutFlow !== 'paypal-api' && (!stripeClientSecret || !isAddressVerified) && (
