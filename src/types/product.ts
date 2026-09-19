@@ -7,7 +7,6 @@ export interface Review {
   title: string;
   content: string;
   helpful?: number;
-  verified?: boolean;
   location?: string;
   purchaseDate?: string;
   images?: string[]; // Array of review/unboxing images

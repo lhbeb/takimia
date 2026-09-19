@@ -1,6 +1,6 @@
 import { getProductBySlug } from '@/lib/data';
 import { getReviewProduct, isReviewProduct } from '@/lib/reviewProducts';
-import { getSellerById } from '@/lib/supabase/sellers';
+import { getOtherSellerReviews } from '@/lib/supabase/sellers';
 import { formatValidSku, mapConditionToSchema } from '@/lib/conditions';
 import { merchantBrand, sanitizeMerchantCopy } from '@/lib/merchantCopy';
 import { notFound } from 'next/navigation';
@@ -89,25 +89,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     if (!product) product = await getProductBySlug(slug);
     if (!product) notFound();
 
-    // ── Review inheritance ─────────────────────────────────────────────────
-    const hasOwnReviews = Array.isArray(product.reviews) && product.reviews.length > 0;
-    if (!hasOwnReviews && product.sellerId) {
+    // ── Review context ─────────────────────────────────────────────────────
+    // Keep listing reviews primary, then load additional reviews from the
+    // assigned seller without including this listing a second time.
+    let sellerReviewData: { reviews: any[]; seller: { name: string; username: string } } | null = null;
+    if (product.sellerId) {
       try {
-        const seller = await getSellerById(product.sellerId);
-        if (seller && seller.reviews && seller.reviews.length > 0) {
-          product = {
-            ...product,
-            reviews: seller.reviews,
-            rating: product.rating || seller.averageRating || 0,
-            reviewCount: product.reviewCount || seller.totalReviews || 0,
-            meta: {
-              ...product.meta,
-              _sellerReviews: true,
-              _sellerName: seller.name,
-              _sellerUsername: seller.username,
-            } as any,
-          };
-        }
+        sellerReviewData = await getOtherSellerReviews(product.sellerId, product.slug);
       } catch {
         // Silently ignore – don't break product page if seller fetch fails
       }
@@ -257,7 +245,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
-        <ProductPageClient product={p} />
+        <ProductPageClient
+          product={p}
+          sellerReviews={sellerReviewData?.reviews || []}
+          sellerName={sellerReviewData?.seller.name}
+          sellerUsername={sellerReviewData?.seller.username}
+        />
       </>
     );
   } catch (error) {

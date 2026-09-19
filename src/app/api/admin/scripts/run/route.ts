@@ -320,11 +320,38 @@ interface SellerAssignResult {
     updated: boolean;
 }
 
+async function resolveSellerId(input: string): Promise<string> {
+    const value = (input || '').trim();
+    if (!value) throw new Error('sellerId is required');
+
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (uuidPattern.test(value)) {
+        const byId = await supabaseAdmin
+            .from('sellers')
+            .select('id')
+            .eq('id', value)
+            .maybeSingle();
+        if (byId.error) throw new Error(`Failed to resolve seller: ${byId.error.message}`);
+        if (byId.data?.id) return byId.data.id;
+    }
+
+    const byUsername = await supabaseAdmin
+        .from('sellers')
+        .select('id')
+        .ilike('username', value)
+        .maybeSingle();
+    if (byUsername.error) throw new Error(`Failed to resolve seller username: ${byUsername.error.message}`);
+    if (byUsername.data?.id) return byUsername.data.id;
+
+    throw new Error(`Seller not found for username or ID: ${value}`);
+}
+
 async function runBulkAssignSellerByAdmin(
     listedBy: string,
     sellerId: string,
     dryRun: boolean
 ): Promise<{ affected: number; results: SellerAssignResult[] }> {
+    const resolvedSellerId = await resolveSellerId(sellerId);
     const { data, error } = await supabaseAdmin
         .from('products')
         .select('slug, title, seller_id')
@@ -337,14 +364,14 @@ async function runBulkAssignSellerByAdmin(
         slug: p.slug,
         title: p.title,
         oldSellerId: p.seller_id || null,
-        newSellerId: sellerId,
+        newSellerId: resolvedSellerId,
         updated: false,
     }));
 
     if (!dryRun && affected.length > 0) {
         const { error: updateError } = await supabaseAdmin
             .from('products')
-            .update({ seller_id: sellerId, updated_at: new Date().toISOString() })
+            .update({ seller_id: resolvedSellerId, updated_at: new Date().toISOString() })
             .eq('listed_by', listedBy);
 
         if (updateError) {
@@ -365,10 +392,11 @@ async function runBulkAssignUnassignedSeller(
     sellerId: string,
     dryRun: boolean
 ): Promise<{ affected: number; results: SellerAssignResult[] }> {
+    const resolvedSellerId = await resolveSellerId(sellerId);
     const { data, error } = await supabaseAdmin
         .from('products')
         .select('slug, title, seller_id')
-        .is('seller_id', null);
+        .or('seller_id.is.null,seller_id.eq.');
 
     if (error) throw new Error(`Failed to fetch products: ${error.message}`);
 
@@ -377,15 +405,15 @@ async function runBulkAssignUnassignedSeller(
         slug: p.slug,
         title: p.title,
         oldSellerId: null,
-        newSellerId: sellerId,
+        newSellerId: resolvedSellerId,
         updated: false,
     }));
 
     if (!dryRun && affected.length > 0) {
         const { error: updateError } = await supabaseAdmin
             .from('products')
-            .update({ seller_id: sellerId, updated_at: new Date().toISOString() })
-            .is('seller_id', null);
+            .update({ seller_id: resolvedSellerId, updated_at: new Date().toISOString() })
+            .or('seller_id.is.null,seller_id.eq.');
 
         if (updateError) {
             console.error('❌ Bulk unassigned seller assign failed:', updateError.message);

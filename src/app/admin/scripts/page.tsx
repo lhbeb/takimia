@@ -157,7 +157,7 @@ const SCRIPTS: ScriptCard[] = [
         danger: false,
         params: {
             listedBy: 'walid',
-            sellerId: '',
+            sellerId: 'takimia',
         },
         paramLabels: {
             listedBy: 'Listed by (admin name)',
@@ -183,7 +183,7 @@ const SCRIPTS: ScriptCard[] = [
             'Use Preview first to see how many products will be affected before running.',
         danger: false,
         params: {
-            sellerId: '',
+            sellerId: 'takimia',
         },
         paramLabels: {
             sellerId: 'Assign to Seller username or ID',

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star, ThumbsUp, CheckCircle2, ChevronDown, X, ZoomIn, ExternalLink } from 'lucide-react';
+import { Star, ThumbsUp, ChevronDown, X, ZoomIn, ExternalLink } from 'lucide-react';
 import type { Review } from '@/types/product';
 import { lockScroll, unlockScroll } from '@/utils/scrollUtils';
 
@@ -230,12 +230,6 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                     <div>
                       <h3 className="font-medium text-[#262626] flex items-center gap-2 flex-wrap sm:flex-nowrap">
                         {review.author}
-                        {review.verified && (
-                          <span className="flex items-center text-[#2e3868] text-sm">
-                            <CheckCircle2 className="h-4 w-4 mr-1" />
-                            Verified Purchase
-                          </span>
-                        )}
                       </h3>
                       <div className="text-sm text-gray-500">
                         {review.location && `${review.location} • `}

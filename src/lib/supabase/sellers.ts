@@ -271,6 +271,61 @@ export async function getSellerByUsername(username: string): Promise<Seller | nu
   }
 }
 
+/**
+ * Load reviews belonging to a seller other than the current product listing.
+ * Native seller reviews are included, while reviews from the current product
+ * are excluded so the product page can render listing reviews first without
+ * duplicating them in the seller section.
+ */
+export async function getOtherSellerReviews(sellerId: string, currentProductSlug: string): Promise<{
+  seller: Pick<Seller, 'name' | 'username'>;
+  reviews: Review[];
+}> {
+  const [{ data: sellerRow, error: sellerError }, { data: productRows, error: productsError }] = await Promise.all([
+    supabaseAdmin
+      .from('sellers')
+      .select('name, username, reviews')
+      .eq('id', sellerId)
+      .single(),
+    supabaseAdmin
+      .from('products')
+      .select('slug, reviews, meta')
+      .eq('seller_id', sellerId)
+      .neq('slug', currentProductSlug),
+  ]);
+
+  if (sellerError) throw new Error(`Failed to fetch seller reviews: ${sellerError.message}`);
+  if (productsError) throw new Error(`Failed to fetch seller product reviews: ${productsError.message}`);
+  if (!sellerRow) return { seller: { name: '', username: '' }, reviews: [] };
+
+  const candidates: Review[] = [
+    ...(Array.isArray(sellerRow.reviews) ? sellerRow.reviews : []),
+    ...(productRows || []).flatMap((product) => (
+      Array.isArray(product.reviews)
+        ? product.reviews.map((review: Review) => ({
+            ...review,
+            productSlug: review.productSlug || product.slug,
+          }))
+        : []
+    )),
+  ];
+
+  const seen = new Set<string>();
+  const reviews = candidates.filter((review) => {
+    const key = review.id || `${review.author}|${review.date}|${review.title}|${review.content}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  reviews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  return {
+    seller: { name: sellerRow.name, username: sellerRow.username },
+    reviews,
+  };
+}
+
 
 /**
  * Get published products for a seller
