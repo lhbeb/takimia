@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { Star, X, Send, ThumbsUp, ZoomIn, Upload } from 'lucide-react';
+import { Star, CheckCircle2, X, Send, ThumbsUp, ZoomIn, Upload } from 'lucide-react';
 import type { Review } from '@/types/product';
 
 interface HomeReviewsProps {
