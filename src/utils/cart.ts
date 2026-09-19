@@ -71,7 +71,6 @@ export function addToCart(product: Product): void {
 
     try {
       localStorage.setItem(CART_STORAGE_KEY, serialized);
-      localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
       debugCart('addToCart: stored in localStorage', { key: CART_STORAGE_KEY });
     } catch (storageError) {
       debugError('addToCart: localStorage.setItem failed', storageError);
