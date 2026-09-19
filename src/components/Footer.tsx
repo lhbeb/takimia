@@ -113,13 +113,32 @@ const Footer = () => {
         <div className="border-t border-[#F0F6FF]/20 mt-12 pt-8">
           <div className="flex flex-col items-center justify-between gap-5 text-center sm:flex-row sm:text-left">
             <p>© 2026 Takimia. All rights reserved.</p>
-            <div className="flex items-center justify-center sm:justify-end">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/paymenticons.svg"
-                alt="Accepted payment methods"
-                className="h-8 w-auto max-w-[min(100%,25rem)] object-contain"
-              />
+            <div className="flex flex-wrap items-center justify-center sm:justify-end gap-1.5">
+              {[
+                { src: '/payment-logos/visa.svg',             alt: 'Visa' },
+                { src: '/payment-logos/mastercard.svg',       alt: 'Mastercard' },
+                { src: '/payment-logos/american-express.svg', alt: 'American Express' },
+                { src: '/payment-logos/discover.svg',         alt: 'Discover' },
+                { src: '/payment-logos/maestro.svg',          alt: 'Maestro' },
+                { src: '/payment-logos/jcb.svg',              alt: 'JCB' },
+                { src: '/payment-logos/unionpay.svg',         alt: 'UnionPay' },
+                { src: '/payment-logos/diners.svg',           alt: 'Diners Club' },
+                { src: '/payment-logos/apple-pay.svg',        alt: 'Apple Pay' },
+                { src: '/payment-logos/google-pay.svg',       alt: 'Google Pay' },
+              ].map((logo) => (
+                <span
+                  key={logo.src}
+                  className="flex h-7 min-w-[2.75rem] items-center justify-center rounded-md border border-white/20 bg-white/10 px-1.5"
+                >
+                  <Image
+                    src={logo.src}
+                    alt={logo.alt}
+                    width={40}
+                    height={26}
+                    className="max-h-4 w-auto object-contain brightness-0 invert"
+                  />
+                </span>
+              ))}
             </div>
           </div>
         </div>
