@@ -19,7 +19,7 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
           {/* Left Section - Image */}
           <div className="relative min-h-[360px] w-full md:min-h-[400px] md:w-[45%]">
             <Image
-              src="/shiiping.jpg"
+              src="/shiiping.jpg.jpg"
               alt="Takimia fast shipping and fulfillment"
               fill
               sizes="(max-width: 768px) 100vw, 45vw"
