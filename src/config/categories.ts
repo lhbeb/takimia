@@ -55,10 +55,10 @@ export const POPULAR_CATEGORY_NAMES = [
 ] as const;
 
 export const POPULAR_CATEGORY_IMAGES: Record<string, string> = {
-  'Espresso Machines': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-oracle-jet/img1.png',
-  'Coffee Makers': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-luxe-brewer-thermal/img1.png',
-  'Precision Grinders': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-dynamic-duo/img3.png',
-  'Bean-to-Cup': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-grind-control/img1.png',
+  'Espresso Machines': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/takimia-aero-jet-espresso-machine/img1.png',
+  'Coffee Makers': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/takimia-luxe-thermal-coffee-maker/img1.png',
+  'Precision Grinders': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/takimia-dynamic-duo-espresso-grinder/img3.png',
+  'Bean-to-Cup': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/takimia-grind-control-coffee-maker/img1.png',
   'Barista Accessories': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-milk-cafe/img1.png',
 };
 
@@ -112,7 +112,7 @@ export function filterProductsByCategory(products: Product[], categoryOrQuery: s
       return (
         slug.includes('grind') ||
         slug.includes('dynamic-duo') ||
-        slug.includes('oracle') ||
+        slug.includes('aero-jet') ||
         slug.includes('barista-pro') ||
         slug.includes('barista-touch') ||
         title.includes('grind') ||
@@ -184,7 +184,7 @@ export function filterProductsByCategory(products: Product[], categoryOrQuery: s
       const cat = String(p.category || '').toLowerCase();
       return (
         cat.includes('espresso') ||
-        slug.includes('oracle') ||
+        slug.includes('aero-jet') ||
         slug.includes('barista') ||
         slug.includes('bambino') ||
         slug.includes('dual-boiler') ||
