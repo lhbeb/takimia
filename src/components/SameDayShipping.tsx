@@ -19,8 +19,8 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
           {/* Left Section - Image */}
           <div className="relative min-h-[360px] w-full md:min-h-[400px] md:w-[45%]">
             <Image
-              src="/shiiping.jpg.jpg"
-              alt="Takimia fast shipping and fulfillment"
+              src="/shipimage.png"
+              alt="FedEx and Takimia fast, reliable shipping partnership"
               fill
               sizes="(max-width: 768px) 100vw, 45vw"
               className="object-cover object-center"
@@ -31,11 +31,11 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
           {/* Right Section - Content */}
           <div className="md:w-[55%] bg-[#2e3868] text-[#F0F6FF] p-12 flex flex-col justify-center">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-[#ffffff]">
-              Same-Day Dispatch
+              FedEx + Takimia: Fast, Reliable Shipping
             </h1>
 
             <p className="text-lg leading-relaxed font-normal mb-12">
-              Place your order by 2:00 PM EST and we&apos;ll process, pack, and hand it to one of our trusted delivery partners that same day. At <strong>Takimia</strong>, fast, dependable fulfillment is part of every order.
+              Through our FedEx and Takimia partnership, your order is handled with care and shipped through a trusted delivery network. We focus on fast, reliable, and safe delivery, with tracking that helps you follow your order from dispatch to arrival.
             </p>
             <Link
               href="/shipping-policy"
@@ -57,10 +57,10 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
             </div>
             <div>
               <h3 className="font-bold text-[#262626] text-lg mb-2">
-                Fast, Same-Day Processing
+                Fast, Reliable Delivery
               </h3>
               <p className="text-gray-600 text-sm">
-                Order before 2:00 PM EST and we&apos;ll prepare your package to begin its journey that same day.
+                We process orders promptly and work with FedEx to move your package quickly and reliably toward its destination.
               </p>
             </div>
           </div>
@@ -74,10 +74,10 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
             </div>
             <div>
               <h3 className="font-bold text-[#262626] text-lg mb-2">
-                Simple 30-Day Returns
+                Safe, Careful Handling
               </h3>
               <p className="text-gray-600 text-sm">
-                If an item isn&apos;t right for you, return it within 30 days through our straightforward returns process.
+                Your order is prepared with care and handed to a trusted FedEx delivery network for secure transportation.
               </p>
             </div>
           </div>
@@ -91,10 +91,10 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
             </div>
             <div>
               <h3 className="font-bold text-[#262626] text-lg mb-2">
-                Tracking You Can Follow
+                FedEx Tracking You Can Follow
               </h3>
               <p className="text-gray-600 text-sm">
-                Our trusted carrier partners provide real-time tracking, so you can follow your package from dispatch to delivery.
+                FedEx tracking keeps you informed, so you can follow your package from dispatch through delivery.
               </p>
             </div>
           </div>
@@ -105,10 +105,10 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
       <div className="bg-white rounded-xl p-8 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <p className="text-gray-500 text-sm mb-2">
-            Ready to get your order moving?
+            Ready for fast, reliable delivery?
           </p>
           <p className="text-2xl md:text-3xl font-bold text-[#262626]">
-            Order by <span className="text-[#2e3868]">2:00 PM EST</span> for same-day dispatch
+            Order today and let FedEx help move it safely toward you
           </p>
         </div>
         <a
