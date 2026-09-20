@@ -20,7 +20,7 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
           <div className="relative min-h-[360px] w-full md:min-h-[400px] md:w-[45%]">
             <Image
               src="/shipimage.png"
-              alt="FedEx and Takimia fast, reliable shipping partnership"
+              alt="Takimia orders shipped via FedEx for fast, reliable delivery"
               fill
               sizes="(max-width: 768px) 100vw, 45vw"
               className="object-cover object-center"
@@ -31,11 +31,11 @@ const SameDayShipping: React.FC<SameDayShippingProps> = ({ fullWidth = false, co
           {/* Right Section - Content */}
           <div className="md:w-[55%] bg-[#2e3868] text-[#F0F6FF] p-12 flex flex-col justify-center">
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 text-[#ffffff]">
-              FedEx + Takimia: Fast, Reliable Shipping
+              Shipped via FedEx — Fast, Tracked, and Reliable
             </h1>
 
             <p className="text-lg leading-relaxed font-normal mb-12">
-              Through our FedEx and Takimia partnership, your order is handled with care and shipped through a trusted delivery network. We focus on fast, reliable, and safe delivery, with tracking that helps you follow your order from dispatch to arrival.
+              Every Takimia order is shipped through FedEx, one of the most trusted delivery networks in the United States. From the moment your order leaves our facility, it is handled with care and moving through a proven logistics network built for speed and reliability. Full tracking is provided so you can follow your shipment from dispatch to delivery.
             </p>
             <Link
               href="/shipping-policy"

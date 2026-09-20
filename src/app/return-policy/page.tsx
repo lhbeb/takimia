@@ -226,7 +226,7 @@ export default function ReturnPolicyPage() {
               <h2 className="text-2xl font-bold text-[#2e3868]">7. Takimia Products and Retail Inventory</h2>
             </div>
             <p>
-              Takimia sells products it makes as well as products sourced through its retail, wholesale, and liquidation channels. Takimia is responsible for the sale, fulfillment, returns, and refunds for orders placed on this website. The same 30-day return policy applies to eligible Takimia products and retail inventory.
+              Takimia sells products through its retail and wholesale channels. Takimia is responsible for the sale, fulfillment, returns, and refunds for orders placed on this website. The same 30-day return policy applies to eligible Takimia products and retail inventory.
             </p>
           </div>
 

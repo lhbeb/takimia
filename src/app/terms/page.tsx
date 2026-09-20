@@ -21,15 +21,15 @@ const TermsPage = () => {
         
         <div className="prose max-w-none text-gray-700 space-y-8">
           <p className="text-lg leading-relaxed">
-            Welcome to Takimia. We manufacture some of the products we offer and also retail products sourced through vetted suppliers and wholesale channels. By accessing or using our website or services, you agree to be bound by these Terms of Service. Please read them carefully. If you do not agree, please discontinue using the site.
+            Welcome to Takimia. We are a coffee and espresso machine brand that designs and sells premium coffee equipment. By accessing or using our website or services, you agree to be bound by these Terms of Service. Please read them carefully. If you do not agree, please discontinue using the site.
           </p>
 
           {/* Section 1: Overview */}
           <div>
             <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">1. Overview</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Takimia operates as an online retailer for coffee machines, espresso makers, and related equipment.</li>
-              <li>We source inventory through vetted wholesale, liquidation, surplus, and supplier channels.</li>
+              <li>Takimia is a coffee and espresso machine brand operating as an online retailer.</li>
+              <li>We sell espresso machines, coffee brewers, precision grinders, and barista accessories.</li>
               <li>Every product listing is reviewed by our team before it is published.</li>
               <li>Takimia is the seller and primary point of contact for purchases made through our website. All purchases are processed under these Terms.</li>
             </ul>
@@ -50,7 +50,7 @@ const TermsPage = () => {
           <div>
             <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">3. Sourcing and Fulfillment Terms</h2>
             <p className="mb-4">
-              Takimia may purchase inventory from independent suppliers, wholesalers, liquidation sources, and other vetted third-party channels. Products are offered for sale by Takimia unless a product page clearly states otherwise.
+              Takimia sources products through vetted suppliers and wholesale channels. Products are offered for sale by Takimia unless a product page clearly states otherwise. Products are offered for sale by Takimia unless a product page clearly states otherwise.
             </p>
 
             <h3 className="text-xl font-bold text-[#262626] mt-6 mb-3">3.1 Supplier Review Process</h3>
@@ -87,7 +87,7 @@ const TermsPage = () => {
             <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">4. Product Terms</h2>
             <ul className="list-disc pl-6 space-y-2">
               <li>We aim to provide accurate and detailed product descriptions.</li>
-              <li>We sell new, open-box, refurbished, and pre owned items, each clearly labeled.</li>
+              <li>Products may be new, open-box, or refurbished. Condition is clearly labeled on each product page.</li>
               <li>All used or open-box electronics are tested prior to sale.</li>
               <li>Product availability is not guaranteed until an order is processed.</li>
               <li>Prices may change at any time due to market conditions and sourcing costs.</li>
@@ -97,22 +97,17 @@ const TermsPage = () => {
 
           {/* Section 5: Sourcing Transparency */}
           <div>
-            <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">5. Sourcing Transparency</h2>
+            <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">5. Product Quality</h2>
             <p className="mb-4">
-              Takimia may source products through:
+              Takimia is committed to offering quality coffee and espresso equipment. Before any product is listed on our website:
             </p>
             <ul className="list-disc pl-6 space-y-2 mb-4">
-              <li>Online auctions and bidding platforms</li>
-              <li>Independent suppliers and sourcers</li>
-              <li>Wholesale, liquidation, and surplus inventory channels</li>
-              <li>Local auctions and community sales</li>
-              <li>Wholesalers and bulk suppliers</li>
+              <li>Product condition and specifications are reviewed and confirmed.</li>
+              <li>Products are sourced through vetted suppliers and wholesale partners.</li>
+              <li>Minor cosmetic variations on open-box or display items are noted in the listing.</li>
             </ul>
             <p>
-              These sourcing methods allow us to offer competitive pricing.
-            </p>
-            <p className="mt-2">
-              You agree that cosmetic variations, packaging differences, or shelf pull characteristics may occur with certain items unless stated otherwise.
+              Our goal is to give every customer accurate information before they buy.
             </p>
           </div>
 
