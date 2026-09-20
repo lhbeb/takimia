@@ -109,6 +109,12 @@ export default function RootLayout({
           }}
         />
         <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-00000000000" strategy="afterInteractive" />
+        {/* Contentsquare Session Recording */}
+        <Script 
+          async 
+          src="https://t.contentsquare.net/uxa/6b28195ddd3fc.js"
+          strategy="afterInteractive"
+        />
         {/* Meta Pixel base snippet + init.
             Loaded synchronously in <head> (NOT afterInteractive) so `window.fbq` exists
             before React hydrates. This removes the race that silently dropped PageView,
@@ -238,13 +244,18 @@ export default function RootLayout({
           </AdminRouteOnly>
         </ErrorBoundaryWrapper>
 
-        <AdminRouteCheck>
-          <Script
-            src="https://analyticsapp-five.vercel.app/tracker.js"
-            strategy="afterInteractive"
-            async
-          />
-        </AdminRouteCheck>
+        {/* The external analytics tracker currently returns HTTP 500 from
+            analyticsapp-five.vercel.app/api/track. Keep it opt-in until that
+            service is healthy; this prevents noisy client errors in production. */}
+        {process.env.NEXT_PUBLIC_ANALYTICS_TRACKER_ENABLED === "true" && (
+          <AdminRouteCheck>
+            <Script
+              src="https://analyticsapp-five.vercel.app/tracker.js"
+              strategy="afterInteractive"
+              async
+            />
+          </AdminRouteCheck>
+        )}
         <FixedSocialRail />
         <LiveChatWidget />
         <GoogleTagTracker />
