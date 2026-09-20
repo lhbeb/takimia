@@ -5,6 +5,8 @@ import { getAllProducts } from '@/lib/data';
 import { filterProductsByCategory } from '@/config/categories';
 import ScrollToTop from '@/components/ScrollToTop';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Coffee Makers & Brewers | Takimia',
   description:

@@ -11,6 +11,8 @@ import type { Review } from '@/types/product';
 // Hardcoded base URL (no environment variable needed)
 const BASE_URL = 'https://takimia.com';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> },
   _parent: ResolvingMetadata

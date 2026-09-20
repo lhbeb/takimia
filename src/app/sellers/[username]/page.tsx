@@ -7,6 +7,8 @@ interface Props {
   params: Promise<{ username: string }>;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { username } = await params;
   const seller = await getSellerByUsername(username);

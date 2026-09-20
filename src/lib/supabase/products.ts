@@ -7,6 +7,37 @@ import type { Review } from '@/types/product';
 const BLOCKED_REVIEW_ID = '65ad323d-1f6d-48c7-935c-797f57429ef4';
 const BLOCKED_REVIEW_SOURCE = 'takimia-seed-review';
 
+const STORAGE_FOLDER_FIX: Record<string, string> = {
+  'takimia-aero-jet-espresso-machine': 'the-oracle-jet',
+  'takimia-dynamic-duo-espresso-grinder': 'the-dynamic-duo',
+  'takimia-barista-pro-espresso-machine': 'the-barista-pro',
+  'takimia-barista-touch-espresso-machine': 'the-barista-touch',
+  'takimia-barista-touch-impress': 'the-barista-touch-impress',
+  'takimia-bambino-plus-espresso-machine': 'the-bambino-plus',
+  'takimia-bambino-espresso-machine': 'the-bambino',
+  'takimia-dual-boiler-espresso-machine': 'the-dual-boiler',
+  'takimia-luxe-thermal-coffee-maker': 'the-luxe-brewer-thermal',
+  'takimia-luxe-glass-coffee-maker': 'luxe-brewer-glass',
+  'takimia-grind-control-coffee-maker': 'the-grind-control',
+  'takimia-milk-cafe-frother': 'the-milk-cafe',
+};
+
+function normalizeProductImageUrls(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.filter((image): image is string => typeof image === 'string' && image.trim().length > 0)
+    .map((image) => {
+      for (const [brokenFolder, realFolder] of Object.entries(STORAGE_FOLDER_FIX)) {
+        const brokenSegment = `/product-images/${brokenFolder}/`;
+        if (image.includes(brokenSegment)) {
+          return image.replace(brokenSegment, `/product-images/${realFolder}/`);
+        }
+      }
+
+      return image;
+    });
+}
+
 export function filterPublicReviews(value: unknown): Review[] {
   if (!Array.isArray(value)) return [];
 
@@ -31,7 +62,7 @@ export function transformProduct(row: any): Product {
     price: row.price,
     rating: row.rating || 0,
     reviewCount: row.review_count || 0,
-    images: row.images || [],
+    images: normalizeProductImageUrls(row.images),
     condition: row.condition,
     category: row.category,
     brand: row.brand,
