@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllProducts } from '@/lib/data';
 import { formatValidSku, mapConditionToGmc } from '@/lib/conditions';
+import { isGmcFeedEligibleProduct } from '@/lib/gmc';
 import type { Product } from '@/types/product';
 
 const BASE_URL = 'https://takimia.com';
@@ -33,18 +34,6 @@ function parseEnum<T extends string>(
   if (!value) return undefined;
   const normalized = value.toUpperCase();
   return supportedValues.includes(normalized as T) ? (normalized as T) : null;
-}
-
-function isFeedEligible(product: Product): boolean {
-  return (
-    product.meta?.gmc_enabled !== false &&
-    product.meta?.published !== false &&
-    product.published !== false &&
-    product.currency?.toUpperCase() === 'USD' &&
-    Boolean(product.slug && product.title && product.images?.[0]) &&
-    Number.isFinite(Number(product.price)) &&
-    Number(product.price) > 0
-  );
 }
 
 function buildShippingXml(
@@ -98,7 +87,7 @@ export async function GET(request: NextRequest) {
       : SUPPORTED_COUNTRIES;
 
     const itemsXml = products
-      .filter(isFeedEligible)
+      .filter(isGmcFeedEligibleProduct)
       .filter((product) => product.currency?.toUpperCase() === 'USD')
       .map((product) => {
         const sku = escapeXml(formatValidSku(product));
