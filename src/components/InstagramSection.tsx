@@ -26,7 +26,7 @@ const InstagramSection: React.FC = () => {
 
                 {/* Profile Details */}
                 <div className="flex-grow">
-                  <h3 className="font-bold text-[#262626] text-lg sm:text-xl mb-1">@takimia.house</h3>
+                  <h3 className="font-bold text-[#262626] text-lg sm:text-xl mb-1">takimia.house</h3>
                       <p className="text-gray-600 text-sm sm:text-base mb-2">Takimia House</p>
 
                   {/* Statistics */}
