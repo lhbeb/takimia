@@ -220,6 +220,8 @@ const CheckoutPage: React.FC = () => {
           images: product.images,
           checkoutLink: product.checkoutLink,
           checkoutFlow: product.checkoutFlow,
+          // Preserve Shopify variant metadata for server-side checkout-link resolution.
+          meta: product.meta || {},
           selectedSize: (product as ProductWithSelectedSize).selectedSize || null,
         },
       };
@@ -565,6 +567,27 @@ const CheckoutPage: React.FC = () => {
           setIsRedirecting(false);
           setCheckoutError('Could not connect to payment provider. Please check your connection and try again.');
         }
+      } else if (checkoutFlow === 'shopify') {
+        console.log('🛍️ [Checkout] Shopify flow: Redirecting to the product Shopify Checkout URL');
+        if (!checkoutLink) {
+          setCheckoutError('Shopify checkout is not configured for this product. Please contact support.');
+          return;
+        }
+
+        try {
+          const shopifyUrl = new URL(checkoutLink);
+          if (shopifyUrl.protocol !== 'https:') {
+            throw new Error('Shopify checkout URL must use HTTPS.');
+          }
+
+          setIsRedirecting(true);
+          window.scrollTo({ top: 0 });
+          window.location.assign(shopifyUrl.toString());
+        } catch (error) {
+          console.error('❌ [Checkout] Invalid Shopify Checkout URL:', error);
+          setIsRedirecting(false);
+          setCheckoutError('Shopify checkout is temporarily unavailable. Please try again.');
+        }
       } else if (checkoutFlow === 'paypal-invoice' || checkoutFlow === 'paypal-unclaimed') {
         console.log('📧 [Checkout] PayPal Invoice/Unclaimed flow: Showing confirmation screen');
         setPaypalConfirmationVariant(checkoutFlow === 'paypal-unclaimed' ? 'unclaimed' : 'invoice');
@@ -656,7 +679,7 @@ const CheckoutPage: React.FC = () => {
         paypalConfirmationVariant={paypalConfirmationVariant}
         paypalConfirmationOrderId={paypalConfirmationOrderId}
         isRedirecting={isRedirecting}
-        redirectingProvider="external"
+        redirectingProvider={cartItem.product.checkoutFlow === 'shopify' ? 'shopify' : 'external'}
         showPaypalDirect={showPaypalDirect}
         paypalDirectEmail={paypalDirectEmail}
         paypalDirectOrderId={paypalDirectOrderId}

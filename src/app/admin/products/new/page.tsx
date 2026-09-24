@@ -19,7 +19,7 @@ import { PRODUCT_CONDITIONS, normalizeConditionValue } from '@/lib/conditions';
 const slugify = (value: string) =>
   value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
-type CheckoutFlow = 'buymeacoffee' | 'kofi' | 'external' | 'stripe' | 'paypal-invoice' | 'paypal-unclaimed' | 'paypal-direct' | 'paypal-api';
+type CheckoutFlow = 'buymeacoffee' | 'kofi' | 'external' | 'stripe' | 'stripe-hosted' | 'shopify' | 'paypal-invoice' | 'paypal-unclaimed' | 'paypal-direct' | 'paypal-api';
 const ROTATABLE_CHECKOUT_FLOWS: CheckoutFlow[] = ['buymeacoffee', 'kofi', 'external'];
 const supportsCheckoutLinkRotation = (flow: CheckoutFlow) => ROTATABLE_CHECKOUT_FLOWS.includes(flow);
 
@@ -670,6 +670,8 @@ export default function NewProductPage() {
                   <option value="buymeacoffee">BuyMeACoffee (External - Redirects to payment link)</option>
                   <option value="kofi">Ko-fi (Iframe - Embedded on your site)</option>
                   <option value="stripe">Stripe (Stripe Checkout - Professional payment processing)</option>
+                  <option value="stripe-hosted">Stripe Hosted (Hosted payment page)</option>
+                  <option value="shopify">Shopify (Redirects to Shopify Checkout)</option>
                   <option value="external">External (Custom payment provider)</option>
                   <option value="paypal-invoice">PayPal Invoice (On-site confirmation — invoice sent by email)</option>
                   <option value="paypal-unclaimed">PayPal Unclaimed (Same as invoice flow for now)</option>
@@ -689,6 +691,10 @@ export default function NewProductPage() {
                     ) : formData.checkout_flow === 'external' ? (
                       <>
                         <strong>External:</strong> Customer is redirected to your custom payment provider after address confirmation.
+                      </>
+                    ) : formData.checkout_flow === 'shopify' ? (
+                      <>
+                        <strong>Shopify:</strong> Customer confirms their delivery address here, then is redirected to the secure Shopify Checkout URL.
                       </>
                     ) : formData.checkout_flow === 'paypal-invoice' ? (
                       <>

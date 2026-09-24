@@ -110,6 +110,8 @@ export async function sendOrderEmail(order: any): Promise<{ success: boolean; er
     const formatCheckoutFlow = (flow: string): string => {
       const flowMap: Record<string, string> = {
         'stripe': 'Stripe',
+        'stripe-hosted': 'Stripe Hosted',
+        'shopify': 'Shopify Checkout',
         'kofi': 'Ko-fi',
         'buymeacoffee': 'Buy Me a Coffee',
         'external': 'External',
