@@ -66,7 +66,7 @@ const NewsletterSection = () => {
           </h2>
 
           <p className="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Be first to discover new espresso machines, precision grinders, brewing accessories, and exclusive member discounts—crafted for true coffee lovers.
+            Be first to discover newly listed espresso machines, precision grinders, brewing accessories, and exclusive member discounts for serious coffee lovers.
           </p>
 
           <form onSubmit={handleSubmit} className="max-w-md mx-auto">

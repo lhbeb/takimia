@@ -21,14 +21,14 @@ const TermsPage = () => {
         
         <div className="prose max-w-none text-gray-700 space-y-8">
           <p className="text-lg leading-relaxed">
-            Welcome to Takimia. We are a coffee and espresso machine brand that designs and sells premium coffee equipment. By accessing or using our website or services, you agree to be bound by these Terms of Service. Please read them carefully. If you do not agree, please discontinue using the site.
+            Welcome to Takimia. We are an online retailer of brew and coffee machines, espresso makers, brewers, grinders, and barista accessories. By accessing or using our website or services, you agree to be bound by these Terms of Service. Please read them carefully. If you do not agree, please discontinue using the site.
           </p>
 
           {/* Section 1: Overview */}
           <div>
             <h2 className="text-3xl font-bold text-[#262626] mt-10 mb-4">1. Overview</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li>Takimia is a coffee and espresso machine brand operating as an online retailer.</li>
+              <li>Takimia is an online retailer of brew and coffee machines and related coffee equipment.</li>
               <li>We sell espresso machines, coffee brewers, precision grinders, and barista accessories.</li>
               <li>Every product listing is reviewed by our team before it is published.</li>
               <li>Takimia is the seller and primary point of contact for purchases made through our website. All purchases are processed under these Terms.</li>
@@ -157,7 +157,7 @@ const TermsPage = () => {
               <li>We work quickly to resolve any concerns, disputes, or issues.</li>
             </ul>
             <p className="mt-4">
-              Products manufactured by Takimia and products retailed from our approved suppliers follow this same return process unless a product page clearly states otherwise.
+              Products retailed by Takimia follow this same return process unless a product page clearly states otherwise.
             </p>
           </div>
 

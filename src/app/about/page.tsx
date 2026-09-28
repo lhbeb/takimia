@@ -25,7 +25,7 @@ import {
 export const metadata: Metadata = {
   title: 'About Us | Takimia',
   description:
-    'Takimia is a coffee and espresso machine brand based in the United States. We design and sell premium espresso machines, coffee brewers, and barista accessories for home and professional use.',
+    'Takimia is a United States retailer of brew and coffee machines, espresso makers, coffee brewers, grinders, and barista accessories for home and professional use.',
 };
 
 export default function AboutPage() {
@@ -38,18 +38,18 @@ export default function AboutPage() {
         'url': 'https://takimia.com/about',
         'name': 'About Takimia',
         'description':
-          'Takimia is a coffee and espresso machine brand that designs and sells premium brewing equipment to customers across the United States.',
+          'Takimia is a retailer of brew and coffee machines, espresso makers, grinders, and barista accessories for customers across the United States.',
         'mainEntity': {
           '@id': 'https://takimia.com/#organization',
         },
       },
       {
-        '@type': 'Brand',
+        '@type': 'Organization',
         '@id': 'https://takimia.com/#organization',
         'name': 'Takimia',
         'url': 'https://takimia.com',
         'description':
-          'Takimia is a coffee and espresso machine brand offering premium espresso makers, coffee brewers, precision grinders, and barista accessories.',
+          'Takimia is a coffee equipment retailer offering espresso makers, coffee brewers, grinders, and barista accessories.',
         'email': 'contact@takimia.com',
         'telephone': ['+17863025205'],
         'address': {
@@ -86,7 +86,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <h1 className="text-5xl font-bold mb-6">About Takimia</h1>
           <p className="text-xl text-[#F0F6FF]/85 leading-relaxed max-w-3xl mx-auto">
-            Takimia is a coffee and espresso machine brand built for people who take their brew seriously. We design and sell premium espresso machines, coffee brewers, and barista accessories crafted to deliver consistent, café-quality results at home and in professional settings.
+            Takimia is a retailer of brew and coffee machines for people who take their daily cup seriously. We sell espresso makers, coffee brewers, grinders, and barista accessories from trusted equipment categories for home and professional use.
           </p>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
             </div>
             <div className="space-y-4 text-base leading-7 text-gray-700">
               <p>
-                Takimia is a dedicated coffee and espresso machine brand. Every product in our lineup — from single-boiler espresso machines to automatic drip brewers and precision burr grinders — is selected and tested to meet the standards of coffee enthusiasts and professional baristas alike.
+                Takimia is a dedicated coffee equipment retailer. Every product we list — from espresso machines to automatic drip brewers and precision burr grinders — is selected and reviewed to meet the standards of coffee enthusiasts and professional baristas alike.
               </p>
               <p>
                 We are based in Gilbert, Arizona and serve customers across the United States with fast, reliable shipping and knowledgeable customer support.
@@ -122,13 +122,13 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold text-[#262626]">What We Offer</h2>
           </div>
           <p className="text-gray-700 mb-8 text-lg">
-            The Takimia catalog covers the full spectrum of home and professional coffee brewing equipment.
+            The Takimia catalog brings together home and professional coffee brewing equipment from trusted product categories.
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              { title: 'Espresso Machines', desc: 'From entry-level semi-automatics to dual-boiler professional machines designed for precision extraction.' },
+              { title: 'Espresso Machines', desc: 'From entry-level semi-automatics to professional machines selected for dependable home espresso.' },
               { title: 'Coffee Brewers', desc: 'Automatic drip brewers, pour-over systems, and French press setups for every brewing preference.' },
-              { title: 'Precision Grinders', desc: 'Burr grinders engineered for consistent grind size — the foundation of any great cup.' },
+              { title: 'Precision Grinders', desc: 'Burr grinders selected for consistent grind size — the foundation of any great cup.' },
               { title: 'Barista Accessories', desc: 'Tampers, milk frothers, portafilters, knock boxes, and everything else a serious barista needs.' },
             ].map(({ title, desc }) => (
               <div key={title} className="bg-[#F0F6FF] rounded-xl p-6 border border-[#2e3868]/10">

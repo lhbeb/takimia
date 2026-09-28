@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Espresso Machines | Takimia',
   description:
-    'Discover Takimia manual, semi-automatic, and dual-boiler espresso machines designed for cafe-quality espresso at home.',
+    'Shop manual, semi-automatic, and automatic espresso machines from Takimia, an online coffee equipment retailer.',
 };
 
 export default async function EspressoMachinesPage() {
@@ -29,7 +29,7 @@ export default async function EspressoMachinesPage() {
             <div className="container mx-auto px-4 py-8">
               <h1 className="text-3xl md:text-4xl font-bold text-[#262626] mb-2">Espresso Machines</h1>
               <p className="text-gray-600">
-                Explore our lineup of commercial-grade home espresso machines with precision PID control and 15-bar extraction.
+                Browse Takimia's retail selection of home espresso machines, automatic coffee systems, milk-frothing models, and grinder-equipped brewers.
               </p>
             </div>
           </div>

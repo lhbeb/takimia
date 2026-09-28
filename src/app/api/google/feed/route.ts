@@ -112,7 +112,7 @@ export async function GET() {
   <channel>
     <title>Takimia Product Feed</title>
     <link>${baseUrl}</link>
-    <description>Takimia coffee and espresso machines</description>
+    <description>Takimia coffee equipment retail catalog</description>
     <lastBuildDate>${new Date().toISOString()}</lastBuildDate>
   </channel>
 </rss>`;
@@ -138,7 +138,7 @@ export async function GET() {
   <channel>
     <title>Takimia Product Feed</title>
     <link>${baseUrl}</link>
-    <description>Takimia coffee and espresso machines product feed for Google Merchant Center</description>
+    <description>Takimia coffee equipment retail product feed for Google Merchant Center</description>
     <lastBuildDate>${new Date().toISOString()}</lastBuildDate>
 ${items}
   </channel>

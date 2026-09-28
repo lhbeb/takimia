@@ -109,7 +109,7 @@ export async function GET() {
   <channel>
     <title>Takimia Google Merchant Center Feed</title>
     <link>${BASE_URL}</link>
-    <description>US product feed for Takimia espresso machines and coffee equipment</description>
+    <description>US product feed for coffee equipment retailed by Takimia</description>
     ${itemsXml}
   </channel>
 </rss>`;

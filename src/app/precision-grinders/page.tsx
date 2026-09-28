@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Precision Coffee Grinders | Takimia',
   description:
-    'Shop Takimia conical and flat burr coffee grinders engineered for low retention and uniform particle size.',
+    'Shop conical and flat burr coffee grinders from Takimia, an online retailer of brew and coffee equipment.',
 };
 
 export default async function PrecisionGrindersPage() {
@@ -29,7 +29,7 @@ export default async function PrecisionGrindersPage() {
             <div className="container mx-auto px-4 py-8">
               <h1 className="text-3xl md:text-4xl font-bold text-[#262626] mb-2">Precision Coffee Grinders</h1>
               <p className="text-gray-600">
-                Unlock full coffee bean aroma and balanced extraction with our micro-stepped, zero-retention conical and flat burr grinders.
+                Browse grinders and grinder-equipped coffee systems selected to support fresh beans, balanced extraction, and better daily brewing.
               </p>
             </div>
           </div>

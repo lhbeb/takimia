@@ -55,9 +55,9 @@ export default async function HomePage() {
             sectionId="products"
             title=""
             editorialCard={{
-              title: 'Masterful Extraction in Every Cup',
+              title: 'Espresso Machines for Everyday Craft',
               description:
-                'Takimia coffee and espresso machines combine precision PID temperature control, durable stainless steel craftsmanship, and consistent 15-bar pressure. Elevate your morning brew with cafe-quality flavor in the comfort of your home.',
+                'Explore automatic espresso machines, classic portafilter makers, built-in grinders, and milk-frothing systems selected for smooth home brewing. Takimia is a retailer of brew and coffee machines for lattes, cappuccinos, cold brew, and daily espresso rituals.',
             }}
             randomizeForVisitor
             visitorShuffleKey="home-espresso"

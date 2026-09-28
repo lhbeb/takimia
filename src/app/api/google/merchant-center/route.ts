@@ -242,7 +242,7 @@ ${additionalImages}
   <channel>
     <title>Takimia Product Feed</title>
     <link>${baseUrl}</link>
-    <description>Takimia coffee and espresso machines product feed for Google Merchant Center</description>
+    <description>Takimia coffee equipment retail product feed for Google Merchant Center</description>
     <lastBuildDate>${timestamp}</lastBuildDate>
 ${items}
   </channel>

@@ -9,7 +9,7 @@ export const STORE_FAQS: readonly StoreFaq[] = [
   {
     question: 'What products does Takimia sell?',
     answer:
-      'Takimia specializes in premium coffee equipment, including manual and automatic espresso machines, pour-over coffee makers, precision burr grinders, commercial brewers, and barista accessories.',
+      'Takimia is an online retailer specializing in premium coffee equipment, including manual and automatic espresso machines, pour-over coffee makers, precision burr grinders, commercial brewers, and barista accessories.',
   },
   {
     question: 'Are your products new or pre-owned?',

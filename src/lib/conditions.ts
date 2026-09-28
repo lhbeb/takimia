@@ -179,7 +179,7 @@ export function formatValidSku(product: { sku?: string; slug?: string; id?: stri
 }
 
 /**
- * Formats a Google Merchant Center item ID that always starts with the Takimia brand.
+ * Formats a Google Merchant Center item ID that always starts with the Takimia store prefix.
  * The GMC `id` attribute is capped at 50 characters.
  */
 export function formatTakimiaGmcId(

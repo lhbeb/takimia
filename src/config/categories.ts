@@ -18,7 +18,7 @@ export const CATALOG_NAVIGATION: readonly CategoryNavItem[] = [
     label: 'Espresso Machines',
     href: '/espresso-machines',
     categoryKey: 'espresso-machines',
-    description: 'Manual, semi-automatic, and dual-boiler espresso machines engineered for cafe-quality extraction.',
+    description: 'Manual, semi-automatic, and automatic espresso machines selected for cafe-quality home brewing.',
   },
   {
     label: 'Coffee Makers',

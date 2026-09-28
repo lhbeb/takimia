@@ -28,7 +28,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "Takimia - Premium Coffee Machines & Espresso Makers",
-  description: "Shop premium coffee machines, espresso makers, precision grinders, and barista essentials at Takimia. Engineered for rich flavor, thermal stability, and the perfect cup every time. Fast shipping and secure checkout.",
+  description: "Shop premium coffee machines, espresso makers, precision grinders, and barista essentials at Takimia, an online retailer of brew and coffee equipment. Fast shipping and secure checkout.",
   keywords: "Takimia, coffee machines, espresso machines, espresso makers, coffee grinders, automatic coffee makers, barista tools, pour over coffee, commercial coffee machines, home espresso",
   authors: [{ name: "Takimia" }],
   creator: "Takimia",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://takimia.com"),
   openGraph: {
     title: "Takimia - Premium Coffee Machines & Espresso Makers",
-    description: "Shop premium coffee machines, espresso makers, precision grinders, and barista essentials at Takimia. Engineered for the perfect brew.",
+    description: "Shop premium coffee machines, espresso makers, precision grinders, and barista essentials from Takimia's retail catalog.",
     url: "https://takimia.com",
     siteName: "Takimia",
     images: [
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Takimia - Premium Coffee Machines & Espresso Makers",
-    description: "Shop premium coffee machines, espresso makers, precision grinders, and barista essentials at Takimia. Engineered for the perfect brew.",
+    description: "Shop premium coffee machines, espresso makers, precision grinders, and barista essentials from Takimia's retail catalog.",
     images: ["/g7x.jpeg"],
   },
   icons: {
@@ -155,7 +155,7 @@ export default function RootLayout({
                 "name": "Takimia",
                 "url": "https://takimia.com",
                 "logo": "https://takimia.com/logosvg.svg",
-                "description": "Takimia - Premium Coffee Machines & Espresso Makers. Discover precision-engineered espresso machines, grinders, and brewing accessories.",
+                "description": "Takimia is an online retailer of coffee machines, espresso makers, grinders, and brewing accessories.",
                 "sameAs": [
                   "https://www.instagram.com/takimia.house",
                   "https://www.pinterest.com/takimia_officiel",
@@ -192,7 +192,7 @@ export default function RootLayout({
                 "@type": "WebSite",
                 "name": "Takimia",
                 "url": "https://takimia.com",
-                "description": "Takimia - Premium Coffee Machines & Espresso Makers. Discover precision-engineered espresso machines, grinders, and brewing accessories.",
+                "description": "Takimia is an online retailer of coffee machines, espresso makers, grinders, and brewing accessories.",
                 "potentialAction": {
                   "@type": "SearchAction",
                   "target": {
