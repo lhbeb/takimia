@@ -1,14 +1,10 @@
 const BUCKET = 'product-images';
 const STORAGE_MARKER = `/storage/v1/object/public/${BUCKET}/`;
 const PROXY_MARKER = '/api/product-images/';
+const CANONICAL_IMAGE_ORIGIN = 'https://takimia.com';
 
 function getSiteOrigin(): string {
-  const configured = process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_BASE_URL || 'https://takimia.com';
-  try {
-    return new URL(configured).origin;
-  } catch {
-    return 'https://takimia.com';
-  }
+  return CANONICAL_IMAGE_ORIGIN;
 }
 
 export function encodeStoragePath(path: string): string {
