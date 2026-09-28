@@ -29,7 +29,7 @@ export default async function EspressoMachinesPage() {
             <div className="container mx-auto px-4 py-8">
               <h1 className="text-3xl md:text-4xl font-bold text-[#262626] mb-2">Espresso Machines</h1>
               <p className="text-gray-600">
-                Browse Takimia's retail selection of home espresso machines, automatic coffee systems, milk-frothing models, and grinder-equipped brewers.
+                Browse Takimia&apos;s retail selection of home espresso machines, automatic coffee systems, milk-frothing models, and grinder-equipped brewers.
               </p>
             </div>
           </div>
