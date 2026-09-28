@@ -56,11 +56,25 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+  const baseUrl = 'https://takimia.com';
   const rows: string[] = [HEADERS.join(',')];
 
   for (const product of products || []) {
     const handle = slugify(product.title);
-    const images: string[] = Array.isArray(product.images) ? product.images : [];
+    const rawImages: string[] = Array.isArray(product.images) ? product.images : [];
+    
+    // Convert all images to absolute URLs
+    const images = rawImages.map(img => {
+      if (!img) return '';
+      // If already absolute URL, return as-is
+      if (img.startsWith('http://') || img.startsWith('https://')) {
+        return img;
+      }
+      // If relative URL, prepend base URL
+      const cleanPath = img.startsWith('/') ? img : `/${img}`;
+      return `${baseUrl}${cleanPath}`;
+    });
+    
     const compareAt = product.original_price ? String(Number(product.original_price).toFixed(2)) : '';
     const price = String(Number(product.price || 0).toFixed(2));
     const sku = `TAKIMIA-${handle.substring(0, 30).toUpperCase()}`;
