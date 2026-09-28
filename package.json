@@ -15,7 +15,8 @@
     "products:pull-content": "tsx scripts/sync-product-content.ts pull",
     "products:push-content": "tsx scripts/sync-product-content.ts push",
     "test-order": "tsx scripts/test-order-flow.ts",
-    "shopify:sync-variants": "tsx scripts/sync-shopify-variants.ts"
+    "shopify:sync-variants": "tsx scripts/sync-shopify-variants.ts",
+    "shopify:sync-public-variants": "tsx scripts/sync-shopify-public-variants.ts"
   },
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^4.6.2",
