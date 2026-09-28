@@ -7,6 +7,7 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { formatTakimiaGmcId } from '@/lib/conditions';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -19,6 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 interface Product {
   id: string;
+  sku?: string;
   slug: string;
   title: string;
   description: string;
@@ -69,7 +71,7 @@ function generateProductXml(product: Product, baseUrl: string): string {
   const description = escapeXml(product.description.substring(0, 5000));
   
   return `  <item>
-    <g:id>${escapeXml(product.id)}</g:id>
+    <g:id>${escapeXml(formatTakimiaGmcId(product))}</g:id>
     <g:title>${title}</g:title>
     <g:description>${description}</g:description>
     <g:link>${baseUrl}/products/${escapeXml(product.slug)}</g:link>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
+import { productImageProxyUrl } from '@/lib/productImageUrls';
 import AdmZip from 'adm-zip';
 import * as path from 'path';
 
@@ -106,15 +107,7 @@ async function uploadImageToSupabase(
     throw new Error(`Storage upload failed for ${storagePath}: ${uploadError.message}`);
   }
 
-  const { data } = supabaseAdmin.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(storagePath);
-
-  if (!data?.publicUrl) {
-    throw new Error(`Unable to retrieve public URL for ${storagePath}`);
-  }
-
-  return data.publicUrl;
+  return productImageProxyUrl(storagePath);
 }
 
 /**

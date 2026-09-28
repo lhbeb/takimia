@@ -178,4 +178,28 @@ export function formatValidSku(product: { sku?: string; slug?: string; id?: stri
   return `CAS-${cleaned || 'ITEM'}-${String(product.id || '101')}`.slice(0, 50);
 }
 
+/**
+ * Formats a Google Merchant Center item ID that always starts with the Takimia brand.
+ * The GMC `id` attribute is capped at 50 characters.
+ */
+export function formatTakimiaGmcId(
+  product: { sku?: string; slug?: string; id?: string | number },
+  fallbackSlug?: string,
+): string {
+  const prefix = 'TAKIMIA';
+  const rawSku = formatValidSku(product, fallbackSlug)
+    .replace(/^TAKIMIA[-_]*/i, '')
+    .replace(/[^a-zA-Z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toUpperCase();
+  const suffix = rawSku || String(product.id || fallbackSlug || 'ITEM')
+    .replace(/[^a-zA-Z0-9_-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toUpperCase();
+
+  return `${prefix}-${suffix}`.slice(0, 50).replace(/-+$/g, '');
+}
+
 

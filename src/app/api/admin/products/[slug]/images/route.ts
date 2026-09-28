@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
+import { productImageProxyUrl } from '@/lib/productImageUrls';
 
 const BUCKET = 'product-images';
 
@@ -43,10 +44,7 @@ export async function GET(
       .filter((file) => !file.name?.startsWith('.') && !file?.metadata?.isFolder)
       .map((file) => {
         const path = `${folder}/${file.name}`;
-        const {
-          data: { publicUrl },
-        } = supabaseAdmin.storage.from(BUCKET).getPublicUrl(path);
-        return publicUrl;
+        return productImageProxyUrl(path);
       })
       .filter(Boolean);
 

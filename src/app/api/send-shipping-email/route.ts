@@ -9,6 +9,7 @@ import {
 } from '@/lib/shipping';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { resolveBaseUrl } from '@/lib/url';
+import { createShopifyCheckoutLink } from '@/lib/shopifyCheckout';
 
 // This endpoint saves the order and attempts to send email with a 5-second timeout
 // If email fails or times out, the order is still saved and email will retry automatically
@@ -125,6 +126,13 @@ export async function POST(request: NextRequest) {
     const requiresCountry = usesCountryFirstAddress(checkoutFlow);
     const shippingData = requiresCountry ? normalizeShippingData(rawShippingData) : rawShippingData;
 
+    if (checkoutFlow === 'stripe' || checkoutFlow === 'stripe-hosted') {
+      if (typeof shippingData.fullName !== 'string' || !shippingData.fullName.trim()) {
+        return NextResponse.json({ error: 'Please enter your full name.' }, { status: 400 });
+      }
+      shippingData.fullName = shippingData.fullName.trim();
+    }
+
     // Validate shipping data fields
     if (!shippingData.email || !shippingData.streetAddress || !shippingData.city || !shippingData.state || !shippingData.zipCode) {
       console.error('❌ [API] Missing required shipping fields:', {
@@ -191,7 +199,9 @@ export async function POST(request: NextRequest) {
     console.log('📦 [API] Product:', { slug: product.slug, title: product.title, price: product.price });
     console.log('📦 [API] Customer:', { email: shippingData.email });
     
-    assignedCheckoutLink = await resolveAssignedCheckoutLink(product);
+    // Shopify checkout links are generated after the order ID exists, so the
+    // hosted checkout can carry a traceable Takimia order reference.
+    assignedCheckoutLink = checkoutFlow === 'shopify' ? '' : await resolveAssignedCheckoutLink(product);
 
     const orderResult = await saveOrder({
       productSlug: product.slug,
@@ -208,7 +218,7 @@ export async function POST(request: NextRequest) {
       shippingCountry: shippingData.country,
       shippingCountryCode: shippingData.countryCode,
       checkoutFlow,
-      status: checkoutFlow === 'stripe' || checkoutFlow === 'stripe-hosted' || checkoutFlow === 'paypal-direct' || checkoutFlow === 'paypal-api'
+      status: checkoutFlow === 'stripe' || checkoutFlow === 'stripe-hosted' || checkoutFlow === 'shopify' || checkoutFlow === 'paypal-direct' || checkoutFlow === 'paypal-api'
         ? 'pending_payment'
         : 'completed',
       paymentProvider: checkoutFlow,
@@ -249,6 +259,65 @@ export async function POST(request: NextRequest) {
 
     orderId = orderResult.id;
     console.log('✅ [API] Order saved to database with ID:', orderId);
+
+    if (checkoutFlow === 'shopify') {
+      try {
+        const hasMeta = product.meta && typeof product.meta === 'object';
+        const metaObj = hasMeta ? (product.meta as Record<string, unknown>) : {};
+        const hasVariantId = metaObj.shopify_variant_id || metaObj.shopifyVariantId ||
+          metaObj.variant_id || metaObj.variantId;
+
+        let productForCheckout = product;
+        if (!hasVariantId) {
+          console.log('⚠️ [Shopify] meta.shopify_variant_id missing from request — fetching from DB');
+          const { data: dbProduct } = await supabaseAdmin
+            .from('products')
+            .select('meta, checkout_link')
+            .eq('slug', product.slug)
+            .single();
+          if (dbProduct) {
+            productForCheckout = { ...product, meta: dbProduct.meta || {}, checkoutLink: dbProduct.checkout_link || product.checkoutLink };
+          }
+        }
+
+        assignedCheckoutLink = createShopifyCheckoutLink({
+          orderId,
+          product: productForCheckout,
+          shippingData,
+        });
+
+        const updatedOrderData = {
+          shippingData,
+          product,
+          siteUrl,
+          checkoutLink: assignedCheckoutLink,
+        };
+        const { error: checkoutLinkUpdateError } = await supabaseAdmin
+          .from('orders')
+          .update({
+            full_order_data: updatedOrderData,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', orderId);
+
+        if (checkoutLinkUpdateError) {
+          throw new Error(`Failed to persist Shopify checkout link: ${checkoutLinkUpdateError.message}`);
+        }
+        console.log('✅ [Shopify] Fresh checkout link generated for order:', orderId);
+      } catch (checkoutError) {
+        console.error('❌ [Shopify] Failed to generate checkout link:', checkoutError);
+        const errorMsg = checkoutError instanceof Error ? checkoutError.message : 'Shopify checkout link could not be generated.';
+        const isVariantMissing = errorMsg.includes('variant ID is missing');
+        return NextResponse.json({
+          success: false,
+          orderId,
+          error: isVariantMissing
+            ? 'This product is not yet available for purchase. Please contact support.'
+            : errorMsg,
+          note: 'The order intent was saved, but checkout was not started. Correct the product Shopify mapping and retry.',
+        }, { status: 500 });
+      }
+    }
 
     // STEP 2: Try to send email with timeout (5 seconds max)
     // This ensures most emails are sent immediately without blocking checkout too long

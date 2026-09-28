@@ -3,6 +3,7 @@ import { supabaseAdmin } from './server';
 import type { Product } from '@/types/product';
 import { FEATURED_PRODUCT_LIMIT } from '@/config/products';
 import type { Review } from '@/types/product';
+import { toTakimiaProductImageUrl } from '@/lib/productImageUrls';
 
 const BLOCKED_REVIEW_ID = '65ad323d-1f6d-48c7-935c-797f57429ef4';
 const BLOCKED_REVIEW_SOURCE = 'takimia-seed-review';
@@ -27,14 +28,16 @@ function normalizeProductImageUrls(value: unknown): string[] {
 
   return value.filter((image): image is string => typeof image === 'string' && image.trim().length > 0)
     .map((image) => {
+      let normalizedImage = image;
+
       for (const [brokenFolder, realFolder] of Object.entries(STORAGE_FOLDER_FIX)) {
         const brokenSegment = `/product-images/${brokenFolder}/`;
-        if (image.includes(brokenSegment)) {
-          return image.replace(brokenSegment, `/product-images/${realFolder}/`);
+        if (normalizedImage.includes(brokenSegment)) {
+          normalizedImage = normalizedImage.replace(brokenSegment, `/product-images/${realFolder}/`);
         }
       }
 
-      return image;
+      return toTakimiaProductImageUrl(normalizedImage);
     });
 }
 

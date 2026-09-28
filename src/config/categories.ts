@@ -55,11 +55,11 @@ export const POPULAR_CATEGORY_NAMES = [
 ] as const;
 
 export const POPULAR_CATEGORY_IMAGES: Record<string, string> = {
-  'Espresso Machines': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-oracle-jet/img1.png',
-  'Coffee Makers': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-luxe-brewer-thermal/img1.png',
-  'Precision Grinders': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-dynamic-duo/img3.png',
-  'Bean-to-Cup': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-grind-control/img1.png',
-  'Barista Accessories': 'https://uozcmaheslvjrwfxfzip.supabase.co/storage/v1/object/public/product-images/the-milk-cafe/img1.png',
+  'Espresso Machines': 'https://takimia.com/api/product-images/the-oracle-jet/img1.png',
+  'Coffee Makers': 'https://takimia.com/api/product-images/the-luxe-brewer-thermal/img1.png',
+  'Precision Grinders': 'https://takimia.com/api/product-images/the-dynamic-duo/img3.png',
+  'Bean-to-Cup': 'https://takimia.com/api/product-images/the-grind-control/img1.png',
+  'Barista Accessories': 'https://takimia.com/api/product-images/the-milk-cafe/img1.png',
 };
 
 /**

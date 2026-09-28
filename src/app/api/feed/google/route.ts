@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllProducts } from '@/lib/data';
-import { formatValidSku, mapConditionToGmc } from '@/lib/conditions';
+import { formatTakimiaGmcId, mapConditionToGmc } from '@/lib/conditions';
 import { isGmcFeedEligibleProduct } from '@/lib/gmc';
 import type { Product } from '@/types/product';
 
@@ -90,7 +90,7 @@ export async function GET(request: NextRequest) {
       .filter(isGmcFeedEligibleProduct)
       .filter((product) => product.currency?.toUpperCase() === 'USD')
       .map((product) => {
-        const sku = escapeXml(formatValidSku(product));
+        const sku = escapeXml(formatTakimiaGmcId(product));
         const title = escapeXml(product.title || 'Product');
         const description = escapeXml(product.description || product.title || '');
         const link = escapeXml(`${BASE_URL}/products/${encodeURIComponent(product.slug)}`);

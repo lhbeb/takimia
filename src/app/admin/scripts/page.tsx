@@ -39,7 +39,18 @@ interface ScriptCard {
 }
 
 // ─── Available scripts ────────────────────────────────────────────────────────
-const CHECKOUT_FLOWS = ['buymeacoffee', 'stripe', 'stripe-hosted', 'kofi', 'external', 'paypal-invoice', 'paypal-unclaimed', 'paypal-direct', 'paypal-api'];
+const CHECKOUT_FLOWS = [
+    'buymeacoffee',
+    'stripe',
+    'shopify',
+    'stripe-hosted',
+    'kofi',
+    'external',
+    'paypal-invoice',
+    'paypal-unclaimed',
+    'paypal-direct',
+    'paypal-api',
+];
 const LISTED_BY_ADMINS = ['walid', 'abdo', 'jebbar', 'amine', 'mehdi', 'othmane', 'janah', 'youssef', 'yassine'];
 
 const SCRIPTS: ScriptCard[] = [

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
+import { productImageProxyUrl } from '@/lib/productImageUrls';
 
 // Maximum file size: 10MB (adjust as needed)
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
@@ -81,20 +82,8 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // Get public URL
-      const {
-        data: { publicUrl },
-      } = supabaseAdmin.storage.from('product-images').getPublicUrl(path);
-
-      if (!publicUrl) {
-        return NextResponse.json(
-          { error: 'Failed to generate public URL for uploaded image' },
-          { status: 500 }
-        );
-      }
-
       return NextResponse.json({
-        url: publicUrl,
+        url: productImageProxyUrl(path),
         path: data.path,
       });
     } catch (error: any) {

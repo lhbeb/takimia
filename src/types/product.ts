@@ -53,6 +53,14 @@ export interface Product {
     rotate_links?: boolean;
     checkout_links?: string[];
     gmc_enabled?: boolean;
+    shopify_variant_id?: string;
+    shopifyVariantId?: string;
+    variant_id?: string;
+    variantId?: string;
+    shopify_variant_gid?: string;
+    shopifyVariantGid?: string;
+    shopify_store_domain?: string;
+    shopifyStoreDomain?: string;
   };
   published?: boolean; // Extracted from meta.published for easier access
   isFeatured?: boolean;

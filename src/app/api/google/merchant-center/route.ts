@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { formatTakimiaGmcId } from '@/lib/conditions';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -19,6 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 interface Product {
   id: string;
+  sku?: string;
   slug: string;
   title: string;
   description: string;
@@ -71,7 +73,7 @@ function transformProductToGMC(product: Product, baseUrl: string): GMCProduct {
   const additionalImageLinks = images.slice(1, 11); // GMC allows up to 10 additional images
 
   return {
-    offerId: product.id,
+    offerId: formatTakimiaGmcId(product),
     title: product.title.substring(0, 150), // GMC max 150 chars
     description: product.description.substring(0, 5000), // GMC max 5000 chars
     link: `${baseUrl}/products/${product.slug}`,

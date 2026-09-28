@@ -5,10 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ShoppingCart, Menu, X, Search, ChevronLeft, ChevronRight, Info, MessageSquare } from 'lucide-react';
-import { getCartCount } from '@/utils/cart';
+import { getCartCount, getCartItem } from '@/utils/cart';
 import type { Product } from '@/types/product';
 import ClientOnly from './ClientOnly';
 import SearchBar from './SearchBar';
+import CartDrawer from './CartDrawer';
 
 import { CATALOG_NAVIGATION } from '@/config/categories';
 
@@ -23,6 +24,7 @@ const mobileMenuLinkClass =
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
   const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
@@ -94,6 +96,12 @@ const Header = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleOpenCart = () => setIsCartOpen(true);
+    window.addEventListener('openCart', handleOpenCart);
+    return () => window.removeEventListener('openCart', handleOpenCart);
+  }, []);
+
   // PRESERVED EXACTLY
   useEffect(() => {
     const handleScroll = () => {
@@ -124,7 +132,12 @@ const Header = () => {
   // PRESERVED EXACTLY
   const handleCartClick = () => {
     if (cartCount > 0) {
-      router.push('/checkout');
+      const item = getCartItem();
+      if (item?.product?.checkoutFlow === 'shopify') {
+        setIsCartOpen(true);
+      } else {
+        router.push('/checkout');
+      }
     }
   };
 
@@ -341,6 +354,8 @@ const Header = () => {
         {/* SearchBar overlay - PRESERVED */}
         <SearchBar open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       </header>
+
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {/* Mobile Swipeable Menu - Outside header, stays at top of page (hidden on checkout page) */}
       {!isCheckoutPage && (
