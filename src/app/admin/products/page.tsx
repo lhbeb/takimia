@@ -92,6 +92,7 @@ export default function AdminProductsPage() {
   const [exporting, setExporting] = useState(false);
   const [exportingCSV, setExportingCSV] = useState(false);
   const [exportingGoogleCSV, setExportingGoogleCSV] = useState(false);
+  const [exportingShopifyCSV, setExportingShopifyCSV] = useState(false);
   const [exportingJSON, setExportingJSON] = useState(false);
   const [adminRole, setAdminRole] = useState<string | null>(null);
   const FEATURE_LIMIT = FEATURED_PRODUCT_LIMIT;
@@ -884,6 +885,28 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleExportShopifyCSV = () => {
+    setExportingShopifyCSV(true);
+    const token = localStorage.getItem('admin_token');
+    const a = document.createElement('a');
+    a.href = '/api/shopify/export-csv';
+    const date = new Date().toISOString().slice(0, 10);
+    a.download = `takimia-shopify-import-${date}.csv`;
+    
+    fetch('/api/shopify/export-csv', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(() => {
+        a.click();
+        setExportingShopifyCSV(false);
+      })
+      .catch((err) => {
+        console.error('Shopify CSV export error:', err);
+        setError('Failed to export Shopify CSV');
+        setExportingShopifyCSV(false);
+      });
+  };
+
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const safeTotalPages = Math.max(1, totalPages);
   const pageItems = getPageItems(currentPage, safeTotalPages);
@@ -1147,6 +1170,21 @@ export default function AdminProductsPage() {
                 <Download className="h-4 w-4" />
               )}
               <span className="font-medium">{exportingGoogleCSV ? 'Exporting...' : 'Export Google GMC CSV'}</span>
+            </button>
+
+            {/* Export Shopify CSV */}
+            <button
+              onClick={handleExportShopifyCSV}
+              disabled={exportingShopifyCSV}
+              className="inline-flex items-center justify-center gap-2 px-3 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors shadow-lg shadow-green-500/25 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm shrink-0"
+              title="Export all products as Shopify import CSV"
+            >
+              {exportingShopifyCSV ? (
+                <RefreshCw className="h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="h-4 w-4" />
+              )}
+              <span className="font-medium">{exportingShopifyCSV ? 'Exporting...' : 'Export Shopify CSV'}</span>
             </button>
 
             {/* Selected items actions */}
