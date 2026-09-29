@@ -1,25 +1,56 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/types/product';
-import {
-  filterProductsByCategory,
-  POPULAR_CATEGORY_NAMES,
-  CATALOG_NAVIGATION,
-} from '@/config/categories';
+import { POPULAR_CATEGORY_NAMES, CATALOG_NAVIGATION } from '@/config/categories';
 
 interface PopularCategoriesProps {
   products: Product[];
 }
 
 export default function PopularCategories({ products }: PopularCategoriesProps) {
+  const usedProductIds = new Set<string>();
+  const usedImages = new Set<string>();
+
   const categories = POPULAR_CATEGORY_NAMES.map((name) => {
-    const categoryProducts = filterProductsByCategory(products, name);
+    const categoryProducts = products.filter((product) => {
+      const collections = (product.collections || []).map((collection) => collection.toLowerCase());
+      const category = product.category.toLowerCase();
+      const title = product.title.toLowerCase();
+      const slug = product.slug.toLowerCase();
+      const productText = `${title} ${slug} ${category}`;
+
+      switch (name) {
+        case 'Espresso Machines':
+          return collections.includes('espresso-machines') || /espresso|bambino|barista|oracle/.test(productText);
+        case 'Coffee Makers':
+          return collections.includes('coffee-makers') || /coffee maker|coffee brewer|drip brewer|luxe brewer|grind control/.test(productText);
+        case 'Precision Grinders':
+          return collections.includes('coffee-grinders') || /coffee grinder|burr grinder|precision grinder|dynamic duo/.test(productText);
+        case 'Bean-to-Cup':
+          return collections.includes('bean-to-cup') || /bean.to.cup|grind control|oracle|barista touch|barista pro/.test(productText);
+        case 'Barista Accessories':
+          return collections.includes('barista-gear') || /milk cafe|milk frother|tamper|portafilter|knock box|barista accessory|barista tool/.test(productText);
+        default:
+          return false;
+      }
+    });
     const navItem = CATALOG_NAVIGATION.find(item => item.label.toLowerCase() === name.toLowerCase());
     const href = navItem?.href || `/search?category=${encodeURIComponent(name)}`;
 
-    const image = categoryProducts
-      .flatMap((product) => product.images || [])
-      .find((productImage) => typeof productImage === 'string' && productImage.trim());
+    const selectedProduct = categoryProducts.find((product) =>
+      !usedProductIds.has(product.id) &&
+      (product.images || []).some((productImage) =>
+        typeof productImage === 'string' && productImage.trim() && !usedImages.has(productImage.trim()),
+      ),
+    );
+    const image = selectedProduct?.images?.find((productImage) =>
+      typeof productImage === 'string' && productImage.trim() && !usedImages.has(productImage.trim()),
+    );
+
+    if (selectedProduct && image) {
+      usedProductIds.add(selectedProduct.id);
+      usedImages.add(image.trim());
+    }
 
     return {
       name,
