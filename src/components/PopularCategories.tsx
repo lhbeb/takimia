@@ -4,7 +4,6 @@ import type { Product } from '@/types/product';
 import {
   filterProductsByCategory,
   POPULAR_CATEGORY_NAMES,
-  POPULAR_CATEGORY_IMAGES,
   CATALOG_NAVIGATION,
 } from '@/config/categories';
 
@@ -18,9 +17,9 @@ export default function PopularCategories({ products }: PopularCategoriesProps) 
     const navItem = CATALOG_NAVIGATION.find(item => item.label.toLowerCase() === name.toLowerCase());
     const href = navItem?.href || `/search?category=${encodeURIComponent(name)}`;
 
-    const image =
-      POPULAR_CATEGORY_IMAGES[name] ||
-      categoryProducts.find((product) => product.images?.[0])?.images[0];
+    const image = categoryProducts
+      .flatMap((product) => product.images || [])
+      .find((productImage) => typeof productImage === 'string' && productImage.trim());
 
     return {
       name,

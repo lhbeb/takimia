@@ -54,14 +54,6 @@ export const POPULAR_CATEGORY_NAMES = [
   'Barista Accessories',
 ] as const;
 
-export const POPULAR_CATEGORY_IMAGES: Record<string, string> = {
-  'Espresso Machines': 'https://takimia.com/api/product-images/the-oracle-jet/img1.png',
-  'Coffee Makers': 'https://takimia.com/api/product-images/the-luxe-brewer-thermal/img1.png',
-  'Precision Grinders': 'https://takimia.com/api/product-images/the-dynamic-duo/img3.png',
-  'Bean-to-Cup': 'https://takimia.com/api/product-images/the-grind-control/img1.png',
-  'Barista Accessories': 'https://takimia.com/api/product-images/the-milk-cafe/img1.png',
-};
-
 /**
  * Filter coffee products by category, collection, or search term.
  * Ensures that every valid store category in the navbar returns matching, relevant products.
