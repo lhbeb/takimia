@@ -23,7 +23,7 @@ export default async function HomePage() {
       p.collections?.includes('espresso-machines') || p.category?.toLowerCase().includes('espresso')
     );
 
-    const grindersAndGear = products.filter((product) =>
+    const grindersAndGear = featuredProducts.filter((product) =>
       (product.collections?.includes('coffee-grinders') || product.collections?.includes('barista-gear')) &&
       product.category.trim().toLowerCase() !== 'espresso machines'
     );
@@ -33,7 +33,7 @@ export default async function HomePage() {
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>
-      <Hero products={featuredProducts.length >= 4 ? featuredProducts : products} />
+      <Hero products={featuredProducts} />
 
       <PopularCategories products={products} />
 

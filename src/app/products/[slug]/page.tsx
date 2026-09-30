@@ -119,7 +119,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         : product!.meta,
     };
     const inStock = p.inStock !== false;
-    const hasReviews = (p.reviewCount || 0) > 0 && (p.rating || 0) > 0;
+    const productReviews = Array.isArray(p.reviews) ? p.reviews : [];
+    const hasReviews = productReviews.length > 0 && (p.reviewCount || 0) > 0 && (p.rating || 0) > 0;
 
     // priceValidUntil: 1 year from today — expected by Google Merchant Center
     const priceValidUntil = new Date();
@@ -162,6 +163,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           "merchantReturnDays": 30,
           "returnMethod": "https://schema.org/ReturnByMail",
           "returnFees": "https://schema.org/FreeReturn",
+          "returnShippingFeesAmount": {
+            "@type": "MonetaryAmount",
+            "value": 0,
+            "currency": "USD"
+          },
           "returnLabelSource": "https://schema.org/ReturnLabelDownloadAndPrint",
           "restockingFee": 0,
           "refundType": "https://schema.org/FullRefund"
@@ -208,7 +214,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         "bestRating": 5,
         "worstRating": 1
       };
-      productSchema["review"] = ((p.reviews || []) as any[]).slice(0, 5).map((review: any) => ({
+      productSchema["review"] = productReviews.slice(0, 5).map((review: any) => ({
         "@type": "Review",
         "author": { "@type": "Person", "name": review.author || 'Anonymous' },
         "reviewRating": {
@@ -218,7 +224,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           "worstRating": 1
         },
         "reviewBody": review.content || '',
-        "datePublished": review.date || new Date().toISOString(),
+        ...(review.date ? { "datePublished": review.date } : {}),
       }));
     }
 

@@ -37,6 +37,11 @@ export default function ReturnPolicyPage() {
       'merchantReturnDays': 30,
       'returnMethod': 'https://schema.org/ReturnByMail',
       'returnFees': 'https://schema.org/FreeReturn',
+      'returnShippingFeesAmount': {
+        '@type': 'MonetaryAmount',
+        'value': 0,
+        'currency': 'USD',
+      },
       'returnLabelSource': 'https://schema.org/ReturnLabelDownloadAndPrint',
       'restockingFee': 0,
       'refundType': 'https://schema.org/FullRefund',

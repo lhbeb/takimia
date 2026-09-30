@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star, ThumbsUp, ChevronDown, X, ZoomIn, ExternalLink } from 'lucide-react';
+import { Star, ChevronDown, X, ZoomIn, ExternalLink } from 'lucide-react';
 import type { Review } from '@/types/product';
 import { lockScroll, unlockScroll } from '@/utils/scrollUtils';
 
@@ -26,7 +26,6 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
   sellerUsername,
 }) => {
   const [sortBy, setSortBy] = useState('recent');
-  const [helpfulClicks, setHelpfulClicks] = useState<Record<string, boolean>>({});
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Placeholder avatar for reviews without custom avatars
@@ -54,23 +53,6 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
         return new Date(b.date).getTime() - new Date(a.date).getTime();
     }
   });
-
-  const handleHelpfulClick = (reviewId: string) => {
-    setHelpfulClicks(prev => ({
-      ...prev,
-      [reviewId]: !prev[reviewId]
-    }));
-  };
-
-  // Generate random helpful count between 9-27 for each review
-  const getRandomHelpful = (id: string) => {
-    let hash = 0;
-    for (let i = 0; i < id.length; i++) {
-      hash = id.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const min = 9, max = 27;
-    return min + (Math.abs(hash) % (max - min + 1));
-  };
 
   const formatDate = (dateString: string) => {
     try {
@@ -309,22 +291,6 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
                     </div>
                   )}
 
-                  {review.helpful !== undefined && (
-                    <div className="mt-4">
-                      <button
-                        onClick={() => handleHelpfulClick(review.id)}
-                        className={`flex items-center text-sm px-3 py-1.5 rounded-md transition-colors duration-200 ${helpfulClicks[review.id]
-                          ? 'bg-[#2e3868] text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                          }`}
-                      >
-                        <ThumbsUp className="h-4 w-4 mr-1" />
-                        <span>
-                          Helpful ({helpfulClicks[review.id] ? getRandomHelpful(review.id) + 1 : getRandomHelpful(review.id)})
-                        </span>
-                      </button>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
