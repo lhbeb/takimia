@@ -38,14 +38,12 @@ function ProductWalletCtas({
   isLinkLoading,
   isGpayLoading,
   onClick,
-  checkoutFlow,
   placement = 'desktop',
 }: {
   isDisabled: boolean;
   isLinkLoading: boolean;
   isGpayLoading: boolean;
   onClick: (wallet: WalletButton) => void;
-  checkoutFlow: 'stripe' | 'buymeacoffee';
   placement?: 'desktop' | 'mobile';
 }) {
   return (
@@ -110,11 +108,6 @@ function ProductWalletCtas({
           </span>
         )}
       </button>
-      {checkoutFlow === 'buymeacoffee' && (
-        <p className="text-center text-xs text-gray-500">
-          Choose your available payment method at Buy Me a Coffee checkout.
-        </p>
-      )}
     </div>
   );
 }
@@ -786,7 +779,6 @@ export default function ProductPageClient({
               {(product.checkoutFlow === 'stripe' || product.checkoutFlow === 'buymeacoffee') && product.inStock !== false && (
                 <ProductWalletCtas
                   placement="mobile"
-                  checkoutFlow={product.checkoutFlow}
                   isDisabled={isAddingToCart || isBuyingNow}
                   isLinkLoading={isBuyingNow && activeWallet === 'link'}
                   isGpayLoading={isBuyingNow && activeWallet === 'gpay'}
@@ -826,7 +818,6 @@ export default function ProductPageClient({
                     </div>
                     {(product.checkoutFlow === 'stripe' || product.checkoutFlow === 'buymeacoffee') ? (
                       <ProductWalletCtas
-                        checkoutFlow={product.checkoutFlow}
                         isDisabled={isAddingToCart || isBuyingNow}
                         isLinkLoading={isBuyingNow && activeWallet === 'link'}
                         isGpayLoading={isBuyingNow && activeWallet === 'gpay'}
