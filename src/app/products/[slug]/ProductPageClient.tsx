@@ -31,19 +31,21 @@ interface ProductPageClientProps {
 const PRODUCT_IMAGE_QUALITY = 95;
 const COLLAPSED_FAQ_COUNT = 2;
 
-type StripeWalletButton = 'link' | 'gpay';
+type WalletButton = 'link' | 'gpay';
 
-function StripeProductWalletCtas({
+function ProductWalletCtas({
   isDisabled,
   isLinkLoading,
   isGpayLoading,
   onClick,
+  checkoutFlow,
   placement = 'desktop',
 }: {
   isDisabled: boolean;
   isLinkLoading: boolean;
   isGpayLoading: boolean;
-  onClick: (wallet: StripeWalletButton) => void;
+  onClick: (wallet: WalletButton) => void;
+  checkoutFlow: 'stripe' | 'buymeacoffee';
   placement?: 'desktop' | 'mobile';
 }) {
   return (
@@ -108,6 +110,11 @@ function StripeProductWalletCtas({
           </span>
         )}
       </button>
+      {checkoutFlow === 'buymeacoffee' && (
+        <p className="text-center text-xs text-gray-500">
+          Choose your available payment method at Buy Me a Coffee checkout.
+        </p>
+      )}
     </div>
   );
 }
@@ -129,7 +136,7 @@ export default function ProductPageClient({
   const [showZoom, setShowZoom] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
-  const [activeStripeWallet, setActiveStripeWallet] = useState<StripeWalletButton | null>(null);
+  const [activeWallet, setActiveWallet] = useState<WalletButton | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
@@ -380,7 +387,7 @@ export default function ProductPageClient({
     }
   };
 
-  const handleBuyNow = async (wallet?: StripeWalletButton) => {
+  const handleBuyNow = async (wallet?: WalletButton) => {
     if (!product) {
       console.error('Cannot proceed to checkout: product is null');
       return;
@@ -401,11 +408,11 @@ export default function ProductPageClient({
         sizeSelectorRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       setIsBuyingNow(false);
-      setActiveStripeWallet(null);
+      setActiveWallet(null);
       return;
     }
 
-    setActiveStripeWallet(wallet ?? null);
+    setActiveWallet(wallet ?? null);
     setIsBuyingNow(true);
 
     // Use a small delay to ensure the UI updates
@@ -449,7 +456,7 @@ export default function ProductPageClient({
             window.dispatchEvent(new CustomEvent('openCart'));
           }
           setIsBuyingNow(false);
-          setActiveStripeWallet(null);
+          setActiveWallet(null);
         }, 200);
       } else {
         setTimeout(() => {
@@ -461,7 +468,7 @@ export default function ProductPageClient({
     } catch (error) {
       console.error('Error in buy now:', error);
       setIsBuyingNow(false);
-      setActiveStripeWallet(null);
+      setActiveWallet(null);
       alert('Failed to proceed to checkout. Please try again.');
     }
   };
@@ -776,12 +783,13 @@ export default function ProductPageClient({
                 </div>
               )}
 
-              {product.checkoutFlow === 'stripe' && product.inStock !== false && (
-                <StripeProductWalletCtas
+              {(product.checkoutFlow === 'stripe' || product.checkoutFlow === 'buymeacoffee') && product.inStock !== false && (
+                <ProductWalletCtas
                   placement="mobile"
+                  checkoutFlow={product.checkoutFlow}
                   isDisabled={isAddingToCart || isBuyingNow}
-                  isLinkLoading={isBuyingNow && activeStripeWallet === 'link'}
-                  isGpayLoading={isBuyingNow && activeStripeWallet === 'gpay'}
+                  isLinkLoading={isBuyingNow && activeWallet === 'link'}
+                  isGpayLoading={isBuyingNow && activeWallet === 'gpay'}
                   onClick={handleBuyNow}
                 />
               )}
@@ -812,15 +820,16 @@ export default function ProductPageClient({
                           <path d="M13.3334 14.666V7.33268H11.3334C10.9652 7.33268 10.6667 7.0342 10.6667 6.66602C10.6667 6.29783 10.9652 5.99935 11.3334 5.99935H14C14.3682 5.99935 14.6667 6.29783 14.6667 6.66602V15.3327C14.6667 15.7009 14.3682 15.9993 14 15.9993H2.00004C1.63185 15.9993 1.33337 15.7009 1.33337 15.3327V6.66602C1.33337 6.29783 1.63185 5.99935 2.00004 5.99935H4.66671C5.0349 5.99935 5.33337 6.29783 5.33337 6.66602C5.33337 7.0342 5.0349 7.33268 4.66671 7.33268H2.66671V14.666H13.3334Z"></path>
                         </svg>
                       </button>
-                      <button onClick={handleAddToCart} disabled={isAddingToCart || isBuyingNow} className="flex-1 lg:w-full bg-[#2e3868] hover:bg-[#1f274a] text-[#F0F6FF] py-3 lg:py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base">
-                        {isAddingToCart ? <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#F0F6FF] mr-2"></div>Adding to Cart...</> : <><ShoppingCart className="h-5 w-5 mr-2" />Add to Cart</>}
+                      <button onClick={handleAddToCart} disabled={isAddingToCart || isBuyingNow} className="flex-1 lg:w-full bg-[#79D7F2] hover:bg-[#62C7E5] text-[#2E3868] py-3 lg:py-4 px-6 rounded-xl font-semibold transition-colors duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm lg:text-base">
+                        {isAddingToCart ? <><div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#2E3868] mr-2"></div>Adding to Cart...</> : <><ShoppingCart className="h-5 w-5 mr-2" />Add to Cart</>}
                       </button>
                     </div>
-                    {product.checkoutFlow === 'stripe' ? (
-                      <StripeProductWalletCtas
+                    {(product.checkoutFlow === 'stripe' || product.checkoutFlow === 'buymeacoffee') ? (
+                      <ProductWalletCtas
+                        checkoutFlow={product.checkoutFlow}
                         isDisabled={isAddingToCart || isBuyingNow}
-                        isLinkLoading={isBuyingNow && activeStripeWallet === 'link'}
-                        isGpayLoading={isBuyingNow && activeStripeWallet === 'gpay'}
+                        isLinkLoading={isBuyingNow && activeWallet === 'link'}
+                        isGpayLoading={isBuyingNow && activeWallet === 'gpay'}
                         onClick={handleBuyNow}
                       />
                     ) : (product.checkoutFlow === 'paypal-invoice' || product.checkoutFlow === 'paypal-unclaimed' || product.checkoutFlow === 'paypal-direct' || product.checkoutFlow === 'paypal-api') ? (
