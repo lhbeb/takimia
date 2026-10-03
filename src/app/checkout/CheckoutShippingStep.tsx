@@ -710,7 +710,7 @@ export default function CheckoutShippingStep({
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-500">Shipping</span>
-                      <span className="font-semibold text-emerald-600">Free</span>
+                      <span className="font-semibold text-[#2e3868]">Free</span>
                     </div>
                     <div className="border-t border-gray-100 pt-3 flex justify-between items-center">
                       <span className="text-sm font-semibold text-[#262626]">Total</span>
